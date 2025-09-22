@@ -4,7 +4,7 @@ license = "MIT License"
 
 [[mods]]
 modId="playerbounty"
-version="1.20.1-0.1"
+version="1.20.1-0.2"
 displayName="Player Bounty"
 authors = "Mattéo"
 description= "Add a customization bounty system on players, nothing more"

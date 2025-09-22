@@ -1,12 +1,12 @@
 package matteo.PlayerBounty;
 
-import java.util.function.Supplier;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.network.NetworkEvent.Context;
+
+import java.util.function.Supplier;
 
 public class BountyDisplays {
 
@@ -25,17 +25,16 @@ public class BountyDisplays {
         this.deleteDisplay = buf.readInt();
     }
 
-    public BountyDisplays(String bountydisplay1, int bounty, String bountydisplay2, int entityID, int deletedisplay)
-    {
+    public BountyDisplays(String bountydisplay1, int bounty, String bountydisplay2, int entityID, int deleteDisplay) {
         this.bountyDisplay1 = bountydisplay1;
         this.bounty = bounty;
         this.bountyDisplay2 = bountydisplay2;
         this.entityId = entityID;
-        this.deleteDisplay = deletedisplay;
+        this.deleteDisplay = deleteDisplay;
     }
 
-    public void toBytes(FriendlyByteBuf buf)
-    {
+
+    public void toBytes(FriendlyByteBuf buf) {
         buf.writeUtf(bountyDisplay1);
         buf.writeUtf(String.valueOf(bounty));
         buf.writeUtf(bountyDisplay2);
@@ -43,26 +42,18 @@ public class BountyDisplays {
         buf.writeInt(deleteDisplay);
     }
 
-    public void handle(Supplier<Context> ctx)
-    {
+    public void handle(Supplier<Context> ctx) {
         ctx.get().enqueueWork(() -> {
             Minecraft minecraft = Minecraft.getInstance();
 
             Player toSync = (Player) minecraft.level.getEntity(entityId);
 
-            if (toSync != null)
-            {
+            if (toSync != null) {
                 ctx.get().setPacketHandled(true);
 
                 PlayerBounty.bountyTags(toSync, bountyDisplay1, bounty, bountyDisplay2, deleteDisplay);
-
-                if(deleteDisplay == 0)
-                    minecraft.player.connection.getPlayerInfo(toSync.getGameProfile().getId()).setTabListDisplayName(Component.literal(bountyDisplay1 + bounty + bountyDisplay2));
-                else
-                    minecraft.player.connection.getPlayerInfo(toSync.getGameProfile().getId()).setTabListDisplayName(Component.literal(toSync.getGameProfile().getName()));
+                minecraft.player.connection.getPlayerInfo(toSync.getGameProfile().getId()).setTabListDisplayName(Component.translatable(bountyDisplay1 + bounty + bountyDisplay2));
             }
-
         });
     }
-
 }

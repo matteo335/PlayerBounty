@@ -23,6 +23,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 
 import static matteo.PlayerBounty.BountyConfig.*;
+import static matteo.PlayerBounty.BountyConfig.BountyDisplay1;
+import static matteo.PlayerBounty.BountyConfig.BountyDisplay2;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -58,7 +60,7 @@ public class PlayerBounty {
 
     public static void sendPacket(Player player, String bountydisplay1, int bounty, String bountydisplay2, int operation) {
         bountyTags(player, bountydisplay1, bounty, bountydisplay2, operation);
-        PlayerBounty.network.send(PacketDistributor.ALL.noArg(), new BountyDisplays(bountydisplay1, bounty, bountydisplay2, player.getId(), operation));
+            PlayerBounty.network.send(PacketDistributor.ALL.noArg(), new BountyDisplays(bountydisplay1, bounty, bountydisplay2, player.getId(), operation));
     }
 
     public static void bountyTags(Player player, String bountydisplay1, int Bounty, String bountydisplay2, int operation) {
@@ -72,7 +74,6 @@ public class PlayerBounty {
         }
     }
 
-    ///Current bugs: The value may differ of 1 unit compared to the correct result when going from negative to positive
     @SubscribeEvent
     public void onTarget(LivingHurtEvent event) {
         Entity target = event.getEntity();
@@ -85,28 +86,29 @@ public class PlayerBounty {
                         if (!serverTarget.isAlive()) {
 
                             CompoundTag tag = serverTarget.getPersistentData();
-                            int Bounty = tag.getInt("bounty");
+                            double Bounty = tag.getInt("bounty");
 
-                            double RandomLoss = (RandomSource.create().nextDouble() * (RandomLossMax.get() + RandomLossMin.get()));
-                            double RandomLossMultiplier = (RandomSource.create().nextDouble() * (RandomLossMultiplierMax.get() + RandomLossMultiplierMin.get()));
+                            double RandomLoss = (RandomSource.create().nextDouble() * (RandomLossMax.get() - RandomLossMin.get()) + RandomLossMin.get());
+                            double RandomLossMultiplier = (RandomSource.create().nextDouble() * (RandomLossMultiplierMax.get() - RandomLossMultiplierMin.get()) + RandomLossMultiplierMin.get());
 
-                            double CorrectValue;
-                            if (Bounty >= 0) { CorrectValue = 0.001; } else { CorrectValue = -0.001; }
+                            boolean wasPositive;
+                            wasPositive = Bounty >= 0;
 
-                            if (LoseCompleteBountyOnDeath.get() == false) { Bounty = (int) (Bounty * (MultiplierOfLossOverTargetBounty.get() + (RandomLossMultiplier + CorrectValue)) - (LossOnDeath.get() + (RandomLoss + CorrectValue))); }
-                            else { Bounty = (int) ((int) (-RandomLoss - LossOnDeath.get()) + (Bounty * (MultiplierOfLossOverTargetBounty.get() + (RandomLossMultiplier - 0.001))) - Bounty); }
-                            if (Bounty < BountyMinimumValue.get()) { Bounty = BountyMinimumValue.get(); }
+                            if (LoseCompleteBountyOnDeath.get() == false) { Bounty = Bounty * (MultiplierOfLossOverTargetBounty.get() + RandomLossMultiplier) - (LossOnDeath.get() + RandomLoss); }
+                            else { Bounty = (-RandomLoss - LossOnDeath.get()) + (Bounty * (MultiplierOfLossOverTargetBounty.get() + RandomLossMultiplier)) - Bounty; }
+                            if (Bounty < 0 && wasPositive) { Bounty = (Bounty - 0.1); } else if (Bounty >= 0 && !wasPositive) { Bounty = (Bounty + 0.1); }
                             if (Bounty > BountyMaximumValue.get()) { Bounty = BountyMaximumValue.get(); }
+                            if (Bounty < BountyMinimumValue.get()) { Bounty = BountyMinimumValue.get(); }
 
                             String bountydisplay1 = serverTarget.getName().getString() + BountyDisplay1.get();
                             String bountydisplay2 = BountyDisplay2.get();
 
                             tag.putString("bountydisplay1", bountydisplay1);
-                            tag.putInt("bounty", Bounty);
+                            tag.putInt("bounty", (int) Bounty);
                             tag.putString("bountydisplay2", bountydisplay2);
 
 
-                            PlayerBounty.sendPacket(serverTarget, bountydisplay1, Bounty, bountydisplay2, 0);
+                            PlayerBounty.sendPacket(serverTarget, bountydisplay1, (int) Bounty, bountydisplay2, 0);
                         }
                     });
                 }
@@ -126,16 +128,16 @@ public class PlayerBounty {
                         if (!serverTarget.isAlive()) {
                             CompoundTag killerTag = killer.getPersistentData();
                             CompoundTag targetTag = target.getPersistentData();
-                            int BountyKiller = killerTag.getInt("bounty");
-                            int BountyTarget = targetTag.getInt("bounty");
+                            double BountyKiller = killerTag.getInt("bounty");
+                            double BountyTarget = targetTag.getInt("bounty");
 
-                            double CorrectValue;
-                            if (BountyKiller < 0) { CorrectValue = -0.001; } else { CorrectValue = 0.001; }
+                            boolean wasPositive;
+                            wasPositive = BountyKiller >= 0;
+                            double RandomGain = (RandomSource.create().nextDouble() * (RandomGainMax.get() - RandomGainMin.get()) + RandomGainMin.get());
+                            double RandomGainMultiplier = (RandomSource.create().nextDouble() * (RandomGainMultiplierMax.get() - RandomGainMultiplierMin.get()) + RandomGainMultiplierMin.get());
 
-                            double RandomGain = (RandomSource.create().nextDouble() * (RandomGainMin.get() + RandomGainMax.get()));
-                            double RandomGainMultiplier = (RandomSource.create().nextDouble() * (RandomGainMultiplierMax.get() + RandomGainMultiplierMin.get()));
-
-                            BountyKiller = (int) ((BountyTarget * MultiplierOfGainOverClaimedBounty.get()) + (BountyKiller * (MultiplierOfGainOverKillerBounty.get() + (RandomGainMultiplier + CorrectValue))) + GainOnKilling.get() + (RandomGain + CorrectValue));
+                            BountyKiller = ((BountyTarget * MultiplierOfGainOverClaimedBounty.get()) + (BountyKiller * (MultiplierOfGainOverKillerBounty.get() + RandomGainMultiplier)) + GainOnKilling.get() + RandomGain);
+                            if (BountyKiller < 0 && wasPositive) { BountyKiller = (BountyKiller - 0.01); } else if (BountyKiller >= 0 && !wasPositive) { BountyKiller = (BountyKiller + 0.1); }
                             if (BountyKiller > BountyMaximumValue.get()) { BountyKiller = BountyMaximumValue.get(); }
                             if (BountyKiller < BountyMinimumValue.get()) { BountyKiller = BountyMinimumValue.get(); }
 
@@ -143,11 +145,11 @@ public class PlayerBounty {
                             String bountydisplay2 = BountyDisplay2.get();
 
                             killerTag.putString("bountydisplay1", bountydisplay1);
-                            killerTag.putInt("bounty", BountyKiller);
+                            killerTag.putInt("bounty", (int) BountyKiller);
                             killerTag.putString("bountydisplay2", bountydisplay2);
 
 
-                            PlayerBounty.sendPacket(serverKiller, bountydisplay1, BountyKiller, bountydisplay2, 0);
+                            PlayerBounty.sendPacket(serverKiller, bountydisplay1, (int) BountyKiller, bountydisplay2, 0);
                         }
                     });
                 }
