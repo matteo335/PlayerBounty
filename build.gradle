@@ -2,8 +2,7 @@ plugins {
     id 'eclipse'
     id 'idea'
     id 'maven-publish'
-    id 'net.minecraftforge.gradle' version '[6.0,6.2)'
-    id 'org.parchmentmc.librarian.forgegradle' version '1+'
+    id 'net.neoforged.moddev' version '1.0.0'
 }
 
 base {
@@ -12,49 +11,47 @@ base {
 
 version = "${mod_version}"
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
-minecraft {
-    mappings channel: mapping_channel, version: mapping_version
+neoForge {
+    version = neoforge_version
+
+    parchment {
+        mappingsVersion = mapping_version
+        minecraftVersion = mapping_minecraft
+    }
 
     runs {
-        configureEach  {
-            workingDirectory project.file('run')
-            property 'forge.logging.console.level', 'debug'
-            property 'fml.earlyprogresswindow', 'false'
-            property 'mixin.env.disableRefMap', 'true'
-
-            mods {
-                "${modid}" {
-                    source sourceSets.main
-                }
-            }
-        }
-
         client {
-            taskName "client"
-            property 'forge.enabledGameTestNamespaces', mod_id
+            client()
+            systemProperty 'neoforge.enabledGameTestNamespaces', mod_id
         }
 
         server {
-            taskName "server"
-            property "forge.enabledGameTestNamespaces", mod_id
+            server()
+            systemProperty "neoforge.enabledGameTestNamespaces", mod_id
         }
 
         data {
-            taskName "data"
-            workingDirectory project.file('run-data')
-            args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), --'existing', file('src/main/resources')
+            data()
+            programArguments.addAll '--mod', mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), --'existing', file('src/main/resources').getAbsolutePath()
         }
 
-        sourceSets.main.resources { srcDir 'src/generated/resources' }
+        configureEach {
+            systemProperty 'forge.logging.markers', 'REGISTRIES'
 
-        respositories {}
+            logLevel = org.slf4j.event.Level.DEBUG
+        }
     }
-}
 
-dependencies {
-    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+
+    sourceSets.main.resources { srcDir 'src/generated/resources' }
+
+    mods {
+        "${mod_id}" {
+            sourceSet(sourceSets.main)
+        }
+    }
 }
 
 tasks.named('jar', Jar).configure {
@@ -67,7 +64,7 @@ tasks.named('jar', Jar).configure {
         ])
     }
 
-    finalizedBy 'reobfJar'
+    //finalizedBy 'reobfJar'
 }
 
 tasks.register('sourceJar', Jar) {
