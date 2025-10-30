@@ -1,14 +1,15 @@
 package matteo.PlayerBounty;
 
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-@Mod.EventBusSubscriber
+@EventBusSubscriber
 public class DelayHelper {
 
     private static class Delay {
@@ -23,22 +24,20 @@ public class DelayHelper {
 
     private static final List<Delay> tasks = new ArrayList<>();
 
-    public static void runLater(int ticks, Runnable methods) {
-        tasks.add(new Delay(ticks, methods));
-    }
-
-    @SubscribeEvent
-    public static void onServerTick(TickEvent.ServerTickEvent event) {
-        if (event.phase == TickEvent.Phase.END) {
-            Iterator<Delay> it = tasks.iterator();
-            while (it.hasNext()) {
-                Delay task = it.next();
-                task.ticks--;
-                if (task.ticks <= 0) {
-                    task.methods.run();
-                    it.remove();
-                }
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public static void onServerTick(ServerTickEvent.Post event) {
+        Iterator<Delay> it = tasks.iterator();
+        while (it.hasNext()) {
+            Delay task = it.next();
+            task.ticks--;
+            if (task.ticks <= 0) {
+                task.methods.run();
+                it.remove();
             }
         }
+    }
+
+    public static void runLater(int ticks, Runnable methods) {
+        tasks.add(new Delay(ticks, methods));
     }
 }

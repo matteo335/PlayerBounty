@@ -2,8 +2,7 @@ plugins {
     id 'eclipse'
     id 'idea'
     id 'maven-publish'
-    id 'net.minecraftforge.gradle' version '[6.0,6.2)'
-    id 'org.parchmentmc.librarian.forgegradle' version '1+'
+    id 'net.neoforged.moddev' version '2.0.78'
 }
 
 base {
@@ -12,68 +11,58 @@ base {
 
 version = "${mod_version}"
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
-minecraft {
-    mappings channel: mapping_channel, version: mapping_version
+neoForge {
+    version = neoforge_version
+
+    parchment {
+        mappingsVersion = mapping_version
+        minecraftVersion = mapping_minecraft
+    }
 
     runs {
-        configureEach  {
-            workingDirectory project.file('run')
-            property 'forge.logging.console.level', 'debug'
-            property 'fml.earlyprogresswindow', 'false'
-            property 'mixin.env.disableRefMap', 'true'
-
-            mods {
-                "${modid}" {
-                    source sourceSets.main
-                }
-            }
-        }
-
         client {
-            taskName "client"
-            property 'forge.enabledGameTestNamespaces', mod_id
+            client()
+            systemProperty 'neoforge.enabledGameTestNamespaces', mod_id
         }
 
         server {
-            taskName "server"
-            property "forge.enabledGameTestNamespaces", mod_id
+            server()
+            systemProperty "neoforge.enabledGameTestNamespaces", mod_id
         }
 
-        data {
-            taskName "data"
-            workingDirectory project.file('run-data')
-            args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), --'existing', file('src/main/resources')
+        configureEach {
+            systemProperty 'forge.logging.markers', 'REGISTRIES'
+
+            logLevel = org.slf4j.event.Level.DEBUG
         }
+    }
 
-        sourceSets.main.resources { srcDir 'src/generated/resources' }
+    sourceSets.main.resources { srcDir 'src/generated/resources' }
 
-        respositories {}
+    mods {
+        "${mod_id}" {
+            sourceSet(sourceSets.main)
+        }
     }
 }
 
 dependencies {
-    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+    implementation "curse.maven:magic-coins-597281:6905939"
 }
 
-tasks.named('jar', Jar).configure {
-    manifest {
-        attributes([
-                'Specification-Title': mod_id,
-                'Specification-Vendor': "Mattéo",
-                'Specification-Version': "1",
-                'Implementation-Timestap': new Date().format("yyyy-MM-dd:mm:ssZ")
-        ])
+tasks.withType(ProcessResources).configureEach {
+    var replaceProperties = [
+                minecraft_version: minecraft_version,
+                neoforge_version: neoforge_version,
+                mod_id: mod_id,
+                mod_version: mod_version,
+        ]
+        inputs.properties replaceProperties
+        filesMatching(['META-INF/neoforge.mods.toml']) {
+            expand replaceProperties
     }
-
-    finalizedBy 'reobfJar'
-}
-
-tasks.register('sourceJar', Jar) {
-    dependsOn 'classes'
-    from sourceSets.main.allSource
-    archiveClassifier = 'sources'
 }
 
 tasks.withType(JavaCompile).configureEach {
