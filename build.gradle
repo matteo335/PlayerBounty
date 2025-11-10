@@ -1,7 +1,4 @@
 plugins {
-    id 'eclipse'
-    id 'idea'
-    id 'maven-publish'
     id 'net.neoforged.moddev' version '1.0.0'
 }
 
@@ -52,6 +49,17 @@ neoForge {
             sourceSet(sourceSets.main)
         }
     }
+}
+
+
+repositories {
+    maven {
+        url "https://cursemaven.com"
+    }
+}
+
+dependencies {
+    implementation("curse.maven:magic-coins-597281:6905939")
 }
 
 tasks.named('jar', Jar).configure {

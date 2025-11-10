@@ -4,7 +4,7 @@ license = "MIT License"
 
 [[mods]]
 modId="playerbounty"
-version="1.21.1-0.2"
+version="1.21.1-0.3"
 displayName="Player Bounty"
 authors = "Mattéo"
 description= "Add a customization bounty system on players, nothing more"
@@ -22,4 +22,9 @@ modId="minecraft"
 mandatory=true
 versionRange="1.21.1"
 ordering="NONE"
+side="BOTH"
+
+[[dependencies.playerbounty]]
+modId="magic_coins"
+type="optional"
 side="BOTH"

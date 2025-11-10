@@ -39,12 +39,6 @@
                 <item name="Tasks" type="e4a08cd1:TasksNode" />
                 <item name="build" type="c8890929:TasksNode$1" />
               </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="Player-Bounty" type="f1a62948:ProjectNode" />
-                <item name="Tasks" type="e4a08cd1:TasksNode" />
-                <item name="mod development" type="c8890929:TasksNode$1" />
-              </path>
             </expand>
             <select />
           </tree_state>
@@ -59,6 +53,21 @@
       </list>
     </option>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/Github" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;matteo335&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/matteo335/PlayerBounty.git&quot;,
+    &quot;accountId&quot;: &quot;8cb7c9fb-a772-420e-b479-d39fe90a8f8b&quot;
+  }
+}</component>
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="CurrentFile" />
   </component>
@@ -74,21 +83,35 @@
   &quot;keyToString&quot;: {
     &quot;Gradle.Build Player-Bounty.executor&quot;: &quot;Run&quot;,
     &quot;Gradle.Download Sources.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Load Gradle Dependencies.executor&quot;: &quot;Run&quot;,
     &quot;Gradle.Player-Bounty [:net.neoforged.devlaunch.Main.main()].executor&quot;: &quot;Run&quot;,
     &quot;Gradle.Player-Bounty [assemble].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Player-Bounty [buildEnvironment].executor&quot;: &quot;Run&quot;,
     &quot;Gradle.Player-Bounty [build].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Player-Bounty [check].executor&quot;: &quot;Run&quot;,
     &quot;Gradle.Player-Bounty [client].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Player-Bounty [createArtifactManifest].executor&quot;: &quot;Run&quot;,
     &quot;Gradle.Player-Bounty [createMcpToSrg].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Player-Bounty [createMinecraftArtifacts].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Player-Bounty [dependencies].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Player-Bounty [downloadAssets].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Player-Bounty [init].executor&quot;: &quot;Run&quot;,
     &quot;Gradle.Player-Bounty [jar].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Player-Bounty [projects].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Player-Bounty [properties].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Player-Bounty [resolvableConfigurations].executor&quot;: &quot;Run&quot;,
     &quot;Gradle.Player-Bounty [runClient].executor&quot;: &quot;Run&quot;,
     &quot;Gradle.Player-Bounty [runServer].executor&quot;: &quot;Run&quot;,
     &quot;Gradle.Player-Bounty [server].executor&quot;: &quot;Run&quot;,
     &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;1.21.1&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;onboarding.tips.debug.path&quot;: &quot;C:/Users/matte/IdeaProjects/Player-Bounty/src/Main.java&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;SDKs&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
@@ -174,7 +197,7 @@
       <RunAsTest>false</RunAsTest>
       <method v="2" />
     </configuration>
-    <configuration name="Player-Bounty [jar]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="Player-Bounty [dependencies]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -185,7 +208,7 @@
         </option>
         <option name="taskNames">
           <list>
-            <option value="jar" />
+            <option value="dependencies" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -196,7 +219,7 @@
       <RunAsTest>false</RunAsTest>
       <method v="2" />
     </configuration>
-    <configuration name="Player-Bounty [runClient]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="Player-Bounty [init]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -207,7 +230,7 @@
         </option>
         <option name="taskNames">
           <list>
-            <option value="runClient" />
+            <option value="init" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -218,7 +241,7 @@
       <RunAsTest>false</RunAsTest>
       <method v="2" />
     </configuration>
-    <configuration name="Player-Bounty [runServer]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="Player-Bounty [resolvableConfigurations]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -229,7 +252,7 @@
         </option>
         <option name="taskNames">
           <list>
-            <option value="runServer" />
+            <option value="resolvableConfigurations" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -244,19 +267,19 @@
       <item itemvalue="Application.Client" />
       <item itemvalue="Application.Data" />
       <item itemvalue="Application.Server" />
-      <item itemvalue="Gradle.Player-Bounty [runServer]" />
-      <item itemvalue="Gradle.Player-Bounty [jar]" />
-      <item itemvalue="Gradle.Player-Bounty [runClient]" />
-      <item itemvalue="Gradle.Player-Bounty [assemble]" />
       <item itemvalue="Gradle.Player-Bounty [build]" />
+      <item itemvalue="Gradle.Player-Bounty [dependencies]" />
+      <item itemvalue="Gradle.Player-Bounty [init]" />
+      <item itemvalue="Gradle.Player-Bounty [resolvableConfigurations]" />
+      <item itemvalue="Gradle.Player-Bounty [assemble]" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.Player-Bounty [runServer]" />
         <item itemvalue="Gradle.Player-Bounty [build]" />
-        <item itemvalue="Gradle.Player-Bounty [runClient]" />
-        <item itemvalue="Gradle.Player-Bounty [jar]" />
+        <item itemvalue="Gradle.Player-Bounty [dependencies]" />
         <item itemvalue="Gradle.Player-Bounty [assemble]" />
+        <item itemvalue="Gradle.Player-Bounty [init]" />
+        <item itemvalue="Gradle.Player-Bounty [resolvableConfigurations]" />
       </list>
     </recent_temporary>
   </component>

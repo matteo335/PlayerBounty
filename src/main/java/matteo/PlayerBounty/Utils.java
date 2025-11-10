@@ -10,7 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 
 @EventBusSubscriber
-public class DelayHelper {
+public class Utils {
 
     private static class Delay {
         int ticks;
@@ -23,21 +23,34 @@ public class DelayHelper {
     }
 
     private static final List<Delay> tasks = new ArrayList<>();
+    private static final List<Delay> riichi = new ArrayList<>();
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onServerTick(ServerTickEvent.Post event) {
+        if (!riichi.isEmpty()) {
+            tasks.addAll(riichi);
+            riichi.clear();
+        }
+
         Iterator<Delay> it = tasks.iterator();
         while (it.hasNext()) {
             Delay task = it.next();
             task.ticks--;
             if (task.ticks <= 0) {
-                task.methods.run();
+                try {
+                    task.methods.run();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 it.remove();
             }
         }
     }
 
     public static void runLater(int ticks, Runnable methods) {
-        tasks.add(new Delay(ticks, methods));
+        if (methods == null) {
+            return;
+        }
+        riichi.add(new Delay(ticks, methods));
     }
 }

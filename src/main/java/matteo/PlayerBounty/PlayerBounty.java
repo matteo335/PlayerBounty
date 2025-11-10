@@ -5,10 +5,12 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
+import net.neoforged.bus.api.EventPriority;
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -20,6 +22,9 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.chat.Component;
+
+import matteo.PlayerBounty.compats.MagicCoins;
 
 import static matteo.PlayerBounty.BountyConfig.*;
 import static matteo.PlayerBounty.BountyConfig.BountyDisplay1;
@@ -27,7 +32,6 @@ import static matteo.PlayerBounty.BountyConfig.BountyDisplay2;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 
 @Mod(PlayerBounty.MOD_ID)
 public class PlayerBounty {
@@ -48,7 +52,6 @@ public class PlayerBounty {
     );
 
     public PlayerBounty(ModContainer modContainer) {
-        PlayerBounty.init();
         modContainer.getEventBus().addListener(this::modSetup);
         NeoForge.EVENT_BUS.register(this);
         NeoForge.EVENT_BUS.register(DisplayEvents.class);
@@ -56,24 +59,32 @@ public class PlayerBounty {
         modContainer.registerConfig(ModConfig.Type.SERVER, CONFIG_SPEC);
     }
 
-    public static void init() {
-        LOGGER.warn("\nTHIS WARN IS FOR PEOPLE WHO FORGOT TO READ THE MOD DESCRIPTION, WHICH YOU SHOULD ALWAYS DO\nIN ORDER FOR THE MOD TO WORK AS YOU WISH, YOU NEED TO CHANGE THE CONFIG AND RESTART THE GAME");
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public void onServerLoad(ServerStartedEvent start) {
+        if (StartupWarning.get()) {
+            Utils.runLater(6000, () -> {
+                if (start.getServer().getPlayerCount() != 0) {
+                    start.getServer().getPlayerList().broadcastSystemMessage(Component.literal("<PlayerBounty>: THIS WARNING IS FOR PEOPLE WHO FORGOT TO READ THE MOD DESCRIPTION, WHICH YOU SHOULD ALWAYS DO\nIN ORDER FOR THE MOD TO WORK AS YOU WISH, YOU NEED TO CHANGE THE CONFIG AND RESTART THE WORLD"), false);
+                } else onServerLoad(start);
+            });
+        }
     }
 
+
     public void modSetup(RegisterPayloadHandlersEvent event) {
-        PayloadRegistrar payload = event.registrar("1.0.0");
+        PayloadRegistrar payload = event.registrar("playerbounty");
         payload.playToClient(TYPE, STREAM, BountyDisplays::payload);
     }
 
-    public static void packets(ServerPlayer player, String bountydisplay1, int bounty, String bountydisplay2, boolean deleteDisplay) {
-        bountyTags(player, bountydisplay1, bounty, bountydisplay2, deleteDisplay);
-        PacketDistributor.sendToAllPlayers(new BountyDisplays(bountydisplay1, bounty, bountydisplay2, player.getId(), deleteDisplay));
+    public static void packets(ServerPlayer player, String bountydisplay1, Integer bounty, String bountydisplay2, boolean deleteDefaultDisplay) {
+        bountyTags(player, bountydisplay1, bounty, bountydisplay2, deleteDefaultDisplay);
+        PacketDistributor.sendToAllPlayers(new BountyDisplays(bountydisplay1, bounty, bountydisplay2, player.getId(), deleteDefaultDisplay));
     }
 
-    public static void bountyTags(Player player, String bountydisplay1, int Bounty, String bountydisplay2, boolean deleteDisplay) {
+    public static void bountyTags(Player player, String bountydisplay1, int Bounty, String bountydisplay2, boolean deleteDefaultDisplay) {
         CompoundTag tag = player.getPersistentData();
 
-        if (!deleteDisplay) {
+        if (!deleteDefaultDisplay) {
             tag.putString("bountydisplay1", bountydisplay1);
             tag.putInt("bounty", Bounty);
             tag.putString("bountydisplay2", bountydisplay2);
@@ -89,55 +100,80 @@ public class PlayerBounty {
         if (killer instanceof ServerPlayer serverKiller && target instanceof ServerPlayer serverTarget) {
             if (serverKiller.getName() != serverTarget.getName()) {
                 if (serverKiller.gameMode.isSurvival() && serverTarget.gameMode.isSurvival()) {
-                    DelayHelper.runLater(1, () -> {
-                        //KILLER
-                        CompoundTag killerTag = killer.getPersistentData();
-                        CompoundTag targetTag = target.getPersistentData();
-                        double BountyKiller = killerTag.getInt("bounty");
-                        double BountyTarget = targetTag.getInt("bounty");
+                    Utils.runLater(1, () -> {
+                        if (DefaultSystem.get() == true) {
+                            //KILLER
 
-                        boolean wasPositive;
-                        wasPositive = BountyKiller >= 0;
-                        double RandomGain = (RandomSource.create().nextDouble() * (RandomGainMax.get() - RandomGainMin.get()) + RandomGainMin.get());
-                        double RandomGainMultiplier = (RandomSource.create().nextDouble() * (RandomGainMultiplierMax.get() - RandomGainMultiplierMin.get()) + RandomGainMultiplierMin.get());
+                            CompoundTag killerTag = killer.getPersistentData();
+                            CompoundTag targetTag = target.getPersistentData();
+                            double BountyKiller = killerTag.getInt("bounty");
+                            double BountyTarget = targetTag.getInt("bounty");
 
-                        BountyKiller = ((BountyTarget * MultiplierOfGainOverClaimedBounty.get()) + (BountyKiller * (MultiplierOfGainOverKillerBounty.get() + RandomGainMultiplier)) + GainOnKilling.get() + RandomGain);
-                        if (BountyKiller < 0 && wasPositive) { BountyKiller = (BountyKiller - 0.01); }
-                        else if (BountyKiller >= 0 && !wasPositive) { BountyKiller = (BountyKiller + 0.1); }
-                        if (BountyKiller > BountyMaximumValue.get()) { BountyKiller = BountyMaximumValue.get(); }
-                        else if (BountyKiller < BountyMinimumValue.get()) { BountyKiller = BountyMinimumValue.get(); }
+                            boolean wasPositive = BountyKiller >= 0;
+                            double RandomGain = (RandomSource.create().nextDouble() * (RandomGainMax.get() - RandomGainMin.get()) + RandomGainMin.get());
+                            double RandomGainMultiplier = (RandomSource.create().nextDouble() * (RandomGainMultiplierMax.get() - RandomGainMultiplierMin.get()) + RandomGainMultiplierMin.get());
 
-                        String bountydisplay1 = killer.getName().getString() + BountyDisplay1.get();
-                        String bountydisplay2 = BountyDisplay2.get();
+                            BountyKiller = ((BountyTarget * MultiplierOfGainOverClaimedBounty.get()) + (BountyKiller * (MultiplierOfGainOverKillerBounty.get() + RandomGainMultiplier)) + GainOnKilling.get() + RandomGain);
+                            if (BountyKiller < 0 && wasPositive) {
+                                BountyKiller = (BountyKiller - 1.0);
+                            } else if (BountyKiller >= 0 && !wasPositive) {
+                                BountyKiller = (BountyKiller + 0.1);
+                            }
+                            if (BountyKiller > BountyMaximumValue.get()) {
+                                BountyKiller = BountyMaximumValue.get();
+                            } else if (BountyKiller < BountyMinimumValue.get()) {
+                                BountyKiller = BountyMinimumValue.get();
+                            }
 
-                        killerTag.putString("bountydisplay1", bountydisplay1);
-                        killerTag.putInt("bounty", (int) BountyKiller);
-                        killerTag.putString("bountydisplay2", bountydisplay2);
+                            String bountydisplay1 = killer.getName().getString() + BountyDisplay1.get();
+                            String bountydisplay2 = BountyDisplay2.get();
 
-                        PlayerBounty.packets(serverKiller, bountydisplay1, (int) BountyKiller, bountydisplay2, false);
+                            killerTag.putString("bountydisplay1", bountydisplay1);
+                            killerTag.putInt("bounty", (int) BountyKiller);
+                            killerTag.putString("bountydisplay2", bountydisplay2);
 
-                        //TARGET
-                        double RandomLoss = (RandomSource.create().nextDouble() * (RandomLossMax.get() - RandomLossMin.get()) + RandomLossMin.get());
-                        double RandomLossMultiplier = (RandomSource.create().nextDouble() * (RandomLossMultiplierMax.get() - RandomLossMultiplierMin.get()) + RandomLossMultiplierMin.get());
+                            if (BountyConfig.IsPlayerBountyDisplayEnabled.get()) {
+                                PlayerBounty.packets(serverKiller, bountydisplay1, (int) BountyKiller, bountydisplay2, DeleteDisplay.get());
+                            }
 
-                        wasPositive = BountyTarget >= 0;
+                            //TARGET
+                            double RandomLoss = (RandomSource.create().nextDouble() * (RandomLossMax.get() - RandomLossMin.get()) + RandomLossMin.get());
+                            double RandomLossMultiplier = (RandomSource.create().nextDouble() * (RandomLossMultiplierMax.get() - RandomLossMultiplierMin.get()) + RandomLossMultiplierMin.get());
 
-                        if (LoseCompleteBountyOnDeath.get() == false) { BountyTarget = (int) (BountyTarget * (MultiplierOfLossOverTargetBounty.get() + RandomLossMultiplier) - (LossOnDeath.get() + RandomLoss)); }
-                        else { BountyTarget = ((int) -RandomLoss - LossOnDeath.get()) + (BountyTarget * (MultiplierOfLossOverTargetBounty.get() + RandomLossMultiplier)) - BountyTarget; }
+                            wasPositive = BountyTarget >= 0;
 
-                        if (BountyTarget < 0 && wasPositive) { BountyTarget = (BountyTarget - 0.1); }
-                        else if (BountyTarget >= 0 && !wasPositive) { BountyTarget = (BountyTarget + 0.1); }
-                        if (BountyTarget > BountyMaximumValue.get()) { BountyTarget = BountyMaximumValue.get(); }
-                        if (BountyTarget < BountyMinimumValue.get()) { BountyTarget = BountyMinimumValue.get(); }
+                            if (LoseCompleteBountyOnDeath.get() == false) {
+                                BountyTarget = (int) (BountyTarget * (MultiplierOfLossOverTargetBounty.get() + RandomLossMultiplier) - (LossOnDeath.get() + RandomLoss));
+                            } else {
+                                BountyTarget = ((int) -RandomLoss - LossOnDeath.get()) + (BountyTarget * (MultiplierOfLossOverTargetBounty.get() + RandomLossMultiplier)) - BountyTarget;
+                            }
 
-                        bountydisplay1 = target.getName().getString() + BountyDisplay1.get();
+                            if (BountyTarget < 0 && wasPositive) {
+                                BountyTarget = (BountyTarget - 0.1);
+                            } else if (BountyTarget >= 0 && !wasPositive) {
+                                BountyTarget = (BountyTarget + 0.1);
+                            }
+                            if (BountyTarget > BountyMaximumValue.get()) {
+                                BountyTarget = BountyMaximumValue.get();
+                            }
+                            if (BountyTarget < BountyMinimumValue.get()) {
+                                BountyTarget = BountyMinimumValue.get();
+                            }
 
-                        targetTag.putString("bountydisplay1", bountydisplay1);
-                        targetTag.putInt("bounty", (int) BountyTarget);
-                        targetTag.putString("bountydisplay2", bountydisplay2);
+                            bountydisplay1 = target.getName().getString() + BountyDisplay1.get();
 
-                        LOGGER.info(serverTarget.deathTime + " packets");
-                        PlayerBounty.packets(serverTarget, bountydisplay1, (int) BountyTarget, bountydisplay2, false);
+                            targetTag.putString("bountydisplay1", bountydisplay1);
+                            targetTag.putInt("bounty", (int) BountyTarget);
+                            targetTag.putString("bountydisplay2", bountydisplay2);
+
+                            if (BountyConfig.IsPlayerBountyDisplayEnabled.get()) {
+                                PlayerBounty.packets(serverTarget, bountydisplay1, (int) BountyTarget, bountydisplay2, DeleteDisplay.get());
+                            }
+                        }
+
+                        if (MagicCoinsSystem.get()) {
+                            MagicCoins.Death(event);
+                        }
                     });
                 }
             }
