@@ -1,0 +1,49 @@
+# Build directories and binaries
+/build/
+/bin/
+
+# Local configuration folders for Eclipse, VSCode, and Gradle
+/.eclipse/
+/.gradle/
+/.vscode/
+
+# Logs and reports
+*.log
+*.out
+*.tmp
+*.pid
+/run/logs/
+run/crash-reports/
+
+# Temporary Gradle files
+/build/
+.gradle/
+**/.gradle/
+!gradle/wrapper/gradle-wrapper.properties # Exception for Gradle wrapper
+
+# Temporary configuration for Gradle and IDE
+.gradle/
+/buildOutputCleanup/
+/tmp/
+/neoformruntime/
+
+# Game files generated during runtime
+run/
+
+# Operating system specific files
+.DS_Store
+Thumbs.db
+
+# Backup or temporary files
+*.bak
+*.swp
+*.swo
+*.tmp
+*.old
+
+# Generated Java files
+/build/classes/
+/build/generated/
+
+.MagicCoins-Obsidian
+.idea

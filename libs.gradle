@@ -1,0 +1,10 @@
+repositories {
+    maven {
+        name = 'CurseMaven'
+        url "https://cursemaven.com"
+    }
+}
+
+dependencies {
+    implementation "curse.maven:sg-economy-api-1446971:7604579"
+}
