@@ -1,41 +1,50 @@
-package matteo.PlayerBounty;
+package net.matteo.playerbounty.old;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
+
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 
-import net.sirgrantd.magic_coins.api.MagicCoinsApi;
-import net.sirgrantd.magic_coins.capabilities.CoinsBagCapabilities;
+import net.matteo.playerbounty.configs.ServerConfig;
+import net.matteo.playerbounty.network.
+
+//import net.sirgrantd.magic_coins.api.MagicCoinsApi;
+//import net.sirgrantd.magic_coins.capabilities.CoinsBagCapabilities;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
 @EventBusSubscriber
 public class DisplayEvents {
 
+    public static void packetDisplay(Player player, String bountydisplay1, Integer bounty, String bountydisplay2, boolean deleteDefaultDisplay) {
+        bountyTag(player, bountydisplay1, bounty, bountydisplay2, deleteDefaultDisplay);
+        PacketDistributor.sendToAllPlayers(new BountyDisplays(bountydisplay1, bounty, bountydisplay2, player.getId(), deleteDefaultDisplay));
+    }
+
     @SubscribeEvent
     public static void onJoin(PlayerEvent.PlayerLoggedInEvent event) {
         Player player = event.getEntity();
 
         if (!player.getCommandSenderWorld().isClientSide) {
-            if (BountyConfig.IsPlayerBountyDisplayEnabled.get() && !BountyConfig.IsMagicCoinsDisplayEnabled.get()) {
+            if (ServerConfig.IsPlayerBountyDisplayEnabled.get() && !ServerConfig.IsMagicCoinsDisplayEnabled.get()) {
                 if (player.getPersistentData().contains("bounty")) {
-                    PlayerBounty.packets((ServerPlayer) player, player.getPersistentData().getString("bountydisplay1"), player.getPersistentData().getInt("bounty"), player.getPersistentData().getString("bountydisplay2"), BountyConfig.DeleteDisplay.get());
+                    packetDisplay(player, player.getPersistentData().getString("bountydisplay1"), player.getPersistentData().getInt("bounty"), player.getPersistentData().getString("bountydisplay2"), ServerConfig.DeleteDisplay.get());
 
                     for (Player playerlist : player.getServer().getPlayerList().getPlayers()) {
                         PacketDistributor.sendToPlayer((ServerPlayer) player, new BountyDisplays(playerlist.getPersistentData().getString("bountydisplay1"), playerlist.getPersistentData().getInt("bounty"), playerlist.getPersistentData().getString("bountydisplay2"), playerlist.getId(), BountyConfig.DeleteDisplay.get()));
                     }
                 }
             }
-        } else if (!BountyConfig.IsPlayerBountyDisplayEnabled.get() && BountyConfig.IsMagicCoinsDisplayEnabled.get()) {
-            PlayerBounty.packets((ServerPlayer) player, player.getName().getString() + BountyConfig.CoinsDisplay1.get(), MagicCoinsApi.getTotalCoins(player), BountyConfig.CoinsDisplay2.get(), BountyConfig.DeleteDisplay.get());
+        } else if (!ServerConfig.IsPlayerBountyDisplayEnabled.get() && ServerConfig.IsMagicCoinsDisplayEnabled.get()) {
+            packetDisplay(player, player.getName().getString() + ServerConfig.CoinsDisplay1.get(), MagicCoinsApi.getTotalCoins(player), ServerConfig.CoinsDisplay2.get(), ServerConfig.DeleteDisplay.get());
 
             for (Player playerlist : player.getServer().getPlayerList().getPlayers()) {
-                PacketDistributor.sendToPlayer((ServerPlayer) player, new BountyDisplays(player.getName().getString() + BountyConfig.CoinsDisplay1.get(), MagicCoinsApi.getTotalCoins(player), BountyConfig.CoinsDisplay2.get(), playerlist.getId(), BountyConfig.DeleteDisplay.get()));
+                PacketDistributor.sendToPlayer((ServerPlayer) player, new BountyDisplays(player.getName().getString() + ServerConfig.CoinsDisplay1.get(), MagicCoinsApi.getTotalCoins(player), ServerConfig.CoinsDisplay2.get(), playerlist.getId(), BountyConfig.DeleteDisplay.get()));
                 player.refreshDisplayName();
                 playerlist.refreshDisplayName();
                 //Enable a constant loop to update the displays updateLoop(player, new PlayerEvent.NameFormat(player, player.getDisplayName()));

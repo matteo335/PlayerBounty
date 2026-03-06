@@ -1,71 +1,116 @@
 package net.matteo.playerbounty.configs;
 
-import net.matteo.playerbounty.PlayerBountyMod;
-import net.matteo.playerbounty.network.payload.SyncServerConfigS2C;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.fml.config.ModConfig;
-import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
-import net.neoforged.neoforge.network.PacketDistributor;
-
-@EventBusSubscriber(modid = PlayerBountyMod.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class ServerConfig {
+
+    public static ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
+
+    /// Base
+    public static ModConfigSpec.BooleanValue StartupWarning;
+
+    public static ModConfigSpec.BooleanValue DefaultSystem;
+    public static ModConfigSpec.BooleanValue MagicCoinsSystem;
+
+    public static ModConfigSpec.BooleanValue IsPlayerBountyDisplayEnabled;
+    public static ModConfigSpec.BooleanValue DeleteDisplay;
+    public static ModConfigSpec.ConfigValue<String> BountyDisplay1;
+    public static ModConfigSpec.ConfigValue<String> BountyDisplay2;
+
+    public static ModConfigSpec.BooleanValue LoseCompleteBountyOnDeath;
+
+    public static ModConfigSpec.ConfigValue<Integer> BountyMinimumValue;
+    public static ModConfigSpec.ConfigValue<Integer> BountyMaximumValue;
+
+    public static ModConfigSpec.ConfigValue<Integer> GainOnKilling;
+    public static ModConfigSpec.ConfigValue<Integer> LossOnDeath;
+
+    public static ModConfigSpec.DoubleValue MultiplierOfGainOverKillerBounty;
+    public static ModConfigSpec.DoubleValue MultiplierOfGainOverClaimedBounty;
+    public static ModConfigSpec.DoubleValue MultiplierOfLossOverTargetBounty;
+
+
+    public static ModConfigSpec.DoubleValue RandomGainMin;
+    public static ModConfigSpec.DoubleValue RandomGainMax;
+    public static ModConfigSpec.DoubleValue RandomLossMin;
+    public static ModConfigSpec.DoubleValue RandomLossMax;
+
+    public static ModConfigSpec.DoubleValue RandomGainMultiplierMin;
+    public static ModConfigSpec.DoubleValue RandomGainMultiplierMax;
+    public static ModConfigSpec.DoubleValue RandomLossMultiplierMin;
+    public static ModConfigSpec.DoubleValue RandomLossMultiplierMax;
+
+
+    /// Magic Coins
+    public static ModConfigSpec.BooleanValue IsMagicCoinsDisplayEnabled;
+    public static ModConfigSpec.ConfigValue<Integer> CoinsDisplayTimer;
+
+    public static ModConfigSpec.ConfigValue<String> CoinsDisplay1;
+    public static ModConfigSpec.ConfigValue<String> CoinsDisplay2;
+
+    public static ModConfigSpec.ConfigValue<Integer> GainCoins;
+    public static ModConfigSpec.ConfigValue<Integer> LossCoins;
+
+    public static ModConfigSpec.DoubleValue MultiplierOfCoinsStealing;
+    public static ModConfigSpec.DoubleValue MultiplierOfCoinsLoss;
+    public static ModConfigSpec.DoubleValue MultiplierSelfCoins;
+
+    public static ModConfigSpec.DoubleValue RandomGainCoinsMin;
+    public static ModConfigSpec.DoubleValue RandomGainCoinsMax;
+    public static ModConfigSpec.DoubleValue RandomLossCoinsMin;
+    public static ModConfigSpec.DoubleValue RandomLossCoinsMax;
+
+    public static ModConfigSpec.DoubleValue RandomGainCoinsMultiplierMin;
+    public static ModConfigSpec.DoubleValue RandomGainCoinsMultiplierMax;
+    public static ModConfigSpec.DoubleValue RandomLossCoinsMultiplierMin;
+    public static ModConfigSpec.DoubleValue RandomLossCoinsMultiplierMax;
 
     public static double baseRateBountyHunter;
     public static int percentageRewardBountyHunter;
 
-    public static class Config {
-        public static final ModConfigSpec.Builder CONFIG_BUILDER = new ModConfigSpec.Builder();
+    public static ModConfigSpec.DoubleValue BASE_RATE_BOUNTY_HUNTER;
+    public static ModConfigSpec.DoubleValue PERCENTAGE_REWARD_BOUNTY_HUNTER;
 
-        public static final ModConfigSpec.ConfigValue<Double> BASE_RATE_BOUNTY_HUNTER;
-        public static final ModConfigSpec.ConfigValue<Integer> PERCENTAGE_REWARD_BOUNTY_HUNTER;
+    static {
+        builder.comment("""
+                 Note that you can use + and - but you CANNOT use %
+                 Make sure you do the calculations correctly, some values might do the opposite in some scenarios.
+                
+                 Target is calculated like this: Bounty = Bounty * (Target-Multiplier + RandomLossMultiplier) - (LossOnDeath + RandomLoss)
+                
+                 If LossCompleteBountyOnDeath is true: Bounty = (-RandomLoss - LossOnDeath) + (Bounty * (Target-Multiplier + RandomLossMultiplier)) - Bounty
+                
+                 Killer is calculated like this: Bounty = (BountyTarget * Claim-Multiplier) + (BountyKiller * (Killer-Multiplier + RandomGainMultiplier)) + (GainOnKilling + RandomLoss)
+                """);
 
-        static {
-            CONFIG_BUILDER.push("Bounty Hunter Settings");
+        StartupWarning = builder.define("Enable the warning in the server start", true);
 
-            BASE_RATE_BOUNTY_HUNTER = CONFIG_BUILDER
-                    .comment("Base rate for Bounty Hunter mode")
-                    .defineInRange("baseRateBountyHunter", 1.0, 0.0, Double.MAX_VALUE);
+        DefaultSystem = builder.define("Enable the default mechanics, disable it if you prefer the compats", true);
 
-            PERCENTAGE_REWARD_BOUNTY_HUNTER = CONFIG_BUILDER
-                    .comment("Percentage reward for Bounty Hunter mode")
-                    .defineInRange("percentageRewardBountyHunter", 5, 0, 100);
+        IsPlayerBountyDisplayEnabled = builder.define("Display for the default system", true);
+        DeleteDisplay = builder.define("Completely delete the display", false);
+        BountyDisplay1 = builder.define("Formatting Codes Before Bounty", " [$§6§l");
+        BountyDisplay2 = builder.define("Formatting Codes After Bounty", "§r]");
 
-            CONFIG_BUILDER.pop();
+        LoseCompleteBountyOnDeath = builder.define("Lose Complete Bounty On Death", false);
+        BountyMinimumValue = builder.define("Bounty Minimum Value", Integer.MIN_VALUE);
+        BountyMaximumValue = builder.define("Bounty Maximum Value", Integer.MAX_VALUE);
 
-            SPEC = CONFIG_BUILDER.build();
-        }
-        public static final ModConfigSpec SPEC;
+        GainOnKilling = builder.define("Bounty Gain On Killing (cannot have a decimal)", 10);
+        LossOnDeath = builder.define("Bounty Loss On Death (cannot have a decimal)", 10);
+
+        MultiplierOfGainOverKillerBounty = builder.defineInRange("Killer-Multiplier of your own bounty (1 = No Change).Must have a decimal", 1.0, Integer.MIN_VALUE, Integer.MAX_VALUE);
+        MultiplierOfGainOverClaimedBounty = builder.defineInRange("Claim-Multiplier, how much you take from your victim (1 = Claim 100% of the bounty).Must have an decimal", 0.5, Integer.MIN_VALUE, Integer.MAX_VALUE);
+        MultiplierOfLossOverTargetBounty = builder.defineInRange("Target-Multiplier, how much do the victim loss (1 = No Change).Must have a decimal", 1.0, Integer.MIN_VALUE, Integer.MAX_VALUE);
+
+        RandomGainMin = builder.defineInRange("Random Gain Min (0 + decimal = No Change) - Cannot be equal or superior than the Max.Must have a decimal", 0.00, Integer.MIN_VALUE, Integer.MAX_VALUE);
+        RandomGainMax = builder.defineInRange("Random Gain Max (0 + decimal 001 = No Change) - Cannot be equal or inferior than the Min.Must have a decimal", 0.001, Integer.MIN_VALUE, Integer.MAX_VALUE);
+        RandomLossMin = builder.defineInRange("Random Loss Min (0 + decimal = No Change) - Cannot be equal or superior than the Max.Must have a decimal", 0.0, Integer.MIN_VALUE, Integer.MAX_VALUE);
+        RandomLossMax = builder.defineInRange("Random Loss Max (0 + decimal 001 = No Change) - Cannot be equal or inferior than the Min.Must have a decimal", 0.001, Integer.MIN_VALUE, Integer.MAX_VALUE);
+
+        RandomGainMultiplierMin = builder.defineInRange("Random Gain Multiplier Min (0 = No Change) - Cannot be equal or superior than the Max.Must have a decimal", 0.0, Integer.MIN_VALUE, Integer.MAX_VALUE);
+        RandomGainMultiplierMax = builder.defineInRange("Random Gain Multiplier Max (0 + decimal 001 = No Change) - Cannot be equal or inferior than the Min.Must have a decimal", 0.001, Integer.MIN_VALUE, Integer.MAX_VALUE);
+        RandomLossMultiplierMin = builder.defineInRange("Random Loss Multiplier Min (0 = No Change) - Cannot be equal or superior than the Max.Must have a decimal", 0.0, Integer.MIN_VALUE, Integer.MAX_VALUE);
+        RandomLossMultiplierMax = builder.defineInRange("Random Loss Multiplier Max (0 + decimal 001 = No Change) - Cannot be equal or interior than the Min.Must have a decimal", 0.001, Integer.MIN_VALUE, Integer.MAX_VALUE);
     }
-
-    public static void bakeConfig() {
-        baseRateBountyHunter = Config.BASE_RATE_BOUNTY_HUNTER.get();
-        percentageRewardBountyHunter = Config.PERCENTAGE_REWARD_BOUNTY_HUNTER.get();
-
-        PacketDistributor.sendToAllPlayers(
-                new SyncServerConfigS2C(
-                        baseRateBountyHunter,
-                    percentageRewardBountyHunter));
-
-    }
-
-    private static void onConfigUnload() {
-        baseRateBountyHunter = 1.0;
-        percentageRewardBountyHunter = 5;
-    }
-
-    @SubscribeEvent
-    public static void onLoad(final ModConfigEvent event) {
-        try {
-            if (event.getConfig().getType() == ModConfig.Type.SERVER && event.getConfig().getSpec() == Config.SPEC) {
-                bakeConfig();
-            }
-        } catch (Exception e) {
-            PlayerBountyMod.LOGGER.error("Error loading server config", e);
-            onConfigUnload();
-        }
-    }
-
 }

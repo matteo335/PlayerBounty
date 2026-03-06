@@ -1,9 +1,11 @@
-package matteo.PlayerBounty;
+package net.matteo.playerbounty.old;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.world.entity.player.Player;
+
+import net.matteo.playerbounty.PlayerBountyMod;
 
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
@@ -17,7 +19,7 @@ public record BountyDisplays(String bountyDisplay1, int bounty, String bountyDis
 
             if (toSync != null) {
 
-                PlayerBounty.bountyTags(toSync, bountyDisplay1, bounty, bountyDisplay2, deleteDisplay);
+                PlayerBountyMod.bountyTags(toSync, bountyDisplay1, bounty, bountyDisplay2, deleteDisplay);
                 minecraft.player.connection.getPlayerInfo(toSync.getGameProfile().getId()).setTabListDisplayName(Component.translatable(bountyDisplay1 + bounty + bountyDisplay2));
             }
         });

@@ -4,7 +4,21 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6c180e54-0589-40b8-b96f-594fb075161e" name="Changes" comment="" />
+    <list default="true" id="cc3dde6b-2bfa-4cb9-b374-00fb3f1da111" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/net/matteo/playerbounty/utils/Timer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/matteo/playerbounty/PlayerBountyMod.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/matteo/playerbounty/PlayerBountyMod.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/matteo/playerbounty/configs/ServerConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/matteo/playerbounty/configs/ServerConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/matteo/playerbounty/events/PlayerDeathEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/matteo/playerbounty/events/PlayerDeathEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/matteo/playerbounty/network/ServerConfigSync.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/matteo/playerbounty/network/ServerConfigSync.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/matteo/playerbounty/old/BountyDisplays.java.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/matteo/playerbounty/old/NetworkDisplays.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/matteo/playerbounty/old/DisplayEvents.java.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/matteo/playerbounty/old/DisplayEvents.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/META-INF/neoforge.mods.toml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/META-INF/neoforge.mods.toml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -26,18 +40,18 @@
             <expand>
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="Player-Bounty" type="f1a62948:ProjectNode" />
+                <item name="PlayerBounty" type="f1a62948:ProjectNode" />
               </path>
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="Player-Bounty" type="f1a62948:ProjectNode" />
+                <item name="PlayerBounty" type="f1a62948:ProjectNode" />
                 <item name="Tasks" type="e4a08cd1:TasksNode" />
               </path>
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="Player-Bounty" type="f1a62948:ProjectNode" />
+                <item name="PlayerBounty" type="f1a62948:ProjectNode" />
                 <item name="Tasks" type="e4a08cd1:TasksNode" />
-                <item name="build" type="c8890929:TasksNode$1" />
+                <item name="mod development" type="c8890929:TasksNode$1" />
               </path>
             </expand>
             <select />
@@ -54,106 +68,81 @@
     </option>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/Github" />
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="1.20.1" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory">{
-  &quot;lastFilter&quot;: {
-    &quot;state&quot;: &quot;OPEN&quot;,
-    &quot;assignee&quot;: &quot;matteo335&quot;
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "matteo335"
   }
-}</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/matteo335/PlayerBounty.git&quot;,
-    &quot;accountId&quot;: &quot;8cb7c9fb-a772-420e-b479-d39fe90a8f8b&quot;
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/matteo335/PlayerBounty",
+    "accountId": "8cb7c9fb-a772-420e-b479-d39fe90a8f8b"
   }
-}</component>
-  <component name="ProblemsViewState">
-    <option name="selectedTabId" value="CurrentFile" />
-  </component>
-  <component name="ProjectColorInfo">{
-  &quot;associatedIndex&quot;: 0
-}</component>
-  <component name="ProjectId" id="32OHwfFks5uslw5dxJupZIGNS9N" />
+}]]></component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 1
+}]]></component>
+  <component name="ProjectId" id="3AaK5TkcKOAQGvhKNgnPk9DE1kZ" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
+    <option name="showMembers" value="true" />
+    <option name="showVisibilityIcons" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Gradle.Build Player-Bounty.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Download Sources.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Load Gradle Dependencies.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Player-Bounty [:net.neoforged.devlaunch.Main.main()].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Player-Bounty [assemble].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Player-Bounty [buildEnvironment].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Player-Bounty [build].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Player-Bounty [check].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Player-Bounty [client].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Player-Bounty [createArtifactManifest].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Player-Bounty [createMcpToSrg].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Player-Bounty [createMinecraftArtifacts].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Player-Bounty [dependencies].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Player-Bounty [downloadAssets].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Player-Bounty [init].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Player-Bounty [jar].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Player-Bounty [projects].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Player-Bounty [properties].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Player-Bounty [resolvableConfigurations].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Player-Bounty [runClient].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Player-Bounty [runServer].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Player-Bounty [server].executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;1.21.1&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;onboarding.tips.debug.path&quot;: &quot;C:/Users/matte/IdeaProjects/Player-Bounty/src/Main.java&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;SDKs&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Gradle.C:/Users/matte/IdeaProjects/PlayerBounty [createMcpToSrg].executor": "Run",
+    "Gradle.Download Sources.executor": "Run",
+    "Gradle.PlayerBounty [runClient2].executor": "Run",
+    "Gradle.PlayerBounty [runClient].executor": "Run",
+    "Gradle.PlayerBounty [runServer].executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "1.21.1",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true"
   }
-}</component>
-  <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\matte\IdeaProjects\Player-Bounty\src\main\resources" />
-    </key>
-  </component>
-  <component name="RunManager" selected="Gradle.Player-Bounty [build]">
+}]]></component>
+  <component name="RunManager" selected="Gradle.PlayerBounty [runServer]">
     <configuration name="Client" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="net.neoforged.devlaunch.Main" />
-      <module name="Player-Bounty.main" />
-      <option name="PROGRAM_PARAMETERS" value="@C:\\Users\\matte\\IdeaProjects\\Player-Bounty\\build\\moddev\\clientRunProgramArgs.txt" />
-      <option name="VM_PARAMETERS" value="@C:\\Users\\matte\\IdeaProjects\\Player-Bounty\\build\\moddev\\clientRunVmArgs.txt -Dfml.modFolders=player-bounty%%C:\\Users\\matte\\IdeaProjects\\Player-Bounty\\build\\classes\\java\\main;player-bounty%%C:\\Users\\matte\\IdeaProjects\\Player-Bounty\\build\\resources\\main" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/run" />
+      <module name="PlayerBounty.main" />
+      <option name="PROGRAM_PARAMETERS" value="@C:\\Users\\matte\\IdeaProjects\\PlayerBounty\\build\\moddev\\clientRunProgramArgs.txt" />
+      <option name="VM_PARAMETERS" value="@C:\\Users\\matte\\IdeaProjects\\PlayerBounty\\build\\moddev\\clientRunVmArgs.txt -Dfml.modFolders=playerbounty%%C:\\Users\\matte\\IdeaProjects\\PlayerBounty\\build\\classes\\java\\main;playerbounty%%C:\\Users\\matte\\IdeaProjects\\PlayerBounty\\build\\resources\\main" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/run/main_client" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Data" type="Application" factoryName="Application">
+    <configuration name="Client2" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="net.neoforged.devlaunch.Main" />
-      <module name="Player-Bounty.main" />
-      <option name="PROGRAM_PARAMETERS" value="@C:\\Users\\matte\\IdeaProjects\\Player-Bounty\\build\\moddev\\dataRunProgramArgs.txt" />
-      <option name="VM_PARAMETERS" value="@C:\\Users\\matte\\IdeaProjects\\Player-Bounty\\build\\moddev\\dataRunVmArgs.txt -Dfml.modFolders=player-bounty%%C:\\Users\\matte\\IdeaProjects\\Player-Bounty\\build\\classes\\java\\main;player-bounty%%C:\\Users\\matte\\IdeaProjects\\Player-Bounty\\build\\resources\\main" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/run" />
+      <module name="PlayerBounty.main" />
+      <option name="PROGRAM_PARAMETERS" value="@C:\\Users\\matte\\IdeaProjects\\PlayerBounty\\build\\moddev\\client2RunProgramArgs.txt" />
+      <option name="VM_PARAMETERS" value="@C:\\Users\\matte\\IdeaProjects\\PlayerBounty\\build\\moddev\\client2RunVmArgs.txt -Dfml.modFolders=playerbounty%%C:\\Users\\matte\\IdeaProjects\\PlayerBounty\\build\\classes\\java\\main;playerbounty%%C:\\Users\\matte\\IdeaProjects\\PlayerBounty\\build\\resources\\main" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/run/off_client" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <configuration name="Server" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="net.neoforged.devlaunch.Main" />
-      <module name="Player-Bounty.main" />
-      <option name="PROGRAM_PARAMETERS" value="@C:\\Users\\matte\\IdeaProjects\\Player-Bounty\\build\\moddev\\serverRunProgramArgs.txt" />
-      <option name="VM_PARAMETERS" value="@C:\\Users\\matte\\IdeaProjects\\Player-Bounty\\build\\moddev\\serverRunVmArgs.txt -Dfml.modFolders=player-bounty%%C:\\Users\\matte\\IdeaProjects\\Player-Bounty\\build\\classes\\java\\main;player-bounty%%C:\\Users\\matte\\IdeaProjects\\Player-Bounty\\build\\resources\\main" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/run" />
+      <module name="PlayerBounty.main" />
+      <option name="PROGRAM_PARAMETERS" value="@C:\\Users\\matte\\IdeaProjects\\PlayerBounty\\build\\moddev\\serverRunProgramArgs.txt" />
+      <option name="VM_PARAMETERS" value="@C:\\Users\\matte\\IdeaProjects\\PlayerBounty\\build\\moddev\\serverRunVmArgs.txt -Dfml.modFolders=playerbounty%%C:\\Users\\matte\\IdeaProjects\\PlayerBounty\\build\\classes\\java\\main;playerbounty%%C:\\Users\\matte\\IdeaProjects\\PlayerBounty\\build\\resources\\main" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/run/server" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Player-Bounty [assemble]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="PlayerBounty [runClient2]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -164,7 +153,7 @@
         </option>
         <option name="taskNames">
           <list>
-            <option value="assemble" />
+            <option value="runClient2" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -175,7 +164,7 @@
       <RunAsTest>false</RunAsTest>
       <method v="2" />
     </configuration>
-    <configuration name="Player-Bounty [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="PlayerBounty [runClient]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -186,7 +175,7 @@
         </option>
         <option name="taskNames">
           <list>
-            <option value="build" />
+            <option value="runClient" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -197,7 +186,7 @@
       <RunAsTest>false</RunAsTest>
       <method v="2" />
     </configuration>
-    <configuration name="Player-Bounty [dependencies]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="PlayerBounty [runServer]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -208,7 +197,7 @@
         </option>
         <option name="taskNames">
           <list>
-            <option value="dependencies" />
+            <option value="runServer" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -219,77 +208,21 @@
       <RunAsTest>false</RunAsTest>
       <method v="2" />
     </configuration>
-    <configuration name="Player-Bounty [init]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="init" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <RunAsTest>false</RunAsTest>
-      <method v="2" />
-    </configuration>
-    <configuration name="Player-Bounty [resolvableConfigurations]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="resolvableConfigurations" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <RunAsTest>false</RunAsTest>
-      <method v="2" />
-    </configuration>
-    <list>
-      <item itemvalue="Application.Client" />
-      <item itemvalue="Application.Data" />
-      <item itemvalue="Application.Server" />
-      <item itemvalue="Gradle.Player-Bounty [build]" />
-      <item itemvalue="Gradle.Player-Bounty [dependencies]" />
-      <item itemvalue="Gradle.Player-Bounty [init]" />
-      <item itemvalue="Gradle.Player-Bounty [resolvableConfigurations]" />
-      <item itemvalue="Gradle.Player-Bounty [assemble]" />
-    </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.Player-Bounty [build]" />
-        <item itemvalue="Gradle.Player-Bounty [dependencies]" />
-        <item itemvalue="Gradle.Player-Bounty [assemble]" />
-        <item itemvalue="Gradle.Player-Bounty [init]" />
-        <item itemvalue="Gradle.Player-Bounty [resolvableConfigurations]" />
+        <item itemvalue="Gradle.PlayerBounty [runServer]" />
+        <item itemvalue="Gradle.PlayerBounty [runClient2]" />
+        <item itemvalue="Gradle.PlayerBounty [runClient]" />
       </list>
     </recent_temporary>
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="6c180e54-0589-40b8-b96f-594fb075161e" name="Changes" comment="" />
-      <created>1757284940723</created>
+      <changelist id="cc3dde6b-2bfa-4cb9-b374-00fb3f1da111" name="Changes" comment="" />
+      <created>1772825058141</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1757284940723</updated>
+      <updated>1772825058141</updated>
     </task>
     <servers />
   </component>

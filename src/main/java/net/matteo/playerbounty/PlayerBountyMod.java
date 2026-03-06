@@ -1,35 +1,34 @@
 package net.matteo.playerbounty;
 
-import org.apache.logging.log4j.Logger;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.concurrent.ConcurrentLinkedQueue;
-
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.tick.ServerTickEvent;
+import net.neoforged.neoforge.event.server.ServerStartedEvent;
+import net.neoforged.bus.api.EventPriority;
+
 import net.matteo.playerbounty.capabilities.PlayerDataBountyCapabilities;
 import net.matteo.playerbounty.configs.ServerConfig;
 import net.matteo.playerbounty.network.PBNetwork;
 import net.matteo.playerbounty.network.payload.SyncServerConfigS2C;
-import net.minecraft.util.Tuple;
+import net.matteo.playerbounty.utils.Timer;
+
+import net.minecraft.network.chat.Component;
+
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
 
 @Mod("playerbounty")
 public class PlayerBountyMod {
-    public static final Logger LOGGER = LogManager.getLogger(PlayerBountyMod.class);
     public static final String MOD_ID = "playerbounty";
+    public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
 
     public PlayerBountyMod(IEventBus modEventBus, ModContainer modContainer) {
         NeoForge.EVENT_BUS.register(PlayerBountyMod.class);
-		modEventBus.addListener(PBNetwork::registerNetworking);
+        modEventBus.addListener(PBNetwork::registerNetworking);
 
         PBNetwork.addNetworkMessage(
                 SyncServerConfigS2C.TYPE,
@@ -39,25 +38,18 @@ public class PlayerBountyMod {
 
         PlayerDataBountyCapabilities.ATTACHMENT_TYPES.register(modEventBus);
 
-        modContainer.registerConfig(ModConfig.Type.SERVER, ServerConfig.Config.SPEC,
-				String.format("%s-server.toml", MOD_ID));
+        modContainer.registerConfig(ModConfig.Type.SERVER, ServerConfig.builder.build(),
+                String.format("%1$s-%2$s.toml", MOD_ID, "SG-Economy"));
     }
 
-    private static final Collection<Tuple<Runnable, Integer>> workQueue = new ConcurrentLinkedQueue<>();
-
-	public static void queueServerWork(int tick, Runnable action) {
-		workQueue.add(new Tuple<>(action, tick));
-	}
-
-	@SubscribeEvent
-	public static void tick(ServerTickEvent.Post event) {
-		List<Tuple<Runnable, Integer>> actions = new ArrayList<>();
-		workQueue.forEach(work -> {
-			work.setB(work.getB() - 1);
-			if (work.getB() == 0)
-				actions.add(work);
-		});
-		actions.forEach(e -> e.getA().run());
-		workQueue.removeAll(actions);
-	}
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public void onServerLoad(ServerStartedEvent start) {
+        if (ServerConfig.StartupWarning.get()) {
+            Timer.runLater(6000, () -> {
+                if (start.getServer().getPlayerCount() != 0) {
+                    start.getServer().getPlayerList().broadcastSystemMessage(Component.literal("<PlayerBounty>: THIS WARNING IS FOR PEOPLE WHO FORGOT TO READ THE MOD DESCRIPTION\nIN ORDER FOR THE MOD TO WORK AS YOU WISH, YOU NEED TO CHANGE THE CONFIG AND RESTART THE WORLD"), false);
+                } else onServerLoad(start);
+            });
+        }
+    }
 }
