@@ -34,6 +34,7 @@ neoForge {
         }
         server {
             server()
+            jvmArgument("-Xmx2G")
             gameDirectory = file('run/server')
         }
 

@@ -12,9 +12,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+@EventBusSubscriber
 public class Timer {
 
-    @EventBusSubscriber
     private static class Delay {
         int ticks;
         Runnable methods;

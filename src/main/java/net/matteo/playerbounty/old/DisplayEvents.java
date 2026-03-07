@@ -4,56 +4,74 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
 
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 import net.matteo.playerbounty.configs.ServerConfig;
-import net.matteo.playerbounty.network.
+import net.matteo.playerbounty.utils.Timer;
+import net.matteo.playerbounty.PlayerBountyMod;
 
-//import net.sirgrantd.magic_coins.api.MagicCoinsApi;
-//import net.sirgrantd.magic_coins.capabilities.CoinsBagCapabilities;
+import net.sirgrantd.sg_economy.api.SGEconomyApi;
+import net.sirgrantd.sg_economy.capabilities.CoinsBagCapabilities;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
 @EventBusSubscriber
-public class DisplayEvents {
+public class DisplayEvents implements CustomPacketPayload {
 
-    public static void packetDisplay(Player player, String bountydisplay1, Integer bounty, String bountydisplay2, boolean deleteDefaultDisplay) {
-        bountyTag(player, bountydisplay1, bounty, bountydisplay2, deleteDefaultDisplay);
-        PacketDistributor.sendToAllPlayers(new BountyDisplays(bountydisplay1, bounty, bountydisplay2, player.getId(), deleteDefaultDisplay));
+    public static final CustomPacketPayload.Type<DisplayEvents> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(PlayerBountyMod.MOD_ID, "display"));
+
+    public static void packetDisplay(Player player, String bountydisplay1, double bounty, String bountydisplay2) {
+        bountyTags(player, bountydisplay1, bounty, bountydisplay2);
+        PacketDistributor.sendToAllPlayers(new NetworkDisplay(bountydisplay1, bounty, bountydisplay2, player.getId()));
+    }
+
+    public static void bountyTags(Player player, String bountydisplay1, double Bounty, String bountydisplay2) {
+        CompoundTag tag = player.getPersistentData();
+
+        if (!ServerConfig.DisableDisplay.get()) {
+            tag.putString("bountydisplay1", bountydisplay1);
+            tag.putDouble("bounty", Bounty);
+            tag.putString("bountydisplay2", bountydisplay2);
+            player.refreshDisplayName();
+        }
     }
 
     @SubscribeEvent
     public static void onJoin(PlayerEvent.PlayerLoggedInEvent event) {
-        Player player = event.getEntity();
+        ServerPlayer player = (ServerPlayer) event.getEntity();
 
         if (!player.getCommandSenderWorld().isClientSide) {
             if (ServerConfig.IsPlayerBountyDisplayEnabled.get() && !ServerConfig.IsMagicCoinsDisplayEnabled.get()) {
                 if (player.getPersistentData().contains("bounty")) {
-                    packetDisplay(player, player.getPersistentData().getString("bountydisplay1"), player.getPersistentData().getInt("bounty"), player.getPersistentData().getString("bountydisplay2"), ServerConfig.DeleteDisplay.get());
+                    packetDisplay(player, player.getPersistentData().getString("bountydisplay1"), player.getPersistentData().getInt("bounty"), player.getPersistentData().getString("bountydisplay2"));
 
                     for (Player playerlist : player.getServer().getPlayerList().getPlayers()) {
-                        PacketDistributor.sendToPlayer((ServerPlayer) player, new BountyDisplays(playerlist.getPersistentData().getString("bountydisplay1"), playerlist.getPersistentData().getInt("bounty"), playerlist.getPersistentData().getString("bountydisplay2"), playerlist.getId(), BountyConfig.DeleteDisplay.get()));
+                        PacketDistributor.sendToPlayer(player, new NetworkDisplay(playerlist.getPersistentData().getString("bountydisplay1"), playerlist.getPersistentData().getInt("bounty"), playerlist.getPersistentData().getString("bountydisplay2"), playerlist.getId()));
                     }
                 }
             }
         } else if (!ServerConfig.IsPlayerBountyDisplayEnabled.get() && ServerConfig.IsMagicCoinsDisplayEnabled.get()) {
-            packetDisplay(player, player.getName().getString() + ServerConfig.CoinsDisplay1.get(), MagicCoinsApi.getTotalCoins(player), ServerConfig.CoinsDisplay2.get(), ServerConfig.DeleteDisplay.get());
+            packetDisplay(player, player.getName().getString() + ServerConfig.CoinsDisplay1.get(), SGEconomyApi.get().getBalance(player), ServerConfig.CoinsDisplay2.get());
 
             for (Player playerlist : player.getServer().getPlayerList().getPlayers()) {
-                PacketDistributor.sendToPlayer((ServerPlayer) player, new BountyDisplays(player.getName().getString() + ServerConfig.CoinsDisplay1.get(), MagicCoinsApi.getTotalCoins(player), ServerConfig.CoinsDisplay2.get(), playerlist.getId(), BountyConfig.DeleteDisplay.get()));
+                PacketDistributor.sendToPlayer(player, new NetworkDisplay(player.getName().getString() + ServerConfig.CoinsDisplay1.get(), SGEconomyApi.get().getBalance(player), ServerConfig.CoinsDisplay2.get(), playerlist.getId()));
                 player.refreshDisplayName();
                 playerlist.refreshDisplayName();
                 //Enable a constant loop to update the displays updateLoop(player, new PlayerEvent.NameFormat(player, player.getDisplayName()));
             }
-        } else if (BountyConfig.IsPlayerBountyDisplayEnabled.get() && BountyConfig.IsMagicCoinsDisplayEnabled.get()) {
-            PlayerBounty.packets((ServerPlayer) player, player.getName().getString() + BountyConfig.CoinsDisplay1.get() + MagicCoinsApi.getTotalCoins(player) + BountyConfig.CoinsDisplay2.get() + BountyConfig.BountyDisplay1.get(), player.getPersistentData().getInt("bounty"), BountyConfig.BountyDisplay2.get(), BountyConfig.DeleteDisplay.get());
+        } else if (ServerConfig.IsPlayerBountyDisplayEnabled.get() && ServerConfig.IsMagicCoinsDisplayEnabled.get()) {
+            packetDisplay(player, player.getName().getString() + ServerConfig.CoinsDisplay1.get() + SGEconomyApi.get().getBalance(player) + ServerConfig.CoinsDisplay2.get() + ServerConfig.BountyDisplay1.get(), player.getPersistentData().getInt("bounty"), ServerConfig.BountyDisplay2.get());
 
             for (Player playerlist : player.getServer().getPlayerList().getPlayers()) {
-                PacketDistributor.sendToPlayer((ServerPlayer) player, new BountyDisplays(player.getName().getString() + BountyConfig.CoinsDisplay1.get() + MagicCoinsApi.getTotalCoins(player) + BountyConfig.CoinsDisplay2.get() + BountyConfig.BountyDisplay1.get(), playerlist.getPersistentData().getInt("bounty"), BountyConfig.CoinsDisplay2.get(), playerlist.getId(), BountyConfig.DeleteDisplay.get()));
+            PacketDistributor.sendToPlayer(player, new NetworkDisplay(player.getName().getString() + ServerConfig.CoinsDisplay1.get() + SGEconomyApi.get().getBalance(player) + ServerConfig.CoinsDisplay2.get() + ServerConfig.BountyDisplay1.get(), playerlist.getPersistentData().getInt("bounty"), ServerConfig.CoinsDisplay2.get(), playerlist.getId()));
                 player.refreshDisplayName();
                 playerlist.refreshDisplayName();
                 //Enable a constant loop to update the displays updateLoop(player, new PlayerEvent.NameFormat(player, player.getName()));
@@ -63,22 +81,23 @@ public class DisplayEvents {
 
 
     @SubscribeEvent
+
     public static void renderName(PlayerEvent.NameFormat event) {
         CompoundTag tag = event.getEntity().getPersistentData();
         int ticks = 1;
 
-        if (BountyConfig.IsPlayerBountyDisplayEnabled.get() && !BountyConfig.IsMagicCoinsDisplayEnabled.get()) {
+        if (ServerConfig.IsPlayerBountyDisplayEnabled.get() && !ServerConfig.IsMagicCoinsDisplayEnabled.get()) {
             if (tag.contains("bounty")) {
                 event.setDisplayname(Component.translatable(tag.getString("bountydisplay1") + tag.getInt("bounty") + tag.getString("bountydisplay2")));
             }
         }
 
-        else if (!BountyConfig.IsPlayerBountyDisplayEnabled.get() && BountyConfig.IsMagicCoinsDisplayEnabled.get()) {
-            event.setDisplayname(Component.translatable(event.getEntity().getName().getString() + BountyConfig.CoinsDisplay1.get() + event.getEntity().getData(CoinsBagCapabilities.COINS_IN_BAG).valueTotalInCoins + BountyConfig.CoinsDisplay2.get()));
+        else if (!ServerConfig.IsPlayerBountyDisplayEnabled.get() && ServerConfig.IsMagicCoinsDisplayEnabled.get()) {
+            event.setDisplayname(Component.translatable(event.getEntity().getName().getString() + ServerConfig.CoinsDisplay1.get() + event.getEntity().getData(CoinsBagCapabilities.COINS_IN_BAG).valueTotalInCoins + ServerConfig.CoinsDisplay2.get()));
 
             //Enable a constant loop to update the displays Utils.runLater(BountyConfig.CoinsDisplayTimer.get(), updateLoop(event.getEntity(), new PlayerEvent.NameFormat(event.getEntity(), event.getEntity().getName())));
-        } else if (BountyConfig.IsPlayerBountyDisplayEnabled.get() && BountyConfig.IsMagicCoinsDisplayEnabled.get()) {
-            event.setDisplayname(Component.literal(event.getEntity().getName().getString() + BountyConfig.CoinsDisplay1.get() + MagicCoinsApi.getTotalCoins(event.getEntity()) + BountyConfig.CoinsDisplay2.get() + BountyConfig.BountyDisplay1.get() + tag.getInt("bounty") + BountyConfig.BountyDisplay2.get()));
+        } else if (ServerConfig.IsPlayerBountyDisplayEnabled.get() && ServerConfig.IsMagicCoinsDisplayEnabled.get()) {
+            event.setDisplayname(Component.literal(event.getEntity().getName().getString() + ServerConfig.CoinsDisplay1.get() + SGEconomyApi.get().getBalance(event.getEntity()) + ServerConfig.CoinsDisplay2.get() + ServerConfig.BountyDisplay1.get() + tag.getInt("bounty") + ServerConfig.BountyDisplay2.get()));
 
             //Enable a constant loop to update the displays updateLoop(event.getEntity(), new PlayerEvent.NameFormat(event.getEntity(), event.getEntity().getDisplayName()));
         }
@@ -89,7 +108,7 @@ public class DisplayEvents {
         Player oldPlayer = event.getOriginal();
         Player newPlayer = event.getEntity();
 
-        if (BountyConfig.IsPlayerBountyDisplayEnabled.get()) {
+        if (ServerConfig.IsPlayerBountyDisplayEnabled.get()) {
             if (oldPlayer.getPersistentData().contains("bounty")) {
                 String bountydisplay1 = oldPlayer.getPersistentData().getString("bountydisplay1");
                 int bounty = oldPlayer.getPersistentData().getInt("bounty");
@@ -101,10 +120,8 @@ public class DisplayEvents {
             }
         }
 
-        if (BountyConfig.MagicCoinsSystem.get()) {
-            int coins = MagicCoinsApi.getTotalCoins(oldPlayer);
-
-            MagicCoinsApi.setTotalCoins(newPlayer, coins);
+        if (ServerConfig.MagicCoinsSystem.get()) {
+            SGEconomyApi.get().getBalance(newPlayer);
         }
     }
 
@@ -113,32 +130,36 @@ public class DisplayEvents {
         if (event.getTarget() instanceof Player player) {
                 ServerPlayer display = (ServerPlayer) event.getEntity();
 
-            if (BountyConfig.IsPlayerBountyDisplayEnabled.get() && !BountyConfig.IsMagicCoinsDisplayEnabled.get()) {
+            if (ServerConfig.IsPlayerBountyDisplayEnabled.get() && !ServerConfig.IsMagicCoinsDisplayEnabled.get()) {
                 if (player.getPersistentData().contains("bounty")) {
-                    PacketDistributor.sendToPlayer(display, new BountyDisplays(player.getPersistentData().getString("bountydisplay1"), player.getPersistentData().getInt("bounty"), player.getPersistentData().getString("bountydisplay2"), player.getId(), BountyConfig.DeleteDisplay.get()));
+                    PacketDistributor.sendToPlayer(display, new NetworkDisplay(player.getPersistentData().getString("bountydisplay1"), player.getPersistentData().getInt("bounty"), player.getPersistentData().getString("bountydisplay2"), player.getId()));
                 }
-            } else if (!BountyConfig.IsPlayerBountyDisplayEnabled.get() && BountyConfig.IsMagicCoinsDisplayEnabled.get()) {
-                PacketDistributor.sendToPlayer(display, new BountyDisplays(player.getName().getString() + BountyConfig.CoinsDisplay1.get(), MagicCoinsApi.getTotalCoins(player), BountyConfig.CoinsDisplay2.get(), player.getId(), BountyConfig.DeleteDisplay.get()));
-            } else if (BountyConfig.IsPlayerBountyDisplayEnabled.get() && BountyConfig.IsMagicCoinsDisplayEnabled.get()) {
-                PacketDistributor.sendToPlayer(display, new BountyDisplays(player.getName().getString() + BountyConfig.CoinsDisplay1.get() + MagicCoinsApi.getTotalCoins(player) + BountyConfig.CoinsDisplay2.get() + BountyConfig.BountyDisplay1.get() + player.getPersistentData().getString("bountydisplay1"), player.getPersistentData().getInt("bounty"), player.getPersistentData().getString("bountydisplay2"), player.getId(), BountyConfig.DeleteDisplay.get()));
+            } else if (!ServerConfig.IsPlayerBountyDisplayEnabled.get() && ServerConfig.IsMagicCoinsDisplayEnabled.get()) {
+                PacketDistributor.sendToPlayer(display, new NetworkDisplay(player.getName().getString() + ServerConfig.CoinsDisplay1.get(), SGEconomyApi.get().getBalance(player), ServerConfig.CoinsDisplay2.get(), player.getId()));
+            } else if (ServerConfig.IsPlayerBountyDisplayEnabled.get() && ServerConfig.IsMagicCoinsDisplayEnabled.get()) {
+                PacketDistributor.sendToPlayer(display, new NetworkDisplay(player.getName().getString() + ServerConfig.CoinsDisplay1.get() + SGEconomyApi.get().getBalance(player) + ServerConfig.CoinsDisplay2.get() + ServerConfig.BountyDisplay1.get() + player.getPersistentData().getString("bountydisplay1"), player.getPersistentData().getInt("bounty"), player.getPersistentData().getString("bountydisplay2"), player.getId()));
             }
         }
     }
 
     //Constant loop to update the displays
-    public static Runnable updateLoop(Player player, PlayerEvent.NameFormat name) {
+    public static void updateLoop(Player player, PlayerEvent.NameFormat name) {
         AtomicInteger tick = new AtomicInteger();
 
         if (tick.get() == 0) {
-            Utils.runLater(BountyConfig.CoinsDisplayTimer.get(), () -> {
-                name.setDisplayname(Component.translatable(player.getName().getString() + BountyConfig.CoinsDisplay1.get() + MagicCoinsApi.getTotalCoins(player) + BountyConfig.CoinsDisplay2.get()));
+            Timer.runLater(ServerConfig.CoinsDisplayTimer.get(), () -> {
+                name.setDisplayname(Component.translatable(player.getName().getString() + ServerConfig.CoinsDisplay1.get() + SGEconomyApi.get().getBalance(player) + ServerConfig.CoinsDisplay2.get()));
                 renderName(name);
                 onTracking(new PlayerEvent.StartTracking(player, player));
                 tick.addAndGet(1);
             });
         } else if (tick.get() != 0) {
-            Utils.runLater(BountyConfig.CoinsDisplayTimer.get(), () -> tick.addAndGet(-1));
+            Timer.runLater(ServerConfig.CoinsDisplayTimer.get(), () -> tick.addAndGet(-1));
         } //new PlayerEvent.NameFormat is a bit broken, let's fix tomorrow
-        return null;
+    }
+
+    @Override
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
     }
 }

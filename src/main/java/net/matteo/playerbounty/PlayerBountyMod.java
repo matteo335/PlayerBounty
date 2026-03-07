@@ -8,6 +8,7 @@ import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import net.neoforged.bus.api.EventPriority;
+import net.neoforged.fml.common.EventBusSubscriber;
 
 import net.matteo.playerbounty.capabilities.PlayerDataBountyCapabilities;
 import net.matteo.playerbounty.configs.ServerConfig;
@@ -22,12 +23,12 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
 
 @Mod("playerbounty")
+@EventBusSubscriber
 public class PlayerBountyMod {
     public static final String MOD_ID = "playerbounty";
     public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
 
     public PlayerBountyMod(IEventBus modEventBus, ModContainer modContainer) {
-        NeoForge.EVENT_BUS.register(PlayerBountyMod.class);
         modEventBus.addListener(PBNetwork::registerNetworking);
 
         PBNetwork.addNetworkMessage(
@@ -43,7 +44,7 @@ public class PlayerBountyMod {
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
-    public void onServerLoad(ServerStartedEvent start) {
+    public static void onServerLoad(ServerStartedEvent start) {
         if (ServerConfig.StartupWarning.get()) {
             Timer.runLater(6000, () -> {
                 if (start.getServer().getPlayerCount() != 0) {

@@ -11,12 +11,10 @@ import net.minecraft.network.chat.Component;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
-import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.api.distmarker.Dist;
 
 
-@EventBusSubscriber
-@OnlyIn(Dist.DEDICATED_SERVER)
+@EventBusSubscriber(Dist.DEDICATED_SERVER)
 public class PlayerDeathEvent {
 
     @SubscribeEvent

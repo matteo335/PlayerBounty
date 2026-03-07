@@ -2,6 +2,8 @@ package net.matteo.playerbounty.configs;
 
 import net.neoforged.neoforge.common.ModConfigSpec;
 
+import java.util.List;
+
 public class ServerConfig {
 
     public static ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
@@ -13,7 +15,7 @@ public class ServerConfig {
     public static ModConfigSpec.BooleanValue MagicCoinsSystem;
 
     public static ModConfigSpec.BooleanValue IsPlayerBountyDisplayEnabled;
-    public static ModConfigSpec.BooleanValue DeleteDisplay;
+    public static ModConfigSpec.BooleanValue DisableDisplay;
     public static ModConfigSpec.ConfigValue<String> BountyDisplay1;
     public static ModConfigSpec.ConfigValue<String> BountyDisplay2;
 
@@ -41,7 +43,7 @@ public class ServerConfig {
     public static ModConfigSpec.DoubleValue RandomLossMultiplierMax;
 
 
-    /// Magic Coins
+    /// SG Economy
     public static ModConfigSpec.BooleanValue IsMagicCoinsDisplayEnabled;
     public static ModConfigSpec.ConfigValue<Integer> CoinsDisplayTimer;
 
@@ -64,6 +66,8 @@ public class ServerConfig {
     public static ModConfigSpec.DoubleValue RandomGainCoinsMultiplierMax;
     public static ModConfigSpec.DoubleValue RandomLossCoinsMultiplierMin;
     public static ModConfigSpec.DoubleValue RandomLossCoinsMultiplierMax;
+
+    public static ModConfigSpec.BooleanValue MagicCoinsCompat;
 
     public static double baseRateBountyHunter;
     public static int percentageRewardBountyHunter;
@@ -88,7 +92,7 @@ public class ServerConfig {
         DefaultSystem = builder.define("Enable the default mechanics, disable it if you prefer the compats", true);
 
         IsPlayerBountyDisplayEnabled = builder.define("Display for the default system", true);
-        DeleteDisplay = builder.define("Completely delete the display", false);
+        DisableDisplay = builder.define("Disable the display", false);
         BountyDisplay1 = builder.define("Formatting Codes Before Bounty", " [$§6§l");
         BountyDisplay2 = builder.define("Formatting Codes After Bounty", "§r]");
 
@@ -112,5 +116,9 @@ public class ServerConfig {
         RandomGainMultiplierMax = builder.defineInRange("Random Gain Multiplier Max (0 + decimal 001 = No Change) - Cannot be equal or inferior than the Min.Must have a decimal", 0.001, Integer.MIN_VALUE, Integer.MAX_VALUE);
         RandomLossMultiplierMin = builder.defineInRange("Random Loss Multiplier Min (0 = No Change) - Cannot be equal or superior than the Max.Must have a decimal", 0.0, Integer.MIN_VALUE, Integer.MAX_VALUE);
         RandomLossMultiplierMax = builder.defineInRange("Random Loss Multiplier Max (0 + decimal 001 = No Change) - Cannot be equal or interior than the Min.Must have a decimal", 0.001, Integer.MIN_VALUE, Integer.MAX_VALUE);
+
+        IsMagicCoinsDisplayEnabled = builder.define("Enable the Magic Coins display over beside the player name", true);
+        CoinsDisplay1 = builder.define("Formatting Codes Before Coins", "[$§d§l");
+        CoinsDisplay2 = builder.define("Formatting Codes After Coins", "§r]");
     }
 }
