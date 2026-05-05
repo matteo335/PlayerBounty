@@ -1,5 +1,7 @@
 package net.matteo.playerbounty;
 
+import net.matteo.playerbounty.old.DisplayEvents;
+import net.matteo.playerbounty.old.NetworkDisplay;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -9,13 +11,14 @@ import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.ModList;
+import net.neoforged.neoforge.event.server.ServerStartingEvent;
 
 import net.matteo.playerbounty.capabilities.PlayerDataBountyCapabilities;
-import net.matteo.playerbounty.network.PBNetwork;
-import net.matteo.playerbounty.network.payload.SyncServerConfigS2C;
+import net.matteo.playerbounty.network.Network;
 import net.matteo.playerbounty.utils.Timer;
 import net.matteo.playerbounty.configs.Config;
-import net.matteo.playerbounty.configs.MagicCoinsConfig;
+import net.matteo.playerbounty.configs.SGEconomyConfig;
+import net.matteo.playerbounty.utils.InvalidConfigException;
 
 import net.minecraft.network.chat.Component;
 
@@ -29,23 +32,28 @@ public class PlayerBountyMod {
     public static final String MOD_ID = "playerbounty";
     public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
 
-    public PlayerBountyMod(IEventBus modEventBus, ModContainer modContainer) {
-        modEventBus.addListener(PBNetwork::registerNetworking);
-
-        PBNetwork.addNetworkMessage(
-                SyncServerConfigS2C.TYPE,
-                SyncServerConfigS2C.STREAM_CODEC,
-                SyncServerConfigS2C::handle
-        );
-
+    public PlayerBountyMod(IEventBus modEventBus, ModContainer modContainer) throws InvalidConfigException {
+        modEventBus.addListener(Network::registerNetworking);
         PlayerDataBountyCapabilities.ATTACHMENT_TYPES.register(modEventBus);
+
+        Network.addNetworkMessage(
+                DisplayEvents.TYPE,
+                NetworkDisplay.STREAM_CODEC,
+                NetworkDisplay::payload,
+                Network.Direction.CLIENTBOUND
+        );
 
         modContainer.registerConfig(ModConfig.Type.SERVER, Config.builder.build());
 
-        if (ModList.get().isLoaded("sg_economy_api")) {
-            modContainer.registerConfig(ModConfig.Type.SERVER, MagicCoinsConfig.builder.build(),
+        if (ModList.get().isLoaded("sg_economy")) {
+            modContainer.registerConfig(ModConfig.Type.SERVER, SGEconomyConfig.builder.build(),
                     String.format("%1$s-%2$s.toml", MOD_ID, "sg_economy"));
         }
+    }
+
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public static void onServerStart(ServerStartingEvent start) throws InvalidConfigException {
+        InvalidConfigException.CheckInvalidConfigs();
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)

@@ -42,8 +42,8 @@ public class Timer {
             if (task.ticks <= 0) {
                 try {
                     task.methods.run();
-                } catch (Exception e) {
-                    e.printStackTrace();
+                } catch (Exception exception) {
+                    exception.printStackTrace();
                 }
                 it.remove();
             }

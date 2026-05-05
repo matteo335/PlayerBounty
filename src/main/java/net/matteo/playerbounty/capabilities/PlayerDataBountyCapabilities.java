@@ -1,7 +1,7 @@
 package net.matteo.playerbounty.capabilities;
 
 import net.matteo.playerbounty.PlayerBountyMod;
-import net.matteo.playerbounty.network.PBNetwork;
+import net.matteo.playerbounty.network.Network;
 
 import java.util.function.Supplier;
 
@@ -36,8 +36,11 @@ public class PlayerDataBountyCapabilities {
     
     @SubscribeEvent
     public static void init(FMLCommonSetupEvent event) {
-        PBNetwork.addNetworkMessage(PlayerDataBountySyncPayload.TYPE, PlayerDataBountySyncPayload.STREAM_CODEC,
-                PlayerDataBountySyncPayload::handleData);
+        Network.addNetworkMessage(
+                PlayerDataBountySyncPayload.TYPE,
+                PlayerDataBountySyncPayload.STREAM_CODEC,
+                PlayerDataBountySyncPayload::handleData,
+                Network.Direction.CLIENTBOUND);
     }
 
     @EventBusSubscriber

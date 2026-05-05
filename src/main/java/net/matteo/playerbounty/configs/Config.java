@@ -17,15 +17,15 @@ public class Config {
 
     public static ModConfigSpec.BooleanValue LoseCompleteBountyOnDeath;
 
-    public static ModConfigSpec.ConfigValue<Integer> BountyMinimumValue;
-    public static ModConfigSpec.ConfigValue<Integer> BountyMaximumValue;
+    public static ModConfigSpec.DoubleValue BountyMinimumValue;
+    public static ModConfigSpec.DoubleValue BountyMaximumValue;
 
-    public static ModConfigSpec.ConfigValue<Integer> GainOnKilling;
-    public static ModConfigSpec.ConfigValue<Integer> LossOnDeath;
+    public static ModConfigSpec.ConfigValue<Double> GainOnKilling;
+    public static ModConfigSpec.ConfigValue<Double> LossOnDeath;
 
-    public static ModConfigSpec.DoubleValue MultiplierOfGainOverKillerBounty;
-    public static ModConfigSpec.DoubleValue MultiplierOfGainOverClaimedBounty;
-    public static ModConfigSpec.DoubleValue MultiplierOfLossOverTargetBounty;
+    public static ModConfigSpec.DoubleValue KillerMultiplier;
+    public static ModConfigSpec.DoubleValue ClaimMultiplier;
+    public static ModConfigSpec.DoubleValue TargetMultiplier;
 
 
     public static ModConfigSpec.DoubleValue RandomGainMin;
@@ -60,24 +60,24 @@ public class Config {
         BountyDisplay2 = builder.define("Formatting Codes After Bounty", "§r]");
 
         LoseCompleteBountyOnDeath = builder.define("Lose Complete Bounty On Death", false);
-        BountyMinimumValue = builder.define("Bounty Minimum Value", Integer.MIN_VALUE);
-        BountyMaximumValue = builder.define("Bounty Maximum Value", Integer.MAX_VALUE);
+        BountyMinimumValue = builder.defineInRange("Bounty Minimum Value", -Double.MAX_VALUE, Double.MIN_VALUE, Double.MAX_VALUE);
+        BountyMaximumValue = builder.defineInRange("Bounty Maximum Value", Double.MAX_VALUE, Double.MIN_VALUE, Double.MAX_VALUE);
 
-        GainOnKilling = builder.define("Bounty Gain On Killing (cannot have a decimal)", 10);
-        LossOnDeath = builder.define("Bounty Loss On Death (cannot have a decimal)", 10);
+        GainOnKilling = builder.define("Bounty Gain On Killing", 10.0);
+        LossOnDeath = builder.define("Bounty Loss On Death", 10.0);
 
-        MultiplierOfGainOverKillerBounty = builder.defineInRange("Killer-Multiplier of your own bounty (1 = No Change).Must have a decimal", 1.0, Integer.MIN_VALUE, Integer.MAX_VALUE);
-        MultiplierOfGainOverClaimedBounty = builder.defineInRange("Claim-Multiplier, how much you take from your victim (1 = Claim 100% of the bounty).Must have an decimal", 0.5, Integer.MIN_VALUE, Integer.MAX_VALUE);
-        MultiplierOfLossOverTargetBounty = builder.defineInRange("Target-Multiplier, how much do the victim loss (1 = No Change).Must have a decimal", 1.0, Integer.MIN_VALUE, Integer.MAX_VALUE);
+        KillerMultiplier = builder.defineInRange("Killer-Multiplier of your own bounty 1 = 100%", 1.0, -Double.MAX_VALUE, Double.MAX_VALUE);
+        ClaimMultiplier = builder.defineInRange("Claim-Multiplier, how much you take from your victim 1 = 100%", 0.5, -Double.MAX_VALUE, Double.MAX_VALUE);
+        TargetMultiplier = builder.defineInRange("Target-Multiplier, how much do the victim loss 1 = 100%", 1.0, -Double.MAX_VALUE, Double.MAX_VALUE);
 
-        RandomGainMin = builder.defineInRange("Minimum Random Gain.Must have a decimal", 0.0, Integer.MIN_VALUE, Integer.MAX_VALUE);
-        RandomGainMax = builder.defineInRange("Maximum Random Gain.Must have a decimal", 0.0, Integer.MIN_VALUE, Integer.MAX_VALUE);
-        RandomLossMin = builder.defineInRange("Minimum Random Loss.Must have a decimal", 0.0, Integer.MIN_VALUE, Integer.MAX_VALUE);
-        RandomLossMax = builder.defineInRange("Maximum Random Loss.Must have a decimal", 0.0, Integer.MIN_VALUE, Integer.MAX_VALUE);
+        RandomGainMin = builder.defineInRange("Minimum Random Gain", 0.0, -Double.MAX_VALUE, Double.MAX_VALUE);
+        RandomGainMax = builder.defineInRange("Maximum Random Gain", 0.0, -Double.MAX_VALUE, Double.MAX_VALUE);
+        RandomLossMin = builder.defineInRange("Minimum Random Loss", 0.0, -Double.MAX_VALUE, Double.MAX_VALUE);
+        RandomLossMax = builder.defineInRange("Maximum Random Loss", 0.0, -Double.MAX_VALUE, Double.MAX_VALUE);
 
-        RandomGainMultiplierMin = builder.defineInRange("Random Gain Multiplier Min (0 = No Change) - Cannot be equal or superior than the Max.Must have a decimal", 0.0, Integer.MIN_VALUE, Integer.MAX_VALUE);
-        RandomGainMultiplierMax = builder.defineInRange("Random Gain Multiplier Max (0 + decimal 001 = No Change) - Cannot be equal or inferior than the Min.Must have a decimal", 0.001, Integer.MIN_VALUE, Integer.MAX_VALUE);
-        RandomLossMultiplierMin = builder.defineInRange("Random Loss Multiplier Min (0 = No Change) - Cannot be equal or superior than the Max.Must have a decimal", 0.0, Integer.MIN_VALUE, Integer.MAX_VALUE);
-        RandomLossMultiplierMax = builder.defineInRange("Random Loss Multiplier Max (0 + decimal 001 = No Change) - Cannot be equal or interior than the Min.Must have a decimal", 0.001, Integer.MIN_VALUE, Integer.MAX_VALUE);
+        RandomGainMultiplierMin = builder.defineInRange("Random Gain Multiplier Min 1 = 100%", 0.0, -Double.MAX_VALUE, Double.MAX_VALUE);
+        RandomGainMultiplierMax = builder.defineInRange("Random Gain Multiplier Max 1 = 100%", 0.0, -Double.MAX_VALUE, Double.MAX_VALUE);
+        RandomLossMultiplierMin = builder.defineInRange("Random Loss Multiplier Min 1 = 100%", 0.0, -Double.MAX_VALUE, Double.MAX_VALUE);
+        RandomLossMultiplierMax = builder.defineInRange("Random Loss Multiplier Max 1 = 100%", 0.0, -Double.MAX_VALUE, Double.MAX_VALUE);
     }
 }

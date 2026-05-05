@@ -1,7 +1,7 @@
 package net.matteo.playerbounty.utils;
 
 import net.matteo.playerbounty.configs.Config;
-import net.matteo.playerbounty.configs.MagicCoinsConfig;
+import net.matteo.playerbounty.configs.SGEconomyConfig;
 
 import net.minecraft.util.RandomSource;
 
@@ -31,7 +31,7 @@ public class NullifyValues {
         }
     }
 
-    public static Double randomGainLossMultiplier() {
+    public static Double randomLossMultiplier() {
         if (Config.RandomLossMultiplierMin.get().equals(Config.RandomLossMultiplierMax.get())) {
             return Config.RandomLossMultiplierMin.get();
         } else {
@@ -40,10 +40,34 @@ public class NullifyValues {
     }
 
     public static Double randomCoinsGain() {
-        if (MagicCoinsConfig.RandomGainCoinsMin.get().equals(MagicCoinsConfig.RandomGainCoinsMax.get())) {
-            return MagicCoinsConfig.RandomGainCoinsMin.get();
+        if (SGEconomyConfig.RandomGainCoinsMin.get().equals(SGEconomyConfig.RandomGainCoinsMax.get())) {
+            return SGEconomyConfig.RandomGainCoinsMin.get();
         } else {
-            return RandomSource.create().nextDouble() * (MagicCoinsConfig.RandomGainCoinsMax.get() - MagicCoinsConfig.RandomGainCoinsMin.get()) + MagicCoinsConfig.RandomGainCoinsMin.get();
+            return RandomSource.create().nextDouble() * (SGEconomyConfig.RandomGainCoinsMax.get() - SGEconomyConfig.RandomGainCoinsMin.get()) + SGEconomyConfig.RandomGainCoinsMin.get();
+        }
+    }
+
+    public static Double randomCoinsLoss() {
+        if (SGEconomyConfig.RandomLossCoinsMin.get().equals(SGEconomyConfig.RandomLossCoinsMax.get())) {
+            return SGEconomyConfig.RandomLossCoinsMin.get();
+        } else {
+            return RandomSource.create().nextDouble() * (SGEconomyConfig.RandomLossCoinsMax.get() - SGEconomyConfig.RandomLossCoinsMin.get()) + SGEconomyConfig.RandomLossCoinsMin.get();
+        }
+    }
+
+    public static Double randomCoinsGainMultiplier() {
+        if (SGEconomyConfig.RandomGainCoinsMultiplierMin.get().equals(SGEconomyConfig.RandomGainCoinsMultiplierMax.get())) {
+            return SGEconomyConfig.RandomGainCoinsMin.get();
+        } else {
+            return RandomSource.create().nextDouble() * (SGEconomyConfig.RandomGainCoinsMultiplierMax.get() - SGEconomyConfig.RandomGainCoinsMultiplierMin.get()) + SGEconomyConfig.RandomGainCoinsMultiplierMin.get();
+        }
+    }
+
+    public static Double randomCoinsLossMultiplier() {
+        if (SGEconomyConfig.RandomLossCoinsMultiplierMin.get().equals(SGEconomyConfig.RandomLossCoinsMultiplierMax.get())) {
+            return SGEconomyConfig.RandomLossCoinsMultiplierMin.get();
+        } else {
+            return RandomSource.create().nextDouble() * (SGEconomyConfig.RandomLossCoinsMultiplierMax.get() - SGEconomyConfig.RandomLossCoinsMultiplierMin.get()) + SGEconomyConfig.RandomLossCoinsMultiplierMin.get();
         }
     }
 }

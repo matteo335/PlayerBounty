@@ -1,9 +1,8 @@
 package net.matteo.playerbounty.internal;
 
-import net.matteo.playerbounty.configs.Config;
 import net.matteo.playerbounty.internal.provider.BountyHunterProvider;
 import net.matteo.playerbounty.repositories.DataBountyRepository;
-import net.matteo.playerbounty.configs.MagicCoinsConfig;
+import net.matteo.playerbounty.configs.SGEconomyConfig;
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.server.level.ServerPlayer;
@@ -45,8 +44,8 @@ public class BountyHunterServiceImpl implements BountyHunterProvider {
         double actorPoints = getBountyHunter(actor);
         double targetPoints = getBountyHunter(target);
 
-        double baseRate = MagicCoinsConfig.baseRateBountyHunter;
-        double configPercentage = MagicCoinsConfig.percentageRewardBountyHunter;
+        double baseRate = SGEconomyConfig.baseRateBountyHunter;
+        double configPercentage = SGEconomyConfig.percentageRewardBountyHunter;
         double percentageReward = targetPoints * (configPercentage / 100.0);
         double bountyLossOnDeath = baseRate + percentageReward;
 
