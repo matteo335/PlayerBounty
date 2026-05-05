@@ -7,7 +7,7 @@ public interface BountyHunterProvider {
     boolean hasPointsBounty(Entity entity, double amount);
 
     double getBountyHunter(Entity actor);
-    boolean updateBountyHunter(Entity actor, Entity target);
+    boolean updateBountyHunter(Entity killer, Entity target);
 
     boolean setBountyHunter(Entity actor, double amount);
     boolean addBountyHunter(Entity actor, double amount);

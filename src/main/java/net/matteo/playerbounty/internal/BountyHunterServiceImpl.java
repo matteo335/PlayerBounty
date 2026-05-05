@@ -1,10 +1,13 @@
 package net.matteo.playerbounty.internal;
 
-import net.matteo.playerbounty.configs.ServerConfig;
+import net.matteo.playerbounty.configs.Config;
 import net.matteo.playerbounty.internal.provider.BountyHunterProvider;
 import net.matteo.playerbounty.repositories.DataBountyRepository;
+import net.matteo.playerbounty.configs.MagicCoinsConfig;
+
 import net.minecraft.world.entity.Entity;
 import net.minecraft.server.level.ServerPlayer;
+
 import net.sirgrantd.sg_economy.api.EconomyEventProvider;
 import net.sirgrantd.sg_economy.api.SGEconomyApi;
 
@@ -42,8 +45,8 @@ public class BountyHunterServiceImpl implements BountyHunterProvider {
         double actorPoints = getBountyHunter(actor);
         double targetPoints = getBountyHunter(target);
 
-        double baseRate = ServerConfig.baseRateBountyHunter;
-        double configPercentage = ServerConfig.percentageRewardBountyHunter;
+        double baseRate = MagicCoinsConfig.baseRateBountyHunter;
+        double configPercentage = MagicCoinsConfig.percentageRewardBountyHunter;
         double percentageReward = targetPoints * (configPercentage / 100.0);
         double bountyLossOnDeath = baseRate + percentageReward;
 
@@ -53,13 +56,12 @@ public class BountyHunterServiceImpl implements BountyHunterProvider {
             removeBountyHunter(target, bountyLossOnDeath);
         }
 
-        if (actorPoints > 0 && targetPoints == 0) {
-            return true;
-        }
+        if (actorPoints > 0 && targetPoints == 0) return true;
         if (actorPoints == 0 && targetPoints == 0) {
             addBountyHunter(actor, baseRate);
             return true;
         }
+
         if (actorPoints == 0 && targetPoints > 0 || actorPoints > 0 && targetPoints > 0) {
             double reward = baseRate + percentageReward;
             

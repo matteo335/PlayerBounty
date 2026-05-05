@@ -1,7 +1,8 @@
 package net.matteo.playerbounty.network;
 
 import net.matteo.playerbounty.PlayerBountyMod;
-import net.matteo.playerbounty.configs.ServerConfig;
+import net.matteo.playerbounty.configs.MagicCoinsConfig;
+
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -23,8 +24,8 @@ public final class ServerConfigSyncEvents {
         PacketDistributor.sendToPlayer(
                 player,
                 new SyncServerConfigS2C(
-                    ServerConfig.baseRateBountyHunter,
-                    ServerConfig.percentageRewardBountyHunter
+                    MagicCoinsConfig.baseRateBountyHunter,
+                    MagicCoinsConfig.percentageRewardBountyHunter
                 )
         );
     }

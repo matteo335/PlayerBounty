@@ -5,16 +5,17 @@ import org.apache.logging.log4j.Logger;
 
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
-import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.ModList;
 
 import net.matteo.playerbounty.capabilities.PlayerDataBountyCapabilities;
-import net.matteo.playerbounty.configs.ServerConfig;
 import net.matteo.playerbounty.network.PBNetwork;
 import net.matteo.playerbounty.network.payload.SyncServerConfigS2C;
 import net.matteo.playerbounty.utils.Timer;
+import net.matteo.playerbounty.configs.Config;
+import net.matteo.playerbounty.configs.MagicCoinsConfig;
 
 import net.minecraft.network.chat.Component;
 
@@ -39,16 +40,20 @@ public class PlayerBountyMod {
 
         PlayerDataBountyCapabilities.ATTACHMENT_TYPES.register(modEventBus);
 
-        modContainer.registerConfig(ModConfig.Type.SERVER, ServerConfig.builder.build(),
-                String.format("%1$s-%2$s.toml", MOD_ID, "SG-Economy"));
+        modContainer.registerConfig(ModConfig.Type.SERVER, Config.builder.build());
+
+        if (ModList.get().isLoaded("sg_economy_api")) {
+            modContainer.registerConfig(ModConfig.Type.SERVER, MagicCoinsConfig.builder.build(),
+                    String.format("%1$s-%2$s.toml", MOD_ID, "sg_economy"));
+        }
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onServerLoad(ServerStartedEvent start) {
-        if (ServerConfig.StartupWarning.get()) {
+        if (Config.StartupWarning.get()) {
             Timer.runLater(6000, () -> {
                 if (start.getServer().getPlayerCount() != 0) {
-                    start.getServer().getPlayerList().broadcastSystemMessage(Component.literal("<PlayerBounty>: THIS WARNING IS FOR PEOPLE WHO FORGOT TO READ THE MOD DESCRIPTION\nIN ORDER FOR THE MOD TO WORK AS YOU WISH, YOU NEED TO CHANGE THE CONFIG AND RESTART THE WORLD"), false);
+                    start.getServer().getPlayerList().broadcastSystemMessage(Component.literal("<PlayerBounty>: This warning is for people who forgot to read the mod description\nIn order for the mod to work as you wish, you need to change the server config and restart the world"), false);
                 } else onServerLoad(start);
             });
         }

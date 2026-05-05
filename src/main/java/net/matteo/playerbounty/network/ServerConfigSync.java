@@ -1,6 +1,6 @@
 package net.matteo.playerbounty.network;
 
-import net.matteo.playerbounty.configs.ServerConfig;
+import net.matteo.playerbounty.configs.MagicCoinsConfig;
 import net.matteo.playerbounty.network.payload.SyncServerConfigS2C;
 
 import net.matteo.playerbounty.utils.Timer;
@@ -15,8 +15,8 @@ public final class ServerConfigSync {
 
         Timer.queueServerWork(1, () -> {
             PacketDistributor.sendToAllPlayers(new SyncServerConfigS2C(
-                    ServerConfig.baseRateBountyHunter,
-                    ServerConfig.percentageRewardBountyHunter));
+                    MagicCoinsConfig.baseRateBountyHunter,
+                    MagicCoinsConfig.percentageRewardBountyHunter));
         });
     }
 }
