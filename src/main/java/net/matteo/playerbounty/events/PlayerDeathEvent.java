@@ -1,8 +1,7 @@
 package net.matteo.playerbounty.events;
 
 
-import net.matteo.playerbounty.old.DisplayEvents;
-import net.matteo.playerbounty.utils.NullifyValues;
+import net.matteo.playerbounty.utils.GetValues;
 import net.matteo.playerbounty.configs.SGEconomyConfig;
 import net.matteo.playerbounty.configs.Config;
 import net.matteo.playerbounty.compats.SG_Economy;
@@ -25,8 +24,8 @@ public class PlayerDeathEvent {
         Entity entity = event.getEntity();
         Entity source = event.getSource().getEntity();
 
-        if (!(entity instanceof ServerPlayer killer)) return;
-        if (!(source instanceof ServerPlayer target)) return;
+        if (!(source instanceof ServerPlayer killer)) return;
+        if (!(entity instanceof ServerPlayer target)) return;
 
         if (killer == target) return;
         if (!target.gameMode.isSurvival() || !killer.gameMode.isSurvival()) return;
@@ -39,8 +38,8 @@ public class PlayerDeathEvent {
         if (Config.DefaultSystem.get()) {
             double killerBounty = killer.getPersistentData().getDouble("bounty");
 
-            double randomGain = NullifyValues.randomGain();
-            double randomGainMultiplier = NullifyValues.randomGainMultiplier();
+            double randomGain = GetValues.randomGain();
+            double randomGainMultiplier = GetValues.randomGainMultiplier();
 
             killerBounty += (Config.GainOnKilling.get() + randomGain + (killerBounty * Config.KillerMultiplier.get()) + (killerBounty * Config.ClaimMultiplier.get() + randomGainMultiplier));
             killer.getPersistentData().putDouble("bounty", killerBounty);
@@ -49,7 +48,6 @@ public class PlayerDeathEvent {
         if (ModList.get().isLoaded("sg_economy") && SGEconomyConfig.CoinsSystem.get()) {
             SG_Economy.handleKillerEconomy(killer, target);
         }
-
 
         DisplayEvents.onTracking(new PlayerEvent.StartTracking(killer, killer));
     }

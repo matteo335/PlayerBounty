@@ -8,7 +8,7 @@ public class SGEconomyConfig {
 
     public static ModConfigSpec.BooleanValue CoinsSystem;
 
-    public static ModConfigSpec.BooleanValue IsCoinsDisplayEnabled;
+    public static ModConfigSpec.BooleanValue EnableDisplay;
     public static ModConfigSpec.ConfigValue<Integer> CoinsDisplayTimer;
 
     public static ModConfigSpec.ConfigValue<String> CoinsDisplay1;
@@ -50,10 +50,12 @@ public class SGEconomyConfig {
                 """);
 
         CoinsSystem = builder.define("Enable the SG Economy compat", false);
-        IsCoinsDisplayEnabled = builder.define("Display the Magic Coins in the player name", true);
+        EnableDisplay = builder.define("Display the Magic Coins in the player name", true);
 
         CoinsDisplay1 = builder.define("Formatting Codes before the coin display", "[$§d§l");
         CoinsDisplay2 = builder.define("Formatting Codes after the coin display", "§r]");
+
+        CoinsDisplayTimer = builder.define("How much ticks before displays get updated", 100);
 
         GainCoins = builder.define("How much coins you gain after killing another player", 100.0);
         LossCoins = builder.define("How much coins you loss after being killed", 100.0);

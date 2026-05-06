@@ -29,7 +29,7 @@ import net.neoforged.neoforge.registries.NeoForgeRegistries;
 @EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD)
 public class PlayerDataBountyCapabilities {
     public static final DeferredRegister<AttachmentType<?>> ATTACHMENT_TYPES = DeferredRegister
-            .create(NeoForgeRegistries.Keys.ATTACHMENT_TYPES, PlayerBountyMod.MOD_ID);
+            .create(NeoForgeRegistries.Keys.ATTACHMENT_TYPES, "playerbounty");
 
     public static final Supplier<AttachmentType<PlayerDataBounty>> PLAYER_DATA_BOUNTY = ATTACHMENT_TYPES.register("player_data_bounty",
             () -> AttachmentType.serializable(() -> new PlayerDataBounty()).build());
@@ -102,7 +102,7 @@ public class PlayerDataBountyCapabilities {
 
     public record PlayerDataBountySyncPayload(PlayerDataBounty data) implements CustomPacketPayload {
         public static final Type<PlayerDataBountySyncPayload> TYPE = new Type<>(
-            ResourceLocation.fromNamespaceAndPath(PlayerBountyMod.MOD_ID, "player_data_bounty_sync"));
+            ResourceLocation.fromNamespaceAndPath("playerbounty", "player_data_bounty_sync"));
 
         public static final StreamCodec<RegistryFriendlyByteBuf, PlayerDataBountySyncPayload> STREAM_CODEC = StreamCodec.of(
             (RegistryFriendlyByteBuf buffer, PlayerDataBountySyncPayload payload) -> buffer

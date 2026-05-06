@@ -10,8 +10,7 @@ public class Config {
 
     public static ModConfigSpec.BooleanValue DefaultSystem;
 
-    public static ModConfigSpec.BooleanValue IsPlayerBountyDisplayEnabled;
-    public static ModConfigSpec.BooleanValue DisableDisplay;
+    public static ModConfigSpec.BooleanValue EnableDisplay;
     public static ModConfigSpec.ConfigValue<String> BountyDisplay1;
     public static ModConfigSpec.ConfigValue<String> BountyDisplay2;
 
@@ -54,8 +53,7 @@ public class Config {
 
         DefaultSystem = builder.define("Enable the default mechanics, disable it if you prefer the compats", true);
 
-        IsPlayerBountyDisplayEnabled = builder.define("Display for the default system", true);
-        DisableDisplay = builder.define("Disable the display", false);
+        EnableDisplay = builder.define("Disable the display", true);
         BountyDisplay1 = builder.define("Formatting Codes Before Bounty", " [$§6§l");
         BountyDisplay2 = builder.define("Formatting Codes After Bounty", "§r]");
 
@@ -66,9 +64,9 @@ public class Config {
         GainOnKilling = builder.define("Bounty Gain On Killing", 10.0);
         LossOnDeath = builder.define("Bounty Loss On Death", 10.0);
 
-        KillerMultiplier = builder.defineInRange("Killer-Multiplier of your own bounty 1 = 100%", 1.0, -Double.MAX_VALUE, Double.MAX_VALUE);
-        ClaimMultiplier = builder.defineInRange("Claim-Multiplier, how much you take from your victim 1 = 100%", 0.5, -Double.MAX_VALUE, Double.MAX_VALUE);
-        TargetMultiplier = builder.defineInRange("Target-Multiplier, how much do the victim loss 1 = 100%", 1.0, -Double.MAX_VALUE, Double.MAX_VALUE);
+        KillerMultiplier = builder.defineInRange("Killer-Multiplier of your own bounty 1 = 100%", 0.0, -Double.MAX_VALUE, Double.MAX_VALUE);
+        ClaimMultiplier = builder.defineInRange("Claim-Multiplier, how much you take from your victim 1 = 100%", 0.0, -Double.MAX_VALUE, Double.MAX_VALUE);
+        TargetMultiplier = builder.defineInRange("Target-Multiplier, how much do the victim loss 1 = 100%", 0.0, -Double.MAX_VALUE, Double.MAX_VALUE);
 
         RandomGainMin = builder.defineInRange("Minimum Random Gain", 0.0, -Double.MAX_VALUE, Double.MAX_VALUE);
         RandomGainMax = builder.defineInRange("Maximum Random Gain", 0.0, -Double.MAX_VALUE, Double.MAX_VALUE);

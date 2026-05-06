@@ -2,10 +2,14 @@ package net.matteo.playerbounty.utils;
 
 import net.matteo.playerbounty.configs.Config;
 import net.matteo.playerbounty.configs.SGEconomyConfig;
+import net.matteo.playerbounty.PlayerBountyMod;
+
 
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.nbt.CompoundTag;
 
-public class NullifyValues {
+public class GetValues {
 
     public static Double randomGain() {
         if (Config.RandomGainMin.get().equals(Config.RandomGainMax.get())) {
@@ -69,5 +73,24 @@ public class NullifyValues {
         } else {
             return RandomSource.create().nextDouble() * (SGEconomyConfig.RandomLossCoinsMultiplierMax.get() - SGEconomyConfig.RandomLossCoinsMultiplierMin.get()) + SGEconomyConfig.RandomLossCoinsMultiplierMin.get();
         }
+    }
+
+    public static String name(Player player) {
+        String name = player.getName().getString();
+        CompoundTag tag = player.getPersistentData();
+
+        if (PlayerBountyMod.sg_economy_enabled && SGEconomyConfig.EnableDisplay.get()) {
+            if (Config.EnableDisplay.get()) {
+                return name + SGEconomyConfig.CoinsDisplay1.get() + net.sirgrantd.sg_economy.api.SGEconomyApi.get().getBalanceAsInt(player) + SGEconomyConfig.CoinsDisplay2.get()
+                + Config.BountyDisplay1.get() + (int) tag.getDouble("bounty") + Config.BountyDisplay2.get();
+            } else {
+                return name + SGEconomyConfig.CoinsDisplay1.get() + net.sirgrantd.sg_economy.api.SGEconomyApi.get().getBalanceAsInt(player) + SGEconomyConfig.CoinsDisplay2.get();
+            }
+
+        } else if (Config.EnableDisplay.get()) {
+            return name + Config.BountyDisplay1.get() + (int) tag.getDouble("bounty") + Config.BountyDisplay2.get();
+        }
+
+        return name;
     }
 }
