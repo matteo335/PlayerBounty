@@ -3,11 +3,10 @@ package net.matteo.playerbounty.utils;
 import net.matteo.playerbounty.configs.Config;
 import net.matteo.playerbounty.configs.SGEconomyConfig;
 import net.matteo.playerbounty.PlayerBountyMod;
-
+import net.matteo.playerbounty.events.DisplayEvents;
 
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.nbt.CompoundTag;
 
 public class GetValues {
 
@@ -77,18 +76,22 @@ public class GetValues {
 
     public static String name(Player player) {
         String name = player.getName().getString();
-        CompoundTag tag = player.getPersistentData();
 
-        if (PlayerBountyMod.sg_economy_enabled && SGEconomyConfig.EnableDisplay.get()) {
-            if (Config.EnableDisplay.get()) {
-                return name + SGEconomyConfig.CoinsDisplay1.get() + net.sirgrantd.sg_economy.api.SGEconomyApi.get().getBalanceAsInt(player) + SGEconomyConfig.CoinsDisplay2.get()
-                + Config.BountyDisplay1.get() + (int) tag.getDouble("bounty") + Config.BountyDisplay2.get();
+        if (Config.EnableDisplay.get() && Config.DefaultSystem.get()) {
+            if (DisplayEvents.bounty.get(player.getUUID()) == null) return name;
+
+            if (PlayerBountyMod.sg_economy_config && SGEconomyConfig.EnableDisplay.get() && SGEconomyConfig.CoinsSystem.get()) {
+
+                return name + SGEconomyConfig.CoinsDisplay1.get() + DisplayEvents.coins.get(player.getUUID()) + SGEconomyConfig.CoinsDisplay2.get()
+                        + Config.BountyDisplay1.get() + DisplayEvents.bounty.get(player.getUUID()) + Config.BountyDisplay2.get();
+
             } else {
-                return name + SGEconomyConfig.CoinsDisplay1.get() + net.sirgrantd.sg_economy.api.SGEconomyApi.get().getBalanceAsInt(player) + SGEconomyConfig.CoinsDisplay2.get();
+                return name + Config.BountyDisplay1.get() + DisplayEvents.bounty.get(player.getUUID()) + Config.BountyDisplay2.get();
             }
 
-        } else if (Config.EnableDisplay.get()) {
-            return name + Config.BountyDisplay1.get() + (int) tag.getDouble("bounty") + Config.BountyDisplay2.get();
+        } else if (PlayerBountyMod.sg_economy_config && SGEconomyConfig.EnableDisplay.get() && SGEconomyConfig.CoinsSystem.get()) {
+            if (DisplayEvents.coins.get(player.getUUID()) == null) return name;
+            return name + SGEconomyConfig.CoinsDisplay1.get() + DisplayEvents.coins.get(player.getUUID()) + SGEconomyConfig.CoinsDisplay2.get();
         }
 
         return name;

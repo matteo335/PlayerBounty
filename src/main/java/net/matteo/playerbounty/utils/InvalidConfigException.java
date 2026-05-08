@@ -2,8 +2,7 @@ package net.matteo.playerbounty.utils;
 
 import net.matteo.playerbounty.configs.Config;
 import net.matteo.playerbounty.configs.SGEconomyConfig;
-
-import net.neoforged.fml.ModList;
+import net.matteo.playerbounty.PlayerBountyMod;
 
 public class InvalidConfigException extends Exception {
     public InvalidConfigException(String string) {
@@ -34,7 +33,7 @@ public class InvalidConfigException extends Exception {
             trigger = true;
         }
 
-        if (ModList.get().isLoaded("sg_economy")) {
+        if (PlayerBountyMod.sg_economy_config && SGEconomyConfig.CoinsSystem.get()) {
             if (SGEconomyConfig.RandomGainCoinsMin.get() > SGEconomyConfig.RandomGainCoinsMax.get()) {
                 string += "\nMinimum Random Coin Gain is GREATER than Maximum Random Coin Gain\n";
                 trigger = true;

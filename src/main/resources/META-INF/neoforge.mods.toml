@@ -21,13 +21,13 @@ license="${mod_license}"
 [[dependencies.${mod_id}]]
     modId="minecraft"
     type="required"
-    versionRange="${minecraft_version_range}"
+    version="${minecraft_version}"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.${mod_id}]]
     modId="sg_economy"
-    type="required"
+    type="optional"
     versionRange="[${sg_economy_version},)"
     ordering="NONE"
     side="BOTH"

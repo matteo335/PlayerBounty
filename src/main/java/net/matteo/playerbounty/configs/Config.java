@@ -11,6 +11,8 @@ public class Config {
     public static ModConfigSpec.BooleanValue DefaultSystem;
 
     public static ModConfigSpec.BooleanValue EnableDisplay;
+    public static ModConfigSpec.ConfigValue<Integer> DisplayCooldown;
+
     public static ModConfigSpec.ConfigValue<String> BountyDisplay1;
     public static ModConfigSpec.ConfigValue<String> BountyDisplay2;
 
@@ -39,27 +41,30 @@ public class Config {
 
     static {
         builder.comment("""
-                 Note that you can use + and - but you CANNOT use %
-                 Make sure you do the calculations correctly, some values might do the complete opposite in some scenarios.
+                 Make sure you do the calculations correctly, you can use the link below to do the math yourself.
                 
-                 Target is calculated like this: your Bounty * (Target-Multiplier + RandomLossMultiplier) - (LossOnDeath + RandomLoss)
+                 Killer is calculated like this: Your Bounty + (Gain On Killing + Random Gain) + (Your Bounty * (Killer-Multiplier + Random Gain Multiplier)) + (Target Bounty * Claim-Multiplier)
+                 
+                 Target is calculated like this: Your Bounty - (Loss On Death + Random Loss) + (Your Bounty * (Target-Multiplier + Random Loss Multiplier)
                 
-                 If LossCompleteBountyOnDeath is true: your Bounty = (-RandomLoss - LossOnDeath) + (Bounty * (Target-Multiplier + RandomLossMultiplier)) - Bounty
-                
-                 Killer is calculated like this: your Bounty = (BountyTarget * Claim-Multiplier) + (BountyKiller * (Killer-Multiplier + RandomGainMultiplier)) + (GainOnKilling + RandomLoss)
-                """);
+                 If LossCompleteBountyOnDeath is true: Your Bounty = (-LossOnDeath - randomLoss) + (Bounty * (Target-Multiplier + RandomLossMultiplier))
+                 
+                 https://onlinegdb.com/BCyy-0Pi-Q
+                 """);
 
         StartupWarning = builder.define("Enable the warning in the server start", true);
 
-        DefaultSystem = builder.define("Enable the default mechanics, disable it if you prefer the compats", true);
+        DefaultSystem = builder.define("Enable the default mechanics", true);
 
-        EnableDisplay = builder.define("Disable the display", true);
+        EnableDisplay = builder.define("Enable the display", true);
+        DisplayCooldown = builder.define("How much ticks before displays get updated", 100);
+
         BountyDisplay1 = builder.define("Formatting Codes Before Bounty", " [$§6§l");
         BountyDisplay2 = builder.define("Formatting Codes After Bounty", "§r]");
 
         LoseCompleteBountyOnDeath = builder.define("Lose Complete Bounty On Death", false);
-        BountyMinimumValue = builder.defineInRange("Bounty Minimum Value", -Double.MAX_VALUE, Double.MIN_VALUE, Double.MAX_VALUE);
-        BountyMaximumValue = builder.defineInRange("Bounty Maximum Value", Double.MAX_VALUE, Double.MIN_VALUE, Double.MAX_VALUE);
+        BountyMinimumValue = builder.defineInRange("Bounty Minimum Value", -Double.MAX_VALUE, -Double.MAX_VALUE, Double.MAX_VALUE);
+        BountyMaximumValue = builder.defineInRange("Bounty Maximum Value", Double.MAX_VALUE, -Double.MAX_VALUE, Double.MAX_VALUE);
 
         GainOnKilling = builder.define("Bounty Gain On Killing", 10.0);
         LossOnDeath = builder.define("Bounty Loss On Death", 10.0);
@@ -73,9 +78,9 @@ public class Config {
         RandomLossMin = builder.defineInRange("Minimum Random Loss", 0.0, -Double.MAX_VALUE, Double.MAX_VALUE);
         RandomLossMax = builder.defineInRange("Maximum Random Loss", 0.0, -Double.MAX_VALUE, Double.MAX_VALUE);
 
-        RandomGainMultiplierMin = builder.defineInRange("Random Gain Multiplier Min 1 = 100%", 0.0, -Double.MAX_VALUE, Double.MAX_VALUE);
-        RandomGainMultiplierMax = builder.defineInRange("Random Gain Multiplier Max 1 = 100%", 0.0, -Double.MAX_VALUE, Double.MAX_VALUE);
-        RandomLossMultiplierMin = builder.defineInRange("Random Loss Multiplier Min 1 = 100%", 0.0, -Double.MAX_VALUE, Double.MAX_VALUE);
-        RandomLossMultiplierMax = builder.defineInRange("Random Loss Multiplier Max 1 = 100%", 0.0, -Double.MAX_VALUE, Double.MAX_VALUE);
+        RandomGainMultiplierMin = builder.defineInRange("Random Killer Multiplier Min 1 = 100%", 0.0, -Double.MAX_VALUE, Double.MAX_VALUE);
+        RandomGainMultiplierMax = builder.defineInRange("Random Killer Multiplier Max 1 = 100%", 0.0, -Double.MAX_VALUE, Double.MAX_VALUE);
+        RandomLossMultiplierMin = builder.defineInRange("Random Target Multiplier Min 1 = 100%", 0.0, -Double.MAX_VALUE, Double.MAX_VALUE);
+        RandomLossMultiplierMax = builder.defineInRange("Random Target Multiplier Max 1 = 100%", 0.0, -Double.MAX_VALUE, Double.MAX_VALUE);
     }
 }

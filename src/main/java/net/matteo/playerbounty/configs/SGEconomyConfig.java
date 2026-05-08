@@ -9,7 +9,6 @@ public class SGEconomyConfig {
     public static ModConfigSpec.BooleanValue CoinsSystem;
 
     public static ModConfigSpec.BooleanValue EnableDisplay;
-    public static ModConfigSpec.ConfigValue<Integer> CoinsDisplayTimer;
 
     public static ModConfigSpec.ConfigValue<String> CoinsDisplay1;
     public static ModConfigSpec.ConfigValue<String> CoinsDisplay2;
@@ -31,34 +30,27 @@ public class SGEconomyConfig {
     public static ModConfigSpec.DoubleValue RandomLossCoinsMultiplierMin;
     public static ModConfigSpec.DoubleValue RandomLossCoinsMultiplierMax;
 
-    public static double baseRateBountyHunter;
-    public static int percentageRewardBountyHunter;
-
-    public static ModConfigSpec.DoubleValue Base_rate_bounty_hunter;
-    public static ModConfigSpec.DoubleValue Percentage_reward_bounty_hunter;
-
     static {
         builder.comment("""
-                 Note that you can use + and - but you CANNOT use %
-                 Make sure you do the calculations correctly, some values might do the complete opposite in some scenarios.
+                Make sure you do the calculations correctly, you can use the link below to do the math yourself.
                 
-                 Target is calculated like this: your Bounty * (Target-Multiplier + RandomLossMultiplier) - (LossOnDeath + RandomLoss)
+                Target is calculated like this: your Bounty * (Target-Multiplier + RandomLossMultiplier) - (LossOnDeath + RandomLoss)
                 
-                 If LossCompleteBountyOnDeath is true: your Bounty = (-RandomLoss - LossOnDeath) + (Bounty * (Target-Multiplier + RandomLossMultiplier)) - Bounty
+                Killer is calculated like this: your Bounty = (BountyTarget * Claim-Multiplier) + (BountyKiller * (Killer-Multiplier + RandomGainMultiplier)) + (GainOnKilling + RandomLoss)
                 
-                 Killer is calculated like this: your Bounty = (BountyTarget * Claim-Multiplier) + (BountyKiller * (Killer-Multiplier + RandomGainMultiplier)) + (GainOnKilling + RandomLoss)
+                There is no LossCompleteBounty in this config, because it is already present in the SGEconomy-API config.
+                
+                 https://onlinegdb.com/BCyy-0Pi-Q
                 """);
 
         CoinsSystem = builder.define("Enable the SG Economy compat", false);
-        EnableDisplay = builder.define("Display the Magic Coins in the player name", true);
+        EnableDisplay = builder.define("Display the balance in the player name", true);
 
-        CoinsDisplay1 = builder.define("Formatting Codes before the coin display", "[$§d§l");
+        CoinsDisplay1 = builder.define("Formatting Codes before the coin display", " [$§d§l");
         CoinsDisplay2 = builder.define("Formatting Codes after the coin display", "§r]");
 
-        CoinsDisplayTimer = builder.define("How much ticks before displays get updated", 100);
-
-        GainCoins = builder.define("How much coins you gain after killing another player", 100.0);
-        LossCoins = builder.define("How much coins you loss after being killed", 100.0);
+        GainCoins = builder.define("How much coins you gain after killing another player", 10.0);
+        LossCoins = builder.define("How much coins you loss after being killed", 10.0);
 
         ClaimMultiplier = builder.defineInRange("Claim-Multiplier, how much you take from your victim = 100%", 0.0, -Double.MAX_VALUE, Double.MAX_VALUE);
         KillerMultiplier = builder.defineInRange("Killer-Multiplier of your own balance 1 = 100%", 0.0, -Double.MAX_VALUE, Double.MAX_VALUE);

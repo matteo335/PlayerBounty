@@ -1,81 +1,38 @@
 package net.matteo.playerbounty.events;
 
-import net.matteo.playerbounty.PlayerBountyMod;
 import net.matteo.playerbounty.configs.Config;
 import net.matteo.playerbounty.network.Packets;
-import net.matteo.playerbounty.compats.SGEconomyDisplay;
+import net.matteo.playerbounty.PlayerBountyMod;
+import net.matteo.playerbounty.configs.SGEconomyConfig;
 
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.level.Level;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.player.Player;
+import net.matteo.playerbounty.utils.Cooldowns;
+import net.matteo.playerbounty.utils.GetValues;
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
+import net.sirgrantd.sg_economy.api.SGEconomyApi;
 
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
-import net.neoforged.fml.ModList;
 
-import javax.annotation.Nullable;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Player;
+
+import java.util.UUID;
+import java.util.HashMap;
+import java.util.Map;
 
 @EventBusSubscriber
 public class DisplayEvents {
-
-    public static void updateDisplay(int player, Level level, int bounty, @Nullable Integer balance) {
-        PlayerBountyMod.LOGGER.info("updateDisplay");
-        bountyTags((ServerPlayer) level.getEntity(player), bounty);
-        PacketDistributor.sendToAllPlayers(new Packets(bounty, player, balance));
-    }
-
-    public static void bountyTags(Player player, double bounty) {
-        CompoundTag tag = player.getPersistentData();
-        PlayerBountyMod.LOGGER.info("bountyTags for " + player.getName().getString());
-
-        if (Config.EnableDisplay.get()) {
-            tag.putDouble("bounty", bounty);
-            //player.refreshDisplayName();
-            player.getServer().getPlayerList().getPlayer(player.getUUID()).refreshTabListName();
-        }
-    }
-
-    @SubscribeEvent
-    public static void onJoin(PlayerEvent.PlayerLoggedInEvent event) {
-        ServerPlayer player = (ServerPlayer) event.getEntity();
-        if (!player.getCommandSenderWorld().isClientSide) {
-
-            if (!ModList.get().isLoaded("sg_economy")) {
-                CompoundTag tag = event.getEntity().getPersistentData();
-
-                if (!Config.EnableDisplay.get()) return;
-                if (!tag.contains("bounty")) return;
-
-                updateDisplay(player.getId(), player.level(), (int) tag.getDouble("bounty"), null);
-
-                for (Player playerlist : player.getServer().getPlayerList().getPlayers()) {
-                    PacketDistributor.sendToPlayer(player,
-                            new Packets((int) playerlist.getPersistentData().getDouble("bounty"), playerlist.getId(), null));
-                }
-            } else {
-                SGEconomyDisplay.onJoin(player);
-            }
-        }
-    }
+    public static final Map<UUID, Integer> coins = new HashMap<>();
+    public static final Map<UUID, Integer> bounty = new HashMap<>();
 
     @SubscribeEvent
     public static void renderName(PlayerEvent.NameFormat event) {
+        String string = GetValues.name(event.getEntity());
 
-        if (!ModList.get().isLoaded("sg_economy")) {
-            if (!Config.EnableDisplay.get()) return;
-
-            CompoundTag tag = event.getEntity().getPersistentData();
-            if (!tag.contains("bounty")) return;
-
-            event.setDisplayname(Component.translatable(Config.BountyDisplay1.get() + tag.getDouble("bounty") + Config.BountyDisplay2.get()));
-
-        } else {
-            SGEconomyDisplay.renderName(event);
-        }
+        event.setDisplayname(Component.translatable(string));
     }
 
     @SubscribeEvent
@@ -83,30 +40,31 @@ public class DisplayEvents {
         Player oldPlayer = event.getOriginal();
         Player newPlayer = event.getEntity();
 
-        if (!Config.EnableDisplay.get()) return;
+        if (!Config.DefaultSystem.get()) return;
         if (!oldPlayer.getPersistentData().contains("bounty")) return;
 
-        int bounty = oldPlayer.getPersistentData().getInt("bounty");
+        double bounty = oldPlayer.getPersistentData().getDouble("bounty");
         newPlayer.getPersistentData().putDouble("bounty", bounty);
-
-        /*if (SGEconomyConfig.CoinsSystem.get()) {
-            SGEconomyApi.get().getBalance(newPlayer);
-        }*/
     }
 
+    ///Tick -> refreshDisplayName -> renderName -> setDisplayName
     @SubscribeEvent
-    public static void onTracking(PlayerEvent.StartTracking event) {
-        if (!(event.getTarget() instanceof ServerPlayer target)) return;
-        if (!ModList.get().isLoaded("sg_economy")) {
-            ServerPlayer player = (ServerPlayer) event.getEntity();
-            CompoundTag tag = target.getPersistentData();
+    public static void tick(ServerTickEvent.Post event) {
+        Player player = event.getServer().overworld().getRandomPlayer();
+        if (player == null) return;
+        if (Cooldowns.isPlayerInCooldown(player.getUUID())) return;
 
-            if (!Config.EnableDisplay.get()) return;
-            if (!target.getPersistentData().contains("bounty")) return;
+        CompoundTag tag = player.getPersistentData();
 
-            PacketDistributor.sendToPlayer(player, new Packets((int) tag.getDouble("bounty"), target.getId(), null));
-        } else {
-            SGEconomyDisplay.onTracking(event);
+        if (PlayerBountyMod.sg_economy_config) {
+            coins.put(player.getUUID(), SGEconomyApi.get().getBalanceAsInt(player));
         }
+
+        bounty.put(player.getUUID(), (int) tag.getDouble("bounty"));
+        if (Config.EnableDisplay.get() || SGEconomyConfig.EnableDisplay.get()) {
+            player.refreshDisplayName();
+        }
+
+        PacketDistributor.sendToAllPlayers(new Packets((int) tag.getDouble("bounty"), player.getId(), PlayerBountyMod.sg_economy_config ? coins.get(player.getUUID()) : null));
     }
 }

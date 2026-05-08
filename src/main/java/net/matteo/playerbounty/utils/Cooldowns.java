@@ -1,20 +1,19 @@
 package net.matteo.playerbounty.utils;
 
-import net.minecraft.util.Tuple;
+import net.matteo.playerbounty.configs.Config;
+
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.concurrent.ConcurrentLinkedQueue;
+
+import java.util.*;
 
 @EventBusSubscriber
-public class Timer {
+public class Cooldowns {
 
+    /// Tick timer
     private static class Delay {
         int ticks;
         Runnable methods;
@@ -57,9 +56,12 @@ public class Timer {
         wait.add(new Delay(ticks, methods));
     }
 
-    public static final Collection<Tuple<Runnable, Integer>> workQueue = new ConcurrentLinkedQueue<>();
+    /// Player cooldown
+    public static Map<UUID, Long> playerCooldownHashMap = new HashMap<>();
 
-    public static void queueServerWork(int tick, Runnable action) {
-        workQueue.add(new Tuple<>(action, tick));
+    public static Boolean isPlayerInCooldown(UUID player) {
+        if (playerCooldownHashMap.containsKey(player) && System.currentTimeMillis() < playerCooldownHashMap.get(player)) return true;
+        playerCooldownHashMap.put(player, System.currentTimeMillis() + (Config.DisplayCooldown.get() * 50L));
+        return false;
     }
 }

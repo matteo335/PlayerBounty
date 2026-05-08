@@ -1,13 +1,16 @@
 package net.matteo.playerbounty.network;
 
-import net.matteo.playerbounty.PlayerBountyMod;
 import net.matteo.playerbounty.utils.GetValues;
+import net.matteo.playerbounty.events.DisplayEvents;
+import net.matteo.playerbounty.utils.Cooldowns;
 
-import net.minecraft.network.chat.Component;
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Player;
 
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
@@ -18,9 +21,9 @@ import javax.annotation.Nullable;
 public record Packets(int bounty, int playerID, @Nullable Integer balance) implements CustomPacketPayload {
 
     public static void registerPackets(RegisterPayloadHandlersEvent event) {
-        PayloadRegistrar registrar = event.registrar(PlayerBountyMod.version);
+        PayloadRegistrar registrar = event.registrar("1.0.0");
 
-        registrar.playBidirectional(TYPE, STREAM_CODEC, Packets::handle);
+        registrar.playToClient(TYPE, STREAM_CODEC, Packets::handle);
     }
 
     public static final StreamCodec<RegistryFriendlyByteBuf, Packets> STREAM_CODEC = StreamCodec.of(
@@ -42,24 +45,20 @@ public record Packets(int bounty, int playerID, @Nullable Integer balance) imple
                     balance = buf.readInt();
                 }
 
-                PlayerBountyMod.LOGGER.info("Stream Codec");
-
                 return new Packets(bounty, playerID, balance);
             }
     );
 
     public void handle(IPayloadContext ctx) {
         ctx.enqueueWork(() -> {
-            PlayerBountyMod.LOGGER.info("payload");
+            Player player = (Player) Minecraft.getInstance().level.getEntity(playerID);
+            if (player == null) return;
+            if (Cooldowns.isPlayerInCooldown(player.getUUID())) return;
+            DisplayEvents.coins.put(player.getUUID(), balance);
+            DisplayEvents.bounty.put(player.getUUID(), bounty);
+            player.refreshDisplayName();
 
-            if (ctx.flow().isClientbound()) {
-                net.minecraft.client.Minecraft minecraft = net.minecraft.client.Minecraft.getInstance();
-                String string = GetValues.name(minecraft.player);
-
-                minecraft.player.connection.getPlayerInfo(minecraft.player.getUUID()).setTabListDisplayName(Component.literal(string));
-                //DisplayEvents.bountyTags(ctx.player(), bounty);
-                //DisplayEvents.updateDisplay(bounty, ctx.player().level(), playerID, balance);
-            }
+            Minecraft.getInstance().player.connection.getPlayerInfo(player.getUUID()).setTabListDisplayName(Component.literal(GetValues.name(player)));
         });
     }
 

@@ -5,6 +5,7 @@ import net.matteo.playerbounty.utils.GetValues;
 import net.matteo.playerbounty.configs.SGEconomyConfig;
 import net.matteo.playerbounty.configs.Config;
 import net.matteo.playerbounty.compats.SG_Economy;
+import net.matteo.playerbounty.PlayerBountyMod;
 
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -13,8 +14,6 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.api.distmarker.Dist;
-import net.neoforged.neoforge.event.entity.player.PlayerEvent;
-import net.neoforged.fml.ModList;
 
 @EventBusSubscriber(Dist.DEDICATED_SERVER)
 public class PlayerDeathEvent {
@@ -30,30 +29,43 @@ public class PlayerDeathEvent {
         if (killer == target) return;
         if (!target.gameMode.isSurvival() || !killer.gameMode.isSurvival()) return;
 
-        handleKillerMath(killer, target);
-        handleTargetMath(target, killer);
+        if (Config.DefaultSystem.get()) {
+            handleKillerBounty(killer, target);
+            handleTargetBounty(target);
+        }
+
+        if (PlayerBountyMod.sg_economy_config && SGEconomyConfig.CoinsSystem.get()) {
+            SG_Economy.handleKillerEconomy(killer, target);
+            SG_Economy.handleTargetEconomy(target);
+        }
     }
 
-    public static void handleKillerMath(ServerPlayer killer, ServerPlayer target) {
+    public static void handleKillerBounty(ServerPlayer killer, ServerPlayer target) {
         if (Config.DefaultSystem.get()) {
             double killerBounty = killer.getPersistentData().getDouble("bounty");
 
-            double randomGain = GetValues.randomGain();
-            double randomGainMultiplier = GetValues.randomGainMultiplier();
+            killerBounty += (Config.GainOnKilling.get() + GetValues.randomGain())
+                            + (killerBounty * (GetValues.randomGainMultiplier() + Config.KillerMultiplier.get())
+                            + (target.getPersistentData().getDouble("bounty") * Config.ClaimMultiplier.get()));
 
-            killerBounty += (Config.GainOnKilling.get() + randomGain + (killerBounty * Config.KillerMultiplier.get()) + (killerBounty * Config.ClaimMultiplier.get() + randomGainMultiplier));
+
             killer.getPersistentData().putDouble("bounty", killerBounty);
         }
+    }
 
-        if (ModList.get().isLoaded("sg_economy") && SGEconomyConfig.CoinsSystem.get()) {
-            SG_Economy.handleKillerEconomy(killer, target);
+    public static void handleTargetBounty(ServerPlayer target) {
+        if (Config.DefaultSystem.get()) {
+            double targetBounty = target.getPersistentData().getDouble("bounty");
+
+            if (Config.LoseCompleteBountyOnDeath.get()) {
+                targetBounty = (-Config.LossOnDeath.get() - GetValues.randomLoss())
+                        - (targetBounty * (Config.TargetMultiplier.get() + GetValues.randomLossMultiplier()));
+            } else {
+                targetBounty -= (Config.LossOnDeath.get() + GetValues.randomLoss())
+                        + (targetBounty * (Config.TargetMultiplier.get() + GetValues.randomLossMultiplier()));
+            }
+
+            target.getPersistentData().putDouble("bounty", targetBounty);
         }
-
-        DisplayEvents.onTracking(new PlayerEvent.StartTracking(killer, killer));
     }
-
-    public static void handleTargetMath(ServerPlayer target, ServerPlayer killer) {
-
-    }
-
 }

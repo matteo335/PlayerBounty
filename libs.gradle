@@ -6,5 +6,5 @@ repositories {
 }
 
 dependencies {
-    implementation "curse.maven:sg-economy-api-1446971:7604579"
+    implementation "curse.maven:sg-economy-api-1446971:8041335"
 }
