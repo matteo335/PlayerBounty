@@ -6,29 +6,35 @@ public class SGEconomyConfig {
 
     public static ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
 
-    public static ModConfigSpec.BooleanValue CoinsSystem;
+    public static ModConfigSpec.BooleanValue System;
 
     public static ModConfigSpec.BooleanValue EnableDisplay;
+    public static ModConfigSpec.ConfigValue<Integer> Color;
 
-    public static ModConfigSpec.ConfigValue<String> CoinsDisplay1;
-    public static ModConfigSpec.ConfigValue<String> CoinsDisplay2;
+    public static ModConfigSpec.BooleanValue Bold;
+    public static ModConfigSpec.BooleanValue Italic;
+    public static ModConfigSpec.BooleanValue Underlined;
+    public static ModConfigSpec.BooleanValue Strikethrough;
 
-    public static ModConfigSpec.ConfigValue<Double> GainCoins;
-    public static ModConfigSpec.ConfigValue<Double> LossCoins;
+    public static ModConfigSpec.ConfigValue<String> Display1;
+    public static ModConfigSpec.ConfigValue<String> Display2;
+
+    public static ModConfigSpec.ConfigValue<Double> Gain;
+    public static ModConfigSpec.ConfigValue<Double> Loss;
 
     public static ModConfigSpec.DoubleValue ClaimMultiplier;
     public static ModConfigSpec.DoubleValue TargetMultiplier;
     public static ModConfigSpec.DoubleValue KillerMultiplier;
 
-    public static ModConfigSpec.DoubleValue RandomGainCoinsMin;
-    public static ModConfigSpec.DoubleValue RandomGainCoinsMax;
-    public static ModConfigSpec.DoubleValue RandomLossCoinsMin;
-    public static ModConfigSpec.DoubleValue RandomLossCoinsMax;
+    public static ModConfigSpec.DoubleValue RandomGainMin;
+    public static ModConfigSpec.DoubleValue RandomGainMax;
+    public static ModConfigSpec.DoubleValue RandomLossMin;
+    public static ModConfigSpec.DoubleValue RandomLossMax;
 
-    public static ModConfigSpec.DoubleValue RandomGainCoinsMultiplierMin;
-    public static ModConfigSpec.DoubleValue RandomGainCoinsMultiplierMax;
-    public static ModConfigSpec.DoubleValue RandomLossCoinsMultiplierMin;
-    public static ModConfigSpec.DoubleValue RandomLossCoinsMultiplierMax;
+    public static ModConfigSpec.DoubleValue RandomGainMultiplierMin;
+    public static ModConfigSpec.DoubleValue RandomGainMultiplierMax;
+    public static ModConfigSpec.DoubleValue RandomLossMultiplierMin;
+    public static ModConfigSpec.DoubleValue RandomLossMultiplierMax;
 
     static {
         builder.comment("""
@@ -40,30 +46,40 @@ public class SGEconomyConfig {
                 
                 There is no LossCompleteBounty in this config, because it is already present in the SGEconomy-API config.
                 
+                For colors, pick a RGB color from the first page and copy the R, G, and B, numbers. Then put these numbers inside the second page to get a Decimal RGB Color
+                https://www.rapidtables.com/web/color/RGB_Color.html
+                https://www.checkyourmath.com/convert/color/rgb_decimal.php
+                
                  https://onlinegdb.com/BCyy-0Pi-Q
                 """);
 
-        CoinsSystem = builder.define("Enable the SG Economy compat", false);
+        System = builder.define("Enable the SG Economy compat", false);
         EnableDisplay = builder.define("Display the balance in the player name", true);
+        Color = builder.define("RGB Decimal color of the balance in chat", 16733695);
 
-        CoinsDisplay1 = builder.define("Formatting Codes before the coin display", " [$§d§l");
-        CoinsDisplay2 = builder.define("Formatting Codes after the coin display", "§r]");
+        Bold = builder.define("Make the color bold", true);
+        Italic = builder.define("Make the color italic", false);
+        Underlined = builder.define("Underline the color", false);
+        Strikethrough = builder.define("Strikethrough the color", false);
 
-        GainCoins = builder.define("How much coins you gain after killing another player", 10.0);
-        LossCoins = builder.define("How much coins you loss after being killed", 10.0);
+        Display1 = builder.define("Formatting Codes before the coin display", " [$");
+        Display2 = builder.define("Formatting Codes after the coin display", "§r]");
 
-        ClaimMultiplier = builder.defineInRange("Claim-Multiplier, how much you take from your victim = 100%", 0.0, -Double.MAX_VALUE, Double.MAX_VALUE);
-        KillerMultiplier = builder.defineInRange("Killer-Multiplier of your own balance 1 = 100%", 0.0, -Double.MAX_VALUE, Double.MAX_VALUE);
-        TargetMultiplier = builder.defineInRange("Target-Multiplier, how much do the victim loss 1 = 100", 0.0, -Double.MAX_VALUE, Double.MAX_VALUE);
+        Gain = builder.define("How much coins you gain after killing another player", 10.0);
+        Loss = builder.define("How much coins you loss after being killed", 10.0);
 
-        RandomGainCoinsMin = builder.defineInRange("Minimum Random Coin Gain", 0.0, -Double.MAX_VALUE, Double.MAX_VALUE);
-        RandomGainCoinsMax = builder.defineInRange("Maximum Random Coin Gain", 0.0, -Double.MAX_VALUE, Double.MAX_VALUE);
-        RandomLossCoinsMin = builder.defineInRange("Minimum Random Coin Loss", 0.0, -Double.MAX_VALUE, Double.MAX_VALUE);
-        RandomLossCoinsMax = builder.defineInRange("Maximum Random Coin Loss", 0.0, -Double.MAX_VALUE, Double.MAX_VALUE);
+        ClaimMultiplier = builder.defineInRange("Claim-Multiplier, how much you take from your victim's balance 1 = 100%", 0.0, -Double.MAX_VALUE, Double.MAX_VALUE);
+        KillerMultiplier = builder.defineInRange("Killer-Multiplier multiply from your own balance everytime you kill someone 1 = 100%", 0.0, -Double.MAX_VALUE, Double.MAX_VALUE);
+        TargetMultiplier = builder.defineInRange("Target-Multiplier, how much is divided from your balance when you get killed 1 = 100", 0.0, -Double.MAX_VALUE, Double.MAX_VALUE);
 
-        RandomGainCoinsMultiplierMin = builder.defineInRange("Minimum Random Coin Gain Multiplier 1 = 100%", 0.0, -Double.MAX_VALUE, Double.MAX_VALUE);
-        RandomGainCoinsMultiplierMax = builder.defineInRange("Maximum Random Coin Gain Multiplier 1 = 100%", 0.0, -Double.MAX_VALUE, Double.MAX_VALUE);
-        RandomLossCoinsMultiplierMin = builder.defineInRange("Minimum Random Coin Loss Multiplier 1 = 100%", 0.0, -Double.MAX_VALUE, Double.MAX_VALUE);
-        RandomLossCoinsMultiplierMax = builder.defineInRange("Maximum Random Coin loss Multiplier 1 = 100%", 0.0, -Double.MAX_VALUE, Double.MAX_VALUE);
+        RandomGainMin = builder.defineInRange("Minimum Random Coin Gain", 0.0, -Double.MAX_VALUE, Double.MAX_VALUE);
+        RandomGainMax = builder.defineInRange("Maximum Random Coin Gain", 0.0, -Double.MAX_VALUE, Double.MAX_VALUE);
+        RandomLossMin = builder.defineInRange("Minimum Random Coin Loss", 0.0, -Double.MAX_VALUE, Double.MAX_VALUE);
+        RandomLossMax = builder.defineInRange("Maximum Random Coin Loss", 0.0, -Double.MAX_VALUE, Double.MAX_VALUE);
+
+        RandomGainMultiplierMin = builder.defineInRange("Minimum Random Coin Gain Multiplier 1 = 100%", 0.0, -Double.MAX_VALUE, Double.MAX_VALUE);
+        RandomGainMultiplierMax = builder.defineInRange("Maximum Random Coin Gain Multiplier 1 = 100%", 0.0, -Double.MAX_VALUE, Double.MAX_VALUE);
+        RandomLossMultiplierMin = builder.defineInRange("Minimum Random Coin Loss Multiplier 1 = 100%", 0.0, -Double.MAX_VALUE, Double.MAX_VALUE);
+        RandomLossMultiplierMax = builder.defineInRange("Maximum Random Coin loss Multiplier 1 = 100%", 0.0, -Double.MAX_VALUE, Double.MAX_VALUE);
     }
 }

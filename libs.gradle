@@ -7,4 +7,7 @@ repositories {
 
 dependencies {
     implementation "curse.maven:sg-economy-api-1446971:8041335"
+    implementation "curse.maven:numismatic-overhaul-reforged-again-1294551:6801648"
+    implementation "curse.maven:owo-lib-532610:6785734"
+    implementation "curse.maven:forgified-fabric-api-889079:7658611"
 }

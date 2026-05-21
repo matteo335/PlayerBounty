@@ -33,23 +33,23 @@ public class InvalidConfigException extends Exception {
             trigger = true;
         }
 
-        if (PlayerBountyMod.sg_economy_config && SGEconomyConfig.CoinsSystem.get()) {
-            if (SGEconomyConfig.RandomGainCoinsMin.get() > SGEconomyConfig.RandomGainCoinsMax.get()) {
+        if (PlayerBountyMod.sg_economy_system) {
+            if (SGEconomyConfig.RandomGainMin.get() > SGEconomyConfig.RandomGainMax.get()) {
                 string += "\nMinimum Random Coin Gain is GREATER than Maximum Random Coin Gain\n";
                 trigger = true;
             }
 
-            if (SGEconomyConfig.RandomLossCoinsMin.get() > SGEconomyConfig.RandomLossCoinsMax.get()) {
+            if (SGEconomyConfig.RandomLossMin.get() > SGEconomyConfig.RandomLossMax.get()) {
                 string += "\nMinimum Random Coin Loss is GREATER than Maximum Random Coin Loss\n";
                 trigger = true;
             }
 
-            if (SGEconomyConfig.RandomGainCoinsMultiplierMin.get() > SGEconomyConfig.RandomGainCoinsMultiplierMax.get()) {
+            if (SGEconomyConfig.RandomGainMultiplierMin.get() > SGEconomyConfig.RandomGainMultiplierMax.get()) {
                 string += "\nMinimum Random Coin Gain Multiplier is GREATER than Maximum Random Coin Gain Multiplier\n";
                 trigger = true;
             }
 
-            if (SGEconomyConfig.RandomLossCoinsMultiplierMin.get() > SGEconomyConfig.RandomLossCoinsMultiplierMax.get()) {
+            if (SGEconomyConfig.RandomLossMultiplierMin.get() > SGEconomyConfig.RandomLossMultiplierMax.get()) {
                 string += "\nMinimum Random Coin Loss Multiplier is GREATER than Maximum Random Coin Loss Multiplier\n";
                 trigger = true;
             }

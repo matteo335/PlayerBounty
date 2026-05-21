@@ -1,99 +1,29 @@
 package net.matteo.playerbounty.utils;
 
-import net.matteo.playerbounty.configs.Config;
-import net.matteo.playerbounty.configs.SGEconomyConfig;
-import net.matteo.playerbounty.PlayerBountyMod;
-import net.matteo.playerbounty.events.DisplayEvents;
+import static net.matteo.playerbounty.utils.mods.PlayerBountyUtils.DefaultDisplay;
+import static net.matteo.playerbounty.utils.mods.SGEconomyUtils.SGEconomyDisplay;
+import static net.matteo.playerbounty.utils.mods.NumismaticOverhaulUtils.NumismaticOverhaulDisplay;
 
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Component;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 public class GetValues {
+    public static Map<UUID, Integer> sg_economy = new HashMap<>();
+    public static Map<UUID, Integer> playerbounty = new HashMap<>();
+    public static Map<UUID, Long> numismaticoverhaul = new HashMap<>();
 
-    public static Double randomGain() {
-        if (Config.RandomGainMin.get().equals(Config.RandomGainMax.get())) {
-            return Config.RandomGainMin.get();
-        } else {
-            return RandomSource.create().nextDouble() * (Config.RandomGainMax.get() - Config.RandomGainMin.get()) + Config.RandomGainMin.get();
-        }
-    }
+    public static MutableComponent name(Player player) {
+        MutableComponent component = Component.literal(player.getName().getString());
 
-    public static Double randomLoss() {
-        if (Config.RandomLossMin.get().equals(Config.RandomLossMin.get())) {
-            return Config.RandomLossMin.get();
-        } else {
-            return RandomSource.create().nextDouble() * (Config.RandomLossMax.get() - Config.RandomLossMin.get()) + Config.RandomLossMin.get();
-        }
-    }
+        component.append(DefaultDisplay(player));
+        component.append(SGEconomyDisplay(player));
+        component.append(NumismaticOverhaulDisplay(player));
 
-    public static Double randomGainMultiplier() {
-        if (Config.RandomGainMultiplierMax.get().equals(Config.RandomGainMultiplierMin.get())) {
-            return Config.RandomGainMultiplierMin.get();
-        } else {
-            return RandomSource.create().nextDouble() * (Config.RandomGainMultiplierMax.get() - Config.RandomGainMultiplierMin.get()) + Config.RandomGainMultiplierMin.get();
-        }
-    }
-
-    public static Double randomLossMultiplier() {
-        if (Config.RandomLossMultiplierMin.get().equals(Config.RandomLossMultiplierMax.get())) {
-            return Config.RandomLossMultiplierMin.get();
-        } else {
-            return RandomSource.create().nextDouble() * (Config.RandomLossMultiplierMax.get() - Config.RandomLossMultiplierMin.get()) + Config.RandomLossMin.get();
-        }
-    }
-
-    public static Double randomCoinsGain() {
-        if (SGEconomyConfig.RandomGainCoinsMin.get().equals(SGEconomyConfig.RandomGainCoinsMax.get())) {
-            return SGEconomyConfig.RandomGainCoinsMin.get();
-        } else {
-            return RandomSource.create().nextDouble() * (SGEconomyConfig.RandomGainCoinsMax.get() - SGEconomyConfig.RandomGainCoinsMin.get()) + SGEconomyConfig.RandomGainCoinsMin.get();
-        }
-    }
-
-    public static Double randomCoinsLoss() {
-        if (SGEconomyConfig.RandomLossCoinsMin.get().equals(SGEconomyConfig.RandomLossCoinsMax.get())) {
-            return SGEconomyConfig.RandomLossCoinsMin.get();
-        } else {
-            return RandomSource.create().nextDouble() * (SGEconomyConfig.RandomLossCoinsMax.get() - SGEconomyConfig.RandomLossCoinsMin.get()) + SGEconomyConfig.RandomLossCoinsMin.get();
-        }
-    }
-
-    public static Double randomCoinsGainMultiplier() {
-        if (SGEconomyConfig.RandomGainCoinsMultiplierMin.get().equals(SGEconomyConfig.RandomGainCoinsMultiplierMax.get())) {
-            return SGEconomyConfig.RandomGainCoinsMin.get();
-        } else {
-            return RandomSource.create().nextDouble() * (SGEconomyConfig.RandomGainCoinsMultiplierMax.get() - SGEconomyConfig.RandomGainCoinsMultiplierMin.get()) + SGEconomyConfig.RandomGainCoinsMultiplierMin.get();
-        }
-    }
-
-    public static Double randomCoinsLossMultiplier() {
-        if (SGEconomyConfig.RandomLossCoinsMultiplierMin.get().equals(SGEconomyConfig.RandomLossCoinsMultiplierMax.get())) {
-            return SGEconomyConfig.RandomLossCoinsMultiplierMin.get();
-        } else {
-            return RandomSource.create().nextDouble() * (SGEconomyConfig.RandomLossCoinsMultiplierMax.get() - SGEconomyConfig.RandomLossCoinsMultiplierMin.get()) + SGEconomyConfig.RandomLossCoinsMultiplierMin.get();
-        }
-    }
-
-    public static String name(Player player) {
-        String name = player.getName().getString();
-
-        if (Config.EnableDisplay.get() && Config.DefaultSystem.get()) {
-            if (DisplayEvents.bounty.get(player.getUUID()) == null) return name;
-
-            if (PlayerBountyMod.sg_economy_config && SGEconomyConfig.EnableDisplay.get() && SGEconomyConfig.CoinsSystem.get()) {
-
-                return name + SGEconomyConfig.CoinsDisplay1.get() + DisplayEvents.coins.get(player.getUUID()) + SGEconomyConfig.CoinsDisplay2.get()
-                        + Config.BountyDisplay1.get() + DisplayEvents.bounty.get(player.getUUID()) + Config.BountyDisplay2.get();
-
-            } else {
-                return name + Config.BountyDisplay1.get() + DisplayEvents.bounty.get(player.getUUID()) + Config.BountyDisplay2.get();
-            }
-
-        } else if (PlayerBountyMod.sg_economy_config && SGEconomyConfig.EnableDisplay.get() && SGEconomyConfig.CoinsSystem.get()) {
-            if (DisplayEvents.coins.get(player.getUUID()) == null) return name;
-            return name + SGEconomyConfig.CoinsDisplay1.get() + DisplayEvents.coins.get(player.getUUID()) + SGEconomyConfig.CoinsDisplay2.get();
-        }
-
-        return name;
+        return component;
     }
 }

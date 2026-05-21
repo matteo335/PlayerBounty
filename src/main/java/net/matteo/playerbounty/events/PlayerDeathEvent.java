@@ -1,11 +1,15 @@
 package net.matteo.playerbounty.events;
 
+import static net.matteo.playerbounty.utils.mods.PlayerBountyUtils.randomGain;
+import static net.matteo.playerbounty.utils.mods.PlayerBountyUtils.randomLoss;
+import static net.matteo.playerbounty.utils.mods.PlayerBountyUtils.randomGainMultiplier;
+import static net.matteo.playerbounty.utils.mods.PlayerBountyUtils.randomLossMultiplier;
 
-import net.matteo.playerbounty.utils.GetValues;
-import net.matteo.playerbounty.configs.SGEconomyConfig;
-import net.matteo.playerbounty.configs.Config;
+import static net.matteo.playerbounty.configs.Config.*;
 import net.matteo.playerbounty.compats.SG_Economy;
 import net.matteo.playerbounty.PlayerBountyMod;
+import net.matteo.playerbounty.compats.NumismaticOverhaul;
+import static net.matteo.playerbounty.utils.GetValues.playerbounty;
 
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -29,43 +33,43 @@ public class PlayerDeathEvent {
         if (killer == target) return;
         if (!target.gameMode.isSurvival() || !killer.gameMode.isSurvival()) return;
 
-        if (Config.DefaultSystem.get()) {
-            handleKillerBounty(killer, target);
-            handleTargetBounty(target);
+        if (System.get()) {
+            handleKiller(killer, target);
+            handleTarget(target);
         }
 
-        if (PlayerBountyMod.sg_economy_config && SGEconomyConfig.CoinsSystem.get()) {
-            SG_Economy.handleKillerEconomy(killer, target);
-            SG_Economy.handleTargetEconomy(target);
+        if (PlayerBountyMod.sg_economy_system) {
+            SG_Economy.handleKiller(killer, target);
+            SG_Economy.handleTarget(target);
         }
-    }
 
-    public static void handleKillerBounty(ServerPlayer killer, ServerPlayer target) {
-        if (Config.DefaultSystem.get()) {
-            double killerBounty = killer.getPersistentData().getDouble("bounty");
-
-            killerBounty += (Config.GainOnKilling.get() + GetValues.randomGain())
-                            + (killerBounty * (GetValues.randomGainMultiplier() + Config.KillerMultiplier.get())
-                            + (target.getPersistentData().getDouble("bounty") * Config.ClaimMultiplier.get()));
-
-
-            killer.getPersistentData().putDouble("bounty", killerBounty);
+        if (PlayerBountyMod.numismaticoverhaul_system) {
+            NumismaticOverhaul.handleKiller(killer, target);
+            NumismaticOverhaul.handleVictim(target);
         }
     }
 
-    public static void handleTargetBounty(ServerPlayer target) {
-        if (Config.DefaultSystem.get()) {
-            double targetBounty = target.getPersistentData().getDouble("bounty");
+    public static void handleKiller(ServerPlayer killer, ServerPlayer target) {
+        double killerBounty = killer.getPersistentData().getDouble("bounty");
 
-            if (Config.LoseCompleteBountyOnDeath.get()) {
-                targetBounty = (-Config.LossOnDeath.get() - GetValues.randomLoss())
-                        - (targetBounty * (Config.TargetMultiplier.get() + GetValues.randomLossMultiplier()));
-            } else {
-                targetBounty -= (Config.LossOnDeath.get() + GetValues.randomLoss())
-                        + (targetBounty * (Config.TargetMultiplier.get() + GetValues.randomLossMultiplier()));
-            }
+        killerBounty += (Gain.get() + randomGain()) + (killerBounty * (randomGainMultiplier() + KillerMultiplier.get())
+                + (target.getPersistentData().getDouble("bounty") * ClaimMultiplier.get()));
 
-            target.getPersistentData().putDouble("bounty", targetBounty);
+
+        killer.getPersistentData().putDouble("bounty", killerBounty);
+        playerbounty.put(killer.getUUID(), (int) killerBounty);
+    }
+
+    public static void handleTarget(ServerPlayer target) {
+        double targetBounty = target.getPersistentData().getDouble("bounty");
+
+        if (LoseCompleteBountyOnDeath.get()) {
+            targetBounty = (-Loss.get() - randomLoss()) - (targetBounty * (TargetMultiplier.get() + randomLossMultiplier()));
+        } else {
+            targetBounty -= (Loss.get() + randomLoss()) + (targetBounty * (TargetMultiplier.get() + randomLossMultiplier()));
         }
+
+        target.getPersistentData().putDouble("bounty", targetBounty);
+        playerbounty.put(target.getUUID(), (int) targetBounty);
     }
 }
