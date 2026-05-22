@@ -2,7 +2,6 @@ package net.matteo.playerbounty.events;
 
 import net.matteo.playerbounty.configs.Config;
 import net.matteo.playerbounty.network.Packets;
-import net.matteo.playerbounty.PlayerBountyMod;
 import net.matteo.playerbounty.utils.GetValues;
 import net.matteo.playerbounty.utils.Cooldowns;
 
@@ -47,14 +46,14 @@ public class DisplayEvents {
         CompoundTag tag = player.getPersistentData();
 
         if (Config.System.get()) GetValues.playerbounty.put(player.getUUID(), (int) tag.getDouble("bounty"));
-        if (PlayerBountyMod.sg_economy_system) GetValues.sg_economy.put(player.getUUID(), SGEconomyApi.get().getBalanceAsInt(player));
-        if (PlayerBountyMod.numismaticoverhaul_system) GetValues.numismaticoverhaul.put(player.getUUID(), CurrencyHolder.getValue(player));
+        if (GetValues.sg_economy_system) GetValues.sg_economy.put(player.getUUID(), SGEconomyApi.get().getBalanceAsInt(player));
+        if (GetValues.numismaticoverhaul_system) GetValues.numismaticoverhaul.put(player.getUUID(), CurrencyHolder.getValue(player));
 
         PacketDistributor.sendToAllPlayers(new Packets(
                 player.getId(),
                 Config.EnableDisplay.get() ? GetValues.playerbounty.get(player.getUUID()) : null,
-                PlayerBountyMod.sg_economy_display ? GetValues.sg_economy.get(player.getUUID()) : null,
-                PlayerBountyMod.numismaticoverhaul_display ? GetValues.numismaticoverhaul.get(player.getUUID()) : null
+                GetValues.sg_economy_display ? GetValues.sg_economy.get(player.getUUID()) : null,
+                GetValues.numismaticoverhaul_display ? GetValues.numismaticoverhaul.get(player.getUUID()) : null
         ));
 
         player.refreshDisplayName();

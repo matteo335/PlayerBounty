@@ -57,7 +57,7 @@ public class NumismaticOverhaulConfig {
                 
                 Killer is calculated like this: your Bounty = (BountyTarget * Claim-Multiplier) + (BountyKiller * (Killer-Multiplier + RandomGainMultiplier)) + (GainOnKilling + RandomLoss)
                 
-                For colors, pick a RGB color from the first page and copy the R, G, and B, numbers. Then put these numbers inside the second page to get a Decimal RGB Color
+                For colors, pick an RGB color from the first page and copy the R, G, and B, numbers. Then put these numbers inside the second page to get a Decimal RGB Color
                 https://www.rapidtables.com/web/color/RGB_Color.html
                 https://www.checkyourmath.com/convert/color/rgb_decimal.php
                 
@@ -66,7 +66,7 @@ public class NumismaticOverhaulConfig {
 
         System = builder.define("Enable the NumismaticOverhaul compat", false);
 
-        EnableDisplay = builder.define("Enable the display", false);
+        EnableDisplay = builder.define("Enable the display", true);
         EnableBronzeDisplay = builder.define("Enable Bronze Display", true);
         EnableSilverDisplay = builder.define("Enable Silver Display", true);
         EnableGoldDisplay = builder.define("Enable Gold Display", true);
@@ -74,7 +74,7 @@ public class NumismaticOverhaulConfig {
         Bold = builder.define("Write the values in bold", true);
         Italic = builder.define("Write the values in italic", false);
         Underlined = builder.define("Underline the values", false);
-        Strikethrough = builder.define("Strike through the values (I don't know who will ever use this one, but it's a option)", false);
+        Strikethrough = builder.define("Strike through the values", false);
 
         BronzeColor = builder.define("Bronze Decimal RGB Color", 11426620);
         DisplayBronze1 = builder.define("Bronze Display1", " [");

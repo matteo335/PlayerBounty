@@ -43,6 +43,7 @@ public class PlayerBountyUtils {
 
     public static MutableComponent DefaultDisplay(Player player) {
         MutableComponent component = Component.empty();
+        if (!EnableDisplay.get()) return component;
 
         Style bold = Style.EMPTY.withBold(Bold.get());
         Style italic = Style.EMPTY.withItalic(Italic.get());

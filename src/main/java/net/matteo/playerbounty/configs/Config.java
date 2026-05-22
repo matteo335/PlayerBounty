@@ -55,7 +55,7 @@ public class Config {
                 
                 If LossCompleteBountyOnDeath is true: Your Bounty = (-LossOnDeath - randomLoss) + (Bounty * (Target-Multiplier + RandomLossMultiplier))
                 
-                For colors, pick a RGB color from the first page and copy the R, G, and B, numbers. Then put these numbers inside the second page to get a Decimal RGB Color
+                For colors, pick an RGB color from the first page and copy the R, G, and B, numbers. Then put these numbers inside the second page to get a Decimal RGB Color
                 https://www.rapidtables.com/web/color/RGB_Color.html
                 https://www.checkyourmath.com/convert/color/rgb_decimal.php
                 

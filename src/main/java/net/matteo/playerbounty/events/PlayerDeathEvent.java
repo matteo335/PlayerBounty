@@ -7,9 +7,8 @@ import static net.matteo.playerbounty.utils.mods.PlayerBountyUtils.randomLossMul
 
 import static net.matteo.playerbounty.configs.Config.*;
 import net.matteo.playerbounty.compats.SG_Economy;
-import net.matteo.playerbounty.PlayerBountyMod;
+import net.matteo.playerbounty.utils.GetValues;
 import net.matteo.playerbounty.compats.NumismaticOverhaul;
-import static net.matteo.playerbounty.utils.GetValues.playerbounty;
 
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -38,12 +37,12 @@ public class PlayerDeathEvent {
             handleTarget(target);
         }
 
-        if (PlayerBountyMod.sg_economy_system) {
+        if (GetValues.sg_economy_system) {
             SG_Economy.handleKiller(killer, target);
             SG_Economy.handleTarget(target);
         }
 
-        if (PlayerBountyMod.numismaticoverhaul_system) {
+        if (GetValues.numismaticoverhaul_system) {
             NumismaticOverhaul.handleKiller(killer, target);
             NumismaticOverhaul.handleVictim(target);
         }
@@ -57,7 +56,7 @@ public class PlayerDeathEvent {
 
 
         killer.getPersistentData().putDouble("bounty", killerBounty);
-        playerbounty.put(killer.getUUID(), (int) killerBounty);
+        GetValues.playerbounty.put(killer.getUUID(), (int) killerBounty);
     }
 
     public static void handleTarget(ServerPlayer target) {
@@ -70,6 +69,6 @@ public class PlayerDeathEvent {
         }
 
         target.getPersistentData().putDouble("bounty", targetBounty);
-        playerbounty.put(target.getUUID(), (int) targetBounty);
+        GetValues.playerbounty.put(target.getUUID(), (int) targetBounty);
     }
 }

@@ -2,6 +2,7 @@ package net.matteo.playerbounty.compats;
 
 import static net.matteo.playerbounty.configs.NumismaticOverhaulConfig.*;
 import static net.matteo.playerbounty.utils.mods.NumismaticOverhaulUtils.*;
+import static net.matteo.playerbounty.utils.GetValues.numismaticoverhaul;
 
 import tallestred.numismaticoverhaul.cap.CurrencyHolder;
 
@@ -18,6 +19,7 @@ public class NumismaticOverhaul {
                 + (CurrencyHolder.getValue(target) * ClaimMultiplier.get());
 
         CurrencyHolder.setValue(killer, (long) killerCoins);
+        numismaticoverhaul.put(killer.getUUID(), (long) killerCoins);
     }
 
     public static void handleVictim(Player target) {
@@ -30,5 +32,6 @@ public class NumismaticOverhaul {
         }
 
         CurrencyHolder.setValue(target, (long) targetCoins);
+        numismaticoverhaul.put(target.getUUID(), (long) targetCoins);
     }
 }

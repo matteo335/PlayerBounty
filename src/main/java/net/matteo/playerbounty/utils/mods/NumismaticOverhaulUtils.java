@@ -45,6 +45,7 @@ public class NumismaticOverhaulUtils {
 
     public static MutableComponent NumismaticOverhaulDisplay(Player player) {
         MutableComponent component = Component.empty();
+        if (!EnableDisplay.get()) return component;
 
         long[] value = CurrencyResolver.splitValues(numismaticoverhaul.get(player.getUUID()));
         Style bold = Style.EMPTY.withBold(Bold.get());
@@ -71,7 +72,7 @@ public class NumismaticOverhaulUtils {
         }
 
         if (EnableBronzeDisplay.get()) {
-            MutableComponent bronze = Component.literal(String.valueOf(value[0]));
+            MutableComponent bronze = Component.literal(String.valueOf(value[0])).withStyle(bold).withStyle(italic).withStyle(underlined).withStyle(strikethrough);
             Style hoverEvent = Style.EMPTY.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal("NumismaticOverhaul Bronze Coin")));
 
             component.append(DisplayBronze1.get());

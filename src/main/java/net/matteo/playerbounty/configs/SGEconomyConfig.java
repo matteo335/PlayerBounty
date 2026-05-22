@@ -46,11 +46,11 @@ public class SGEconomyConfig {
                 
                 There is no LossCompleteBounty in this config, because it is already present in the SGEconomy-API config.
                 
-                For colors, pick a RGB color from the first page and copy the R, G, and B, numbers. Then put these numbers inside the second page to get a Decimal RGB Color
+                For colors, pick an RGB color from the first page and copy the R, G, and B, numbers. Then put these numbers inside the second page to get a Decimal RGB Color
                 https://www.rapidtables.com/web/color/RGB_Color.html
                 https://www.checkyourmath.com/convert/color/rgb_decimal.php
                 
-                 https://onlinegdb.com/BCyy-0Pi-Q
+                Use this link to calculate maths: https://onlinegdb.com/BCyy-0Pi-Q
                 """);
 
         System = builder.define("Enable the SG Economy compat", false);
@@ -72,14 +72,14 @@ public class SGEconomyConfig {
         KillerMultiplier = builder.defineInRange("Killer-Multiplier multiply from your own balance everytime you kill someone 1 = 100%", 0.0, -Double.MAX_VALUE, Double.MAX_VALUE);
         TargetMultiplier = builder.defineInRange("Target-Multiplier, how much is divided from your balance when you get killed 1 = 100", 0.0, -Double.MAX_VALUE, Double.MAX_VALUE);
 
-        RandomGainMin = builder.defineInRange("Minimum Random Coin Gain", 0.0, -Double.MAX_VALUE, Double.MAX_VALUE);
-        RandomGainMax = builder.defineInRange("Maximum Random Coin Gain", 0.0, -Double.MAX_VALUE, Double.MAX_VALUE);
-        RandomLossMin = builder.defineInRange("Minimum Random Coin Loss", 0.0, -Double.MAX_VALUE, Double.MAX_VALUE);
-        RandomLossMax = builder.defineInRange("Maximum Random Coin Loss", 0.0, -Double.MAX_VALUE, Double.MAX_VALUE);
+        RandomGainMin = builder.defineInRange("Minimum Random Gain", 0.0, -Double.MAX_VALUE, Double.MAX_VALUE);
+        RandomGainMax = builder.defineInRange("Maximum Random Gain", 0.0, -Double.MAX_VALUE, Double.MAX_VALUE);
+        RandomLossMin = builder.defineInRange("Minimum Random Loss", 0.0, -Double.MAX_VALUE, Double.MAX_VALUE);
+        RandomLossMax = builder.defineInRange("Maximum Random Loss", 0.0, -Double.MAX_VALUE, Double.MAX_VALUE);
 
-        RandomGainMultiplierMin = builder.defineInRange("Minimum Random Coin Gain Multiplier 1 = 100%", 0.0, -Double.MAX_VALUE, Double.MAX_VALUE);
-        RandomGainMultiplierMax = builder.defineInRange("Maximum Random Coin Gain Multiplier 1 = 100%", 0.0, -Double.MAX_VALUE, Double.MAX_VALUE);
-        RandomLossMultiplierMin = builder.defineInRange("Minimum Random Coin Loss Multiplier 1 = 100%", 0.0, -Double.MAX_VALUE, Double.MAX_VALUE);
-        RandomLossMultiplierMax = builder.defineInRange("Maximum Random Coin loss Multiplier 1 = 100%", 0.0, -Double.MAX_VALUE, Double.MAX_VALUE);
+        RandomGainMultiplierMin = builder.defineInRange("Minimum Random Gain Multiplier 1 = 100%", 0.0, -Double.MAX_VALUE, Double.MAX_VALUE);
+        RandomGainMultiplierMax = builder.defineInRange("Maximum Random Gain Multiplier 1 = 100%", 0.0, -Double.MAX_VALUE, Double.MAX_VALUE);
+        RandomLossMultiplierMin = builder.defineInRange("Minimum Random Loss Multiplier 1 = 100%", 0.0, -Double.MAX_VALUE, Double.MAX_VALUE);
+        RandomLossMultiplierMax = builder.defineInRange("Maximum Random loss Multiplier 1 = 100%", 0.0, -Double.MAX_VALUE, Double.MAX_VALUE);
     }
 }

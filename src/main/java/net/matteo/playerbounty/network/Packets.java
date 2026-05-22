@@ -3,7 +3,6 @@ package net.matteo.playerbounty.network;
 import net.matteo.playerbounty.utils.GetValues;
 import net.matteo.playerbounty.utils.Cooldowns;
 import net.matteo.playerbounty.configs.Config;
-import net.matteo.playerbounty.PlayerBountyMod;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -62,8 +61,8 @@ public record Packets(int playerID, @Nullable Integer playerbounty, @Nullable In
             if (Cooldowns.isPlayerInCooldown(player.getUUID())) return;
 
             if (Config.EnableDisplay.get()) GetValues.playerbounty.put(player.getUUID(), playerbounty);
-            if (PlayerBountyMod.sg_economy_display) GetValues.sg_economy.put(player.getUUID(), sg_economy);
-            if (PlayerBountyMod.numismaticoverhaul_display) GetValues.numismaticoverhaul.put(player.getUUID(), numismaticoverhaul);
+            if (GetValues.sg_economy_display) GetValues.sg_economy.put(player.getUUID(), sg_economy);
+            if (GetValues.numismaticoverhaul_display) GetValues.numismaticoverhaul.put(player.getUUID(), numismaticoverhaul);
 
             Minecraft.getInstance().player.connection.getPlayerInfo(player.getUUID()).setTabListDisplayName(GetValues.name(player));
             player.refreshDisplayName();
