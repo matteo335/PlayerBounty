@@ -17,7 +17,8 @@ import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 import javax.annotation.Nullable;
 
-public record Packets(int playerID, @Nullable Integer playerbounty, @Nullable Integer sg_economy, @Nullable Long numismaticoverhaul) implements CustomPacketPayload {
+public record Packets(int playerID, @Nullable Integer playerbounty, @Nullable Integer sg_economy, @Nullable Long numismatic_overhaul,
+                      @Nullable Integer create_numismatics) implements CustomPacketPayload {
 
     public static void registerPackets(RegisterPayloadHandlersEvent event) {
         PayloadRegistrar registrar = event.registrar("1.0.0");
@@ -35,22 +36,21 @@ public record Packets(int playerID, @Nullable Integer playerbounty, @Nullable In
                 buf.writeBoolean(packet.sg_economy != null);
                 if (packet.sg_economy != null) buf.writeInt(packet.sg_economy);
 
-                buf.writeBoolean(packet.numismaticoverhaul != null);
-                if (packet.numismaticoverhaul != null) buf.writeLong(packet.numismaticoverhaul);
+                buf.writeBoolean(packet.numismatic_overhaul != null);
+                if (packet.numismatic_overhaul != null) buf.writeLong(packet.numismatic_overhaul);
+
+                buf.writeBoolean(packet.create_numismatics != null);
+                if (packet.create_numismatics != null) buf.writeInt(packet.create_numismatics);
             },
             (RegistryFriendlyByteBuf buf) -> {
                 int playerID = buf.readInt();
 
-                Integer playerbounty = null;
-                if (buf.readBoolean()) playerbounty = buf.readInt();
+                Integer playerbounty = buf.readBoolean() ? buf.readInt() : null;
+                Integer sg_economy = buf.readBoolean() ? buf.readInt() : null;
+                Long numismatic_overhaul = buf.readBoolean() ? buf.readLong() : null;
+                Integer create_numismatics = buf.readBoolean() ? buf.readInt() : null;
 
-                Integer sg_economy = null;
-                if (buf.readBoolean()) sg_economy = buf.readInt();
-
-                Long numismaticoverhaul = null;
-                if (buf.readBoolean()) numismaticoverhaul = buf.readLong();
-
-                return new Packets(playerID, playerbounty, sg_economy, numismaticoverhaul);
+                return new Packets(playerID, playerbounty, sg_economy, numismatic_overhaul, create_numismatics);
             }
     );
 
@@ -62,7 +62,8 @@ public record Packets(int playerID, @Nullable Integer playerbounty, @Nullable In
 
             if (Config.EnableDisplay.get()) GetValues.playerbounty.put(player.getUUID(), playerbounty);
             if (GetValues.sg_economy_display) GetValues.sg_economy.put(player.getUUID(), sg_economy);
-            if (GetValues.numismaticoverhaul_display) GetValues.numismaticoverhaul.put(player.getUUID(), numismaticoverhaul);
+            if (GetValues.numismatic_overhaul_display) GetValues.numismaticoverhaul.put(player.getUUID(), numismatic_overhaul);
+            if (GetValues.create_numismatics_display) GetValues.create_numismatics.put(player.getUUID(), create_numismatics);
 
             Minecraft.getInstance().player.connection.getPlayerInfo(player.getUUID()).setTabListDisplayName(GetValues.name(player));
             player.refreshDisplayName();

@@ -8,7 +8,7 @@ public class InvalidConfigException extends Exception {
     }
 
     public static void CheckInvalidConfigs() throws InvalidConfigException {
-        String string = "We have found some issues in the PlayerBounty configuration files";
+        String string = "You have misconfigured the PlayerBounty configuration files";
         boolean trigger = false;
 
         if (Config.System.get()) {
@@ -55,7 +55,7 @@ public class InvalidConfigException extends Exception {
             }
         }
 
-        if (GetValues.numismaticoverhaul_system) {
+        if (GetValues.numismatic_overhaul_system) {
             if (NumismaticOverhaulConfig.RandomGainMin.get() > NumismaticOverhaulConfig.RandomGainMax.get()) {
                 string += "\nNumismaticOverhaul Compat: Minimum Random Gain is greater than Maximum Random Gain\n";
                 trigger = true;
@@ -73,6 +73,28 @@ public class InvalidConfigException extends Exception {
 
             if (NumismaticOverhaulConfig.RandomLossMultiplierMin.get() > NumismaticOverhaulConfig.RandomLossMultiplierMax.get()) {
                 string += "\nNumismaticOverhaul Compat: Minimum Random Loss Multiplier is greater than Maximum Random Loss Multiplier\n";
+                trigger = true;
+            }
+        }
+
+        if (GetValues.create_numismatics_system) {
+            if (CreateNumismaticsConfig.RandomGainMin.get() > CreateNumismaticsConfig.RandomGainMax.get()) {
+                string += "\nCreate Numismatics Compat: Spur Minimum Random Gain is greater than Maximum Random Gain\n";
+                trigger = true;
+            }
+
+            if (CreateNumismaticsConfig.RandomLossMin.get() > CreateNumismaticsConfig.RandomLossMax.get()) {
+                string += "\nCreate Numismatics Compat: Spur Minimum Random Loss is greater than Maximum Random Loss\n";
+                trigger = true;
+            }
+
+            if (CreateNumismaticsConfig.RandomGainMultiplierMin.get() > CreateNumismaticsConfig.RandomGainMultiplierMax.get()) {
+                string += "\nCreate Numismatics Compat: Spur Minimum Random Gain Multiplier is greater than Maximum Random Gain Multiplier`\n";
+                trigger = true;
+            }
+
+            if (CreateNumismaticsConfig.RandomLossMultiplierMin.get() > CreateNumismaticsConfig.RandomLossMultiplierMax.get()) {
+                string += "\nCreate Numismatics Compat: Spur Minimum Random Loss Multiplier is greater than Maximum Random Loss Multiplier\n";
                 trigger = true;
             }
         }

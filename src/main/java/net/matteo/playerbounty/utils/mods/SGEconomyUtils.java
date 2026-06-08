@@ -43,8 +43,6 @@ public class SGEconomyUtils {
 
     public static MutableComponent SGEconomyDisplay(Player player) {
         MutableComponent component = Component.empty();
-        if (!EnableDisplay.get()) return component;
-
         Style bold = Style.EMPTY.withBold(Bold.get());
         Style italic = Style.EMPTY.withItalic(Italic.get());
         Style underlined = Style.EMPTY.withUnderlined(Underlined.get());

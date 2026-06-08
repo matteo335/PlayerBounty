@@ -2,16 +2,18 @@ package net.matteo.playerbounty.configs;
 
 import net.neoforged.neoforge.common.ModConfigSpec;
 
-public class Config {
+public class CreateNumismaticsConfig {
 
     public static ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
 
-    public static ModConfigSpec.BooleanValue StartupWarning;
-
     public static ModConfigSpec.BooleanValue System;
+    public static ModConfigSpec.BooleanValue InventoryMath;
+    public static ModConfigSpec.BooleanValue InventoryDisplay;
+    public static ModConfigSpec.BooleanValue InventoryCoinsMove;
 
     public static ModConfigSpec.BooleanValue EnableDisplay;
-    public static ModConfigSpec.ConfigValue<Integer> DisplayCooldown;
+    public static ModConfigSpec.ConfigValue<String> Display1;
+    public static ModConfigSpec.ConfigValue<String> Display2;
     public static ModConfigSpec.ConfigValue<Integer> Color;
 
     public static ModConfigSpec.BooleanValue Bold;
@@ -19,21 +21,13 @@ public class Config {
     public static ModConfigSpec.BooleanValue Underlined;
     public static ModConfigSpec.BooleanValue Strikethrough;
 
-    public static ModConfigSpec.ConfigValue<String> Display1;
-    public static ModConfigSpec.ConfigValue<String> Display2;
-
-    public static ModConfigSpec.BooleanValue LoseCompleteBountyOnDeath;
-
-    public static ModConfigSpec.ConfigValue<Double> MinimumValue;
-    public static ModConfigSpec.ConfigValue<Double> MaximumValue;
-
+    public static ModConfigSpec.BooleanValue CompleteLoss;
     public static ModConfigSpec.ConfigValue<Double> Gain;
     public static ModConfigSpec.ConfigValue<Double> Loss;
 
-    public static ModConfigSpec.ConfigValue<Double> KillerMultiplier;
     public static ModConfigSpec.ConfigValue<Double> ClaimMultiplier;
+    public static ModConfigSpec.ConfigValue<Double> KillerMultiplier;
     public static ModConfigSpec.ConfigValue<Double> TargetMultiplier;
-
 
     public static ModConfigSpec.ConfigValue<Double> RandomGainMin;
     public static ModConfigSpec.ConfigValue<Double> RandomGainMax;
@@ -59,40 +53,38 @@ public class Config {
                 https://www.rapidtables.com/web/color/RGB_Color.html
                 https://www.checkyourmath.com/convert/color/rgb_decimal.php
                 
-                For calculations, check there! https://onlinegdb.com/BCyy-0Pi-Q
+                For calculations, check there! https://onlinegdb.com/wcCtb8Yds
                 """);
 
-        StartupWarning = builder.define("Enable the warning in the server start", true);
-
-        System = builder.define("Enable the default maths, disable the display to prevent the name change", true);
+        System = builder.define("Enable the Create Numismatics compat", false);
+        InventoryMath = builder.define("Includes the coins in the inventory and ender chest during the math", true);
+        InventoryDisplay = builder.define("Includes the coins in the inventory and ender chest inside the display value", true);
+        InventoryCoinsMove = builder.define("Instead of dropping the coins when being killed, move them in the bank", false);
 
         EnableDisplay = builder.define("Enable the display", true);
-        DisplayCooldown = builder.define("How much ticks before displays get updated", 100);
-        Color = builder.define("RGB Decimal color of the bounty in chat", 16755200);
+        Color = builder.define("Decimal RGB Color of the value", 16777215);
 
-        Bold = builder.define("Make the color bold", true);
-        Italic = builder.define("Make the color italic", false);
-        Underlined = builder.define("Underline the color", false);
-        Strikethrough = builder.define("Strikethrough the color", false);
+        Bold = builder.define("Write the values in bold", true);
+        Italic = builder.define("Write the values in italic", false);
+        Underlined = builder.define("Underline the values", false);
+        Strikethrough = builder.define("Strike through the values", false);
 
-        Display1 = builder.define("Text before the value", " [$");
-        Display2 = builder.define("Text after the value", "]");
+        Display1 = builder.define("Text before the value", " [");
+        Display2 = builder.define("Text after the value", " Cogs]");
 
-        LoseCompleteBountyOnDeath = builder.define("Loss the equivalent of your entire bounty on death", false);
-        MinimumValue = builder.define("Bounty Minimum Value", -Double.MAX_VALUE);
-        MaximumValue = builder.define("Bounty Maximum Value", Double.MAX_VALUE);
+        CompleteLoss = builder.define("Lose every of your spurs on death", false);
 
-        Gain = builder.define("Bounty Gain On Killing", 10.0);
-        Loss = builder.define("Bounty Loss On Death", 10.0);
+        Gain = builder.define("Spurs gained in bank or inventory on killing", 640.0);
+        Loss = builder.define("Spurs lose in bank or inventory on death", 640.0);
 
-        KillerMultiplier = builder.define("Killer-Multiplier multiply from your own balance everytime you kill someone 1 = 100%", 0.0);
-        ClaimMultiplier = builder.define("Claim-Multiplier, how much you take from your victim's balance 1 = 100%", 0.0);
-        TargetMultiplier = builder.define("Target-Multiplier, how much is divided from your balance when you get killed 1 = 100%", 0.0);
+        KillerMultiplier = builder.define("Killer-Multiplier, multiply from your total balance everytime you kill someone 1 = 100%", 0.0);
+        ClaimMultiplier = builder.define("Claim-Multiplier, steal from your target 1 = 100%", 0.0);
+        TargetMultiplier = builder.define("Target-Multiplier, how much is divided from your total balance when you get killed 1 = 100%", 0.0);
 
-        RandomGainMin = builder.define("Minimum Random Gain", 0.0);
-        RandomGainMax = builder.define("Maximum Random Gain", 0.0);
-        RandomLossMin = builder.define("Minimum Random Loss", 0.0);
-        RandomLossMax = builder.define("Maximum Random Loss", 0.0);
+        RandomGainMin = builder.define("Spur Minimum Random Gain", 0.0);
+        RandomGainMax = builder.define("Spur Maximum Random Gain", 0.0);
+        RandomLossMin = builder.define("Spur Minimum Random Loss", 0.0);
+        RandomLossMax = builder.define("Spur Maximum Random Loss", 0.0);
 
         RandomGainMultiplierMin = builder.define("Random Killer Multiplier Min 1 = 100%", 0.0);
         RandomGainMultiplierMax = builder.define("Random Killer Multiplier Max 1 = 100%", 0.0);

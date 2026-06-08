@@ -22,7 +22,6 @@ public class NumismaticOverhaulConfig {
     public static ModConfigSpec.ConfigValue<String> DisplayBronze1;
     public static ModConfigSpec.ConfigValue<String> DisplayBronze2;
 
-
     public static ModConfigSpec.ConfigValue<Integer> SilverColor;
     public static ModConfigSpec.ConfigValue<String> DisplaySilver1;
     public static ModConfigSpec.ConfigValue<String> DisplaySilver2;
@@ -52,16 +51,19 @@ public class NumismaticOverhaulConfig {
     static {
         builder.comment("""
                 Make sure you do the calculations correctly, you can use the link below to do the math yourself.
+                Total value means inventory + ender chest + bank 
                 
-                Target is calculated like this: your Bounty * (Target-Multiplier + RandomLossMultiplier) - (LossOnDeath + RandomLoss)
+                Killer is calculated like this: Total value + (Gain On Killing + Random Gain) + (Total value * (Killer-Multiplier + Random Gain Multiplier)) + (target's total value * Claim-Multiplier)
                 
-                Killer is calculated like this: your Bounty = (BountyTarget * Claim-Multiplier) + (BountyKiller * (Killer-Multiplier + RandomGainMultiplier)) + (GainOnKilling + RandomLoss)
+                Target is calculated like this: Bank - (Loss On Death + Random Loss) + (Bank * (Target-Multiplier + Random Loss Multiplier)
+                
+                If LossCompleteBountyOnDeath is true: Bank = (-LossOnDeath - randomLoss) + (Bank * (Target-Multiplier + RandomLossMultiplier))
                 
                 For colors, pick an RGB color from the first page and copy the R, G, and B, numbers. Then put these numbers inside the second page to get a Decimal RGB Color
                 https://www.rapidtables.com/web/color/RGB_Color.html
                 https://www.checkyourmath.com/convert/color/rgb_decimal.php
                 
-                Use this link  to calculate maths: https://onlinegdb.com/BCyy-0Pi-Q
+                Use this link to calculate maths: https://onlinegdb.com/BCyy-0Pi-Q
                 """);
 
         System = builder.define("Enable the NumismaticOverhaul compat", false);

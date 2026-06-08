@@ -6,9 +6,8 @@ import static net.matteo.playerbounty.utils.mods.PlayerBountyUtils.randomGainMul
 import static net.matteo.playerbounty.utils.mods.PlayerBountyUtils.randomLossMultiplier;
 
 import static net.matteo.playerbounty.configs.Config.*;
-import net.matteo.playerbounty.compats.SG_Economy;
 import net.matteo.playerbounty.utils.GetValues;
-import net.matteo.playerbounty.compats.NumismaticOverhaul;
+import net.matteo.playerbounty.compats.*;
 
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -42,10 +41,12 @@ public class PlayerDeathEvent {
             SG_Economy.handleTarget(target);
         }
 
-        if (GetValues.numismaticoverhaul_system) {
+        if (GetValues.numismatic_overhaul_system) {
             NumismaticOverhaul.handleKiller(killer, target);
             NumismaticOverhaul.handleVictim(target);
         }
+
+        if (GetValues.create_numismatics_system) CreateNumismatics.deathEvent(killer, target);
     }
 
     public static void handleKiller(ServerPlayer killer, ServerPlayer target) {

@@ -45,8 +45,6 @@ public class NumismaticOverhaulUtils {
 
     public static MutableComponent NumismaticOverhaulDisplay(Player player) {
         MutableComponent component = Component.empty();
-        if (!EnableDisplay.get()) return component;
-
         long[] value = CurrencyResolver.splitValues(numismaticoverhaul.get(player.getUUID()));
         Style bold = Style.EMPTY.withBold(Bold.get());
         Style italic = Style.EMPTY.withItalic(Italic.get());
