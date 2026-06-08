@@ -51,13 +51,12 @@ public class NumismaticOverhaulConfig {
     static {
         builder.comment("""
                 Make sure you do the calculations correctly, you can use the link below to do the math yourself.
-                Total value means inventory + ender chest + bank 
                 
-                Killer is calculated like this: Total value + (Gain On Killing + Random Gain) + (Total value * (Killer-Multiplier + Random Gain Multiplier)) + (target's total value * Claim-Multiplier)
+                Killer is calculated like this: Your Bounty + (Gain On Killing + Random Gain) + (Your Bounty * (Killer-Multiplier + Random Gain Multiplier)) + (Target Bounty * Claim-Multiplier)
                 
-                Target is calculated like this: Bank - (Loss On Death + Random Loss) + (Bank * (Target-Multiplier + Random Loss Multiplier)
+                Target is calculated like this: Your Bounty - (Loss On Death + Random Loss) + (Your Bounty * (Target-Multiplier + Random Loss Multiplier)
                 
-                If LossCompleteBountyOnDeath is true: Bank = (-LossOnDeath - randomLoss) + (Bank * (Target-Multiplier + RandomLossMultiplier))
+                If LossCompleteBountyOnDeath is true: Your Bounty = (-LossOnDeath - randomLoss) + (Bounty * (Target-Multiplier + RandomLossMultiplier))
                 
                 For colors, pick an RGB color from the first page and copy the R, G, and B, numbers. Then put these numbers inside the second page to get a Decimal RGB Color
                 https://www.rapidtables.com/web/color/RGB_Color.html
