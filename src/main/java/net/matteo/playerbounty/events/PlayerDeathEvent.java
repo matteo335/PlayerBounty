@@ -1,10 +1,6 @@
 package net.matteo.playerbounty.events;
 
-import static net.matteo.playerbounty.utils.mods.PlayerBountyUtils.randomGain;
-import static net.matteo.playerbounty.utils.mods.PlayerBountyUtils.randomLoss;
-import static net.matteo.playerbounty.utils.mods.PlayerBountyUtils.randomGainMultiplier;
-import static net.matteo.playerbounty.utils.mods.PlayerBountyUtils.randomLossMultiplier;
-
+import static net.matteo.playerbounty.utils.mods.PlayerBountyUtils.*;
 import static net.matteo.playerbounty.configs.Config.*;
 import net.matteo.playerbounty.utils.GetValues;
 import net.matteo.playerbounty.compats.*;
@@ -12,10 +8,10 @@ import net.matteo.playerbounty.compats.*;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
-import net.neoforged.api.distmarker.Dist;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.api.distmarker.Dist;
 
 @EventBusSubscriber(Dist.DEDICATED_SERVER)
 public class PlayerDeathEvent {
@@ -34,11 +30,6 @@ public class PlayerDeathEvent {
         if (System.get()) {
             handleKiller(killer, target);
             handleTarget(target);
-        }
-
-        if (GetValues.sg_economy_system) {
-            SG_Economy.handleKiller(killer, target);
-            SG_Economy.handleTarget(target);
         }
 
         if (GetValues.numismatic_overhaul_system) {

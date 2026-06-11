@@ -48,12 +48,13 @@ public class PlayerBountyUtils {
         Style underlined = Style.EMPTY.withUnderlined(Underlined.get());
         Style strikethrough = Style.EMPTY.withStrikethrough(Strikethrough.get());
         Style hoverEvent = Style.EMPTY.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal("PlayerBounty")));
+        Style color = Style.EMPTY.withColor(Color.get());
 
         String bountyString = String.valueOf(GetValues.playerbounty.get(player.getUUID()));
         MutableComponent bounty = Component.literal(bountyString).withStyle(bold).withStyle(italic).withStyle(underlined).withStyle(strikethrough);
 
         component.append(Display1.get());
-        component.append(bounty.withColor(Color.get()).withStyle(hoverEvent));
+        component.append(bounty.withStyle(color).withStyle(hoverEvent));
         component.append(Display2.get());
 
         return component;

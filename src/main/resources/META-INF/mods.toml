@@ -8,26 +8,18 @@ license="${mod_license}"
     displayName="${mod_name}"
     logoFile="${logo_file}"
     authors="${mod_authors}"
-    credits="SirGrantd"
     description='''${mod_description}'''
 
 [[dependencies.${mod_id}]]
-    modId="neoforge"
-    type="required"
-    versionRange="${neo_version_range}"
+    modId="forge"
+    mandatory=true
+    versionRange="{dev_forge_version}"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.${mod_id}]]
     modId="minecraft"
-    type="required"
-    version="${minecraft_version}"
-    ordering="NONE"
-    side="BOTH"
-
-[[dependencies.${mod_id}]]
-    modId="sg_economy"
-    type="optional"
-    versionRange="[${sg_economy_version},)"
+    mandatory=true
+    versionRange="${minecraft_version}"
     ordering="NONE"
     side="BOTH"

@@ -49,15 +49,16 @@ public class CreateNumismaticsUtils {
         }
     }
 
+    @SuppressWarnings("deprecation")
     public static Integer spurValue(Player player, boolean mathElseDisplay) {
         int spurs = BankSavedData.load(player.getServer()).getAccounts().get(player.getUUID()).getBalance();
 
         if ((InventoryMath.get() && mathElseDisplay) || (InventoryDisplay.get() && !mathElseDisplay)) {
             for (ItemStack stack : player.getInventory().items) {
-                ResourceLocation registry = BuiltInRegistries.ITEM.getKey(stack.getItem());
+                ResourceLocation location = BuiltInRegistries.ITEM.getKey(stack.getItem());
 
-                if ("numismatics".equals(registry.getNamespace())) {
-                    switch (registry.getPath()) {
+                if ("numismatics".equals(location.getNamespace())) {
+                    switch (location.getPath()) {
                         case "sun" -> spurs += stack.getCount() * 4096;
                         case "crown" -> spurs += stack.getCount() * 512;
                         case "cog" -> spurs += stack.getCount() * 64;
@@ -68,11 +69,12 @@ public class CreateNumismaticsUtils {
                 }
             }
 
-            for (ItemStack stack : player.getEnderChestInventory().getItems()) {
-                ResourceLocation registry = BuiltInRegistries.ITEM.getKey(stack.getItem());
+            for (int slot = 0; slot < player.getEnderChestInventory().getContainerSize(); slot++) {
+                ItemStack stack = player.getEnderChestInventory().getItem(slot);
+                ResourceLocation location = BuiltInRegistries.ITEM.getKey(stack.getItem());
 
-                if ("numismatics".equals(registry.getNamespace())) {
-                    switch (registry.getPath()) {
+                if ("numismatics".equals(location.getNamespace())) {
+                    switch (location.getPath()) {
                         case "sun" -> spurs += stack.getCount() * 4096;
                         case "crown" -> spurs += stack.getCount() * 512;
                         case "cog" -> spurs += stack.getCount() * 64;
@@ -95,12 +97,13 @@ public class CreateNumismaticsUtils {
         Style italic = Style.EMPTY.withItalic(Italic.get());
         Style underlined = Style.EMPTY.withUnderlined(Underlined.get());
         Style strikethrough = Style.EMPTY.withStrikethrough(Strikethrough.get());
+        Style color = Style.EMPTY.withColor(Color.get());
         Style hoverEvent = Style.EMPTY.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal(hoverString)));
         int coins = create_numismatics.get(player.getUUID());
         MutableComponent balance = Component.literal(String.valueOf(coins));
 
         component.append(Display1.get());
-        component.append(balance.withStyle(bold).withStyle(italic).withStyle(underlined).withStyle(strikethrough).withColor(Color.get()).withStyle(hoverEvent));
+        component.append(balance.withStyle(bold).withStyle(italic).withStyle(underlined).withStyle(strikethrough).withStyle(color).withStyle(hoverEvent));
         component.append(Display2.get());
         return component;
     }

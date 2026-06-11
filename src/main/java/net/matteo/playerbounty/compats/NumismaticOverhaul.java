@@ -2,36 +2,32 @@ package net.matteo.playerbounty.compats;
 
 import static net.matteo.playerbounty.configs.NumismaticOverhaulConfig.*;
 import static net.matteo.playerbounty.utils.mods.NumismaticOverhaulUtils.*;
-import static net.matteo.playerbounty.utils.GetValues.numismaticoverhaul;
 
 import tallestred.numismaticoverhaul.cap.CurrencyHolder;
+import static tallestred.numismaticoverhaul.cap.CurrencyHolderAttacher.EXAMPLE_CAPABILITY;
 
 import net.minecraft.world.entity.player.Player;
 
 public class NumismaticOverhaul {
 
     public static void handleKiller(Player killer, Player target) {
-        double killerCoins = CurrencyHolder.getValue(killer);
-
-        killerCoins +=
-                (Gain.get() + randomGain())
+        double killerCoins = (double) killer.getCapability(EXAMPLE_CAPABILITY).map(CurrencyHolder::getValue).orElse(0L);
+        final long result = (long) (killerCoins + (Gain.get() + randomGain())
                 + (killerCoins * (randomGainMultiplier() + KillerMultiplier.get()))
-                + (CurrencyHolder.getValue(target) * ClaimMultiplier.get());
+                + ((double) target.getCapability(EXAMPLE_CAPABILITY).map(CurrencyHolder::getValue).orElse(0L) * ClaimMultiplier.get()));
 
-        CurrencyHolder.setValue(killer, (long) killerCoins);
-        numismaticoverhaul.put(killer.getUUID(), (long) killerCoins);
+        killer.getCapability(EXAMPLE_CAPABILITY).ifPresent(CurrencyHolder -> CurrencyHolder.setValue(result));
     }
 
     public static void handleVictim(Player target) {
-        double targetCoins = CurrencyHolder.getValue(target);
+        double targetCoins = (double) target.getCapability(EXAMPLE_CAPABILITY).map(CurrencyHolder::getValue).orElse(0L);
 
         if (CompleteLoss.get()) {
-            targetCoins = (-Loss.get() - randomLoss()) - (targetCoins * (TargetMultiplier.get() + randomLossMultiplier()));
+            final long result = (long) ((-Loss.get() - randomLoss()) - (targetCoins * (TargetMultiplier.get() + randomLossMultiplier())));
+            target.getCapability(EXAMPLE_CAPABILITY).ifPresent(CurrencyHolder -> CurrencyHolder.setValue(result));
         } else {
-            targetCoins -= (Loss.get() + randomLoss()) + (targetCoins * (TargetMultiplier.get() + randomLossMultiplier()));
+            final long result = (long) (targetCoins - (Loss.get() + randomLoss()) + (targetCoins * (TargetMultiplier.get() + randomLossMultiplier())));
+            target.getCapability(EXAMPLE_CAPABILITY).ifPresent(CurrencyHolder -> CurrencyHolder.setValue(result));
         }
-
-        CurrencyHolder.setValue(target, (long) targetCoins);
-        numismaticoverhaul.put(target.getUUID(), (long) targetCoins);
     }
 }

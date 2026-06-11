@@ -3,18 +3,22 @@ repositories {
         name = 'CurseMaven'
         url "https://cursemaven.com"
     }
+
+    maven { url = 'https://maven.100media.dev/' }
+}
+
+configurations {
+    shade
+    implementation.extendsFrom shade
 }
 
 dependencies {
-    //Magic Coins support & SG_Economy API
-    implementation "curse.maven:sg-economy-api-1446971:8041335"
     //Numismatic Overhaul Reforged Again
-    implementation "curse.maven:numismatic-overhaul-reforged-again-1294551:6801648"
+    implementation fg.deobf("curse.maven:numismatic-overhaul-reforged-again-1294551:7263660")
     //Create: Numismatics
-    implementation "curse.maven:numismatics-889722:7948018"
+    implementation fg.deobf("curse.maven:numismatics-889722:6264591")
 
-    //Comapt dependencies
-    implementation "curse.maven:owo-lib-532610:6785734"
-    implementation "curse.maven:forgified-fabric-api-889079:7658611"
-    implementation "curse.maven:create-328085:7963363"
+    //Compat dependencies
+    implementation "curse.maven:create-328085:7178761"
+    shade "dev._100media.capabilitysyncer:capabilitysyncer:1.20.1-4.0.1"
 }

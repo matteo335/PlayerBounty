@@ -2,10 +2,10 @@ package net.matteo.playerbounty.utils;
 
 import net.matteo.playerbounty.configs.Config;
 
-import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.bus.api.EventPriority;
-import net.neoforged.neoforge.event.tick.ServerTickEvent;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.event.TickEvent;
 
 
 import java.util.*;
@@ -28,7 +28,9 @@ public class Cooldowns {
     private static final List<Delay> wait = new ArrayList<>();
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
-    public static void onServerTick(ServerTickEvent.Post event) {
+    public static void onServerTick(TickEvent.ServerTickEvent event) {
+        if (event.phase != TickEvent.Phase.END) return;
+
         if (!wait.isEmpty()) {
             tasks.addAll(wait);
             wait.clear();
@@ -39,11 +41,13 @@ public class Cooldowns {
             Delay task = it.next();
             task.ticks--;
             if (task.ticks <= 0) {
+
                 try {
                     task.methods.run();
                 } catch (Exception exception) {
-                    exception.printStackTrace();
+                    throw new RuntimeException("Somehow the display cooldown for PlayerBounty crashed. Make sure you are using the latest version, otherwise please report the issue there: https://discord.gg/NfEvdR8m4D");
                 }
+
                 it.remove();
             }
         }

@@ -1,49 +1,49 @@
 package net.matteo.playerbounty.configs;
 
-import net.neoforged.neoforge.common.ModConfigSpec;
+import net.minecraftforge.common.ForgeConfigSpec;
 
 public class Config {
 
-    public static ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
+    public static ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
 
-    public static ModConfigSpec.BooleanValue StartupWarning;
+    public static ForgeConfigSpec.BooleanValue StartupWarning;
 
-    public static ModConfigSpec.BooleanValue System;
+    public static ForgeConfigSpec.BooleanValue System;
 
-    public static ModConfigSpec.BooleanValue EnableDisplay;
-    public static ModConfigSpec.ConfigValue<Integer> DisplayCooldown;
-    public static ModConfigSpec.ConfigValue<Integer> Color;
+    public static ForgeConfigSpec.BooleanValue EnableDisplay;
+    public static ForgeConfigSpec.ConfigValue<Integer> DisplayCooldown;
+    public static ForgeConfigSpec.ConfigValue<Integer> Color;
 
-    public static ModConfigSpec.BooleanValue Bold;
-    public static ModConfigSpec.BooleanValue Italic;
-    public static ModConfigSpec.BooleanValue Underlined;
-    public static ModConfigSpec.BooleanValue Strikethrough;
+    public static ForgeConfigSpec.BooleanValue Bold;
+    public static ForgeConfigSpec.BooleanValue Italic;
+    public static ForgeConfigSpec.BooleanValue Underlined;
+    public static ForgeConfigSpec.BooleanValue Strikethrough;
 
-    public static ModConfigSpec.ConfigValue<String> Display1;
-    public static ModConfigSpec.ConfigValue<String> Display2;
+    public static ForgeConfigSpec.ConfigValue<String> Display1;
+    public static ForgeConfigSpec.ConfigValue<String> Display2;
 
-    public static ModConfigSpec.BooleanValue LoseCompleteBountyOnDeath;
+    public static ForgeConfigSpec.BooleanValue LoseCompleteBountyOnDeath;
 
-    public static ModConfigSpec.ConfigValue<Double> MinimumValue;
-    public static ModConfigSpec.ConfigValue<Double> MaximumValue;
+    public static ForgeConfigSpec.ConfigValue<Double> MinimumValue;
+    public static ForgeConfigSpec.ConfigValue<Double> MaximumValue;
 
-    public static ModConfigSpec.ConfigValue<Double> Gain;
-    public static ModConfigSpec.ConfigValue<Double> Loss;
+    public static ForgeConfigSpec.ConfigValue<Double> Gain;
+    public static ForgeConfigSpec.ConfigValue<Double> Loss;
 
-    public static ModConfigSpec.ConfigValue<Double> KillerMultiplier;
-    public static ModConfigSpec.ConfigValue<Double> ClaimMultiplier;
-    public static ModConfigSpec.ConfigValue<Double> TargetMultiplier;
+    public static ForgeConfigSpec.ConfigValue<Double> KillerMultiplier;
+    public static ForgeConfigSpec.ConfigValue<Double> ClaimMultiplier;
+    public static ForgeConfigSpec.ConfigValue<Double> TargetMultiplier;
 
 
-    public static ModConfigSpec.ConfigValue<Double> RandomGainMin;
-    public static ModConfigSpec.ConfigValue<Double> RandomGainMax;
-    public static ModConfigSpec.ConfigValue<Double> RandomLossMin;
-    public static ModConfigSpec.ConfigValue<Double> RandomLossMax;
+    public static ForgeConfigSpec.ConfigValue<Double> RandomGainMin;
+    public static ForgeConfigSpec.ConfigValue<Double> RandomGainMax;
+    public static ForgeConfigSpec.ConfigValue<Double> RandomLossMin;
+    public static ForgeConfigSpec.ConfigValue<Double> RandomLossMax;
 
-    public static ModConfigSpec.ConfigValue<Double> RandomGainMultiplierMin;
-    public static ModConfigSpec.ConfigValue<Double> RandomGainMultiplierMax;
-    public static ModConfigSpec.ConfigValue<Double> RandomLossMultiplierMin;
-    public static ModConfigSpec.ConfigValue<Double> RandomLossMultiplierMax;
+    public static ForgeConfigSpec.ConfigValue<Double> RandomGainMultiplierMin;
+    public static ForgeConfigSpec.ConfigValue<Double> RandomGainMultiplierMax;
+    public static ForgeConfigSpec.ConfigValue<Double> RandomLossMultiplierMin;
+    public static ForgeConfigSpec.ConfigValue<Double> RandomLossMultiplierMax;
 
     static {
         builder.comment("""

@@ -5,17 +5,20 @@ import net.matteo.playerbounty.network.Packets;
 import net.matteo.playerbounty.utils.GetValues;
 import net.matteo.playerbounty.utils.Cooldowns;
 import net.matteo.playerbounty.utils.mods.CreateNumismaticsUtils;
+import net.matteo.playerbounty.PlayerBountyMod;
 
-import net.sirgrantd.sg_economy.api.SGEconomyApi;
 import tallestred.numismaticoverhaul.cap.CurrencyHolder;
+import static tallestred.numismaticoverhaul.cap.CurrencyHolderAttacher.EXAMPLE_CAPABILITY;
 
-import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.event.entity.player.PlayerEvent;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.neoforge.network.PacketDistributor;
-import net.neoforged.neoforge.event.tick.ServerTickEvent;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.network.PacketDistributor;
+import net.minecraftforge.event.TickEvent.ServerTickEvent;
 
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.util.RandomSource;
 
 @EventBusSubscriber
 public class DisplayEvents {
@@ -39,23 +42,27 @@ public class DisplayEvents {
 
     //Tick -> networking -> refreshDisplayName -> renderName
     @SubscribeEvent
-    public static void tick(ServerTickEvent.Post event) {
-        Player player = event.getServer().overworld().getRandomPlayer();
+    public static void tick(ServerTickEvent event) {
+        if (event.phase != TickEvent.Phase.END) return;
+        int playerCount = event.getServer().getPlayerCount();
+        if (playerCount == 0) return;
+
+        Player player = event.getServer().getPlayerList().getPlayers().get(RandomSource.create().nextInt(0, playerCount));
         if (player == null) return;
         if (Cooldowns.isPlayerInCooldown(player.getUUID())) return;
 
         if (Config.System.get()) GetValues.playerbounty.put(player.getUUID(), (int) player.getPersistentData().getDouble("bounty"));
 
-        if (GetValues.sg_economy_system) GetValues.sg_economy.put(player.getUUID(), SGEconomyApi.get().getBalanceAsInt(player));
-
-        if (GetValues.numismatic_overhaul_system) GetValues.numismaticoverhaul.put(player.getUUID(), CurrencyHolder.getValue(player));
+        if (GetValues.numismatic_overhaul_system) {
+            GetValues.numismaticoverhaul.put(player.getUUID(), player.getCapability(EXAMPLE_CAPABILITY).map(CurrencyHolder::getValue).orElse(0L));
+        }
 
         if (GetValues.create_numismatics_system) GetValues.create_numismatics.put(player.getUUID(), CreateNumismaticsUtils.spurValue(player, false) / 64);
 
-        PacketDistributor.sendToAllPlayers(new Packets(
+        PlayerBountyMod.CHANNEL.send(PacketDistributor.ALL.noArg(),
+                new Packets(
                 player.getId(),
                 Config.EnableDisplay.get() ? GetValues.playerbounty.get(player.getUUID()) : null,
-                GetValues.sg_economy_display ? GetValues.sg_economy.get(player.getUUID()) : null,
                 GetValues.numismatic_overhaul_display ? GetValues.numismaticoverhaul.get(player.getUUID()) : null,
                 GetValues.create_numismatics_display ? GetValues.create_numismatics.get(player.getUUID()) : null
         ));

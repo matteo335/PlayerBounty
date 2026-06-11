@@ -33,28 +33,6 @@ public class InvalidConfigException extends Exception {
             }
         }
 
-        if (GetValues.sg_economy_system) {
-            if (SGEconomyConfig.RandomGainMin.get() > SGEconomyConfig.RandomGainMax.get()) {
-                string += "\nSG_Economy Compat: Minimum Random Gain is greater than Maximum Random Gain\n";
-                trigger = true;
-            }
-
-            if (SGEconomyConfig.RandomLossMin.get() > SGEconomyConfig.RandomLossMax.get()) {
-                string += "\nSG_Economy Compat: Minimum Random is greater than Maximum Random Loss\n";
-                trigger = true;
-            }
-
-            if (SGEconomyConfig.RandomGainMultiplierMin.get() > SGEconomyConfig.RandomGainMultiplierMax.get()) {
-                string += "\nSG_Economy Compat: Minimum Random Gain Multiplier is greater than Maximum Random Gain Multiplier\n";
-                trigger = true;
-            }
-
-            if (SGEconomyConfig.RandomLossMultiplierMin.get() > SGEconomyConfig.RandomLossMultiplierMax.get()) {
-                string += "\nSG_Economy Compat: Minimum Random Loss Multiplier is greater than Maximum Random Loss Multiplier\n";
-                trigger = true;
-            }
-        }
-
         if (GetValues.numismatic_overhaul_system) {
             if (NumismaticOverhaulConfig.RandomGainMin.get() > NumismaticOverhaulConfig.RandomGainMax.get()) {
                 string += "\nNumismaticOverhaul Compat: Minimum Random Gain is greater than Maximum Random Gain\n";

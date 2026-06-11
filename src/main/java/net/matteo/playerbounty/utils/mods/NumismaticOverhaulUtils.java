@@ -56,7 +56,7 @@ public class NumismaticOverhaulUtils {
             Style hoverEvent = Style.EMPTY.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal("NumismaticOverhaul Gold Coin")));
 
             component.append(DisplayGold1.get());
-            component.append(gold.withStyle(hoverEvent).withColor(GoldColor.get()));
+            component.append(gold.withStyle(hoverEvent).withStyle(Style.EMPTY.withColor(GoldColor.get())));
             component.append(DisplayBronze2.get());
         }
 
@@ -65,7 +65,7 @@ public class NumismaticOverhaulUtils {
             Style hoverEvent = Style.EMPTY.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal("NumismaticOverhaul Silver Coin")));
 
             component.append(DisplaySilver1.get());
-            component.append(silver.withStyle(hoverEvent).withColor(SilverColor.get()));
+            component.append(silver.withStyle(hoverEvent).withStyle(Style.EMPTY.withColor(SilverColor.get())));
             component.append(DisplaySilver2.get());
         }
 
@@ -74,7 +74,7 @@ public class NumismaticOverhaulUtils {
             Style hoverEvent = Style.EMPTY.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal("NumismaticOverhaul Bronze Coin")));
 
             component.append(DisplayBronze1.get());
-            component.append(bronze.withStyle(hoverEvent).withColor(BronzeColor.get()));
+            component.append(bronze.withStyle(hoverEvent).withStyle(Style.EMPTY.withColor(BronzeColor.get())));
             component.append(DisplayBronze2.get());
         }
 

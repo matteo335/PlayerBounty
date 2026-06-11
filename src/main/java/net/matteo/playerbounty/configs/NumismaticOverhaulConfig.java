@@ -1,52 +1,52 @@
 package net.matteo.playerbounty.configs;
 
-import net.neoforged.neoforge.common.ModConfigSpec;
+import net.minecraftforge.common.ForgeConfigSpec;
 
 public class NumismaticOverhaulConfig {
 
-    public static ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
+    public static ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
 
-    public static ModConfigSpec.BooleanValue System;
-    public static ModConfigSpec.BooleanValue EnableDisplay;
+    public static ForgeConfigSpec.BooleanValue System;
+    public static ForgeConfigSpec.BooleanValue EnableDisplay;
 
-    public static ModConfigSpec.BooleanValue EnableBronzeDisplay;
-    public static ModConfigSpec.BooleanValue EnableSilverDisplay;
-    public static ModConfigSpec.BooleanValue EnableGoldDisplay;
+    public static ForgeConfigSpec.BooleanValue EnableBronzeDisplay;
+    public static ForgeConfigSpec.BooleanValue EnableSilverDisplay;
+    public static ForgeConfigSpec.BooleanValue EnableGoldDisplay;
 
-    public static ModConfigSpec.BooleanValue Bold;
-    public static ModConfigSpec.BooleanValue Italic;
-    public static ModConfigSpec.BooleanValue Underlined;
-    public static ModConfigSpec.BooleanValue Strikethrough;
+    public static ForgeConfigSpec.BooleanValue Bold;
+    public static ForgeConfigSpec.BooleanValue Italic;
+    public static ForgeConfigSpec.BooleanValue Underlined;
+    public static ForgeConfigSpec.BooleanValue Strikethrough;
 
-    public static ModConfigSpec.ConfigValue<Integer> BronzeColor;
-    public static ModConfigSpec.ConfigValue<String> DisplayBronze1;
-    public static ModConfigSpec.ConfigValue<String> DisplayBronze2;
+    public static ForgeConfigSpec.ConfigValue<Integer> BronzeColor;
+    public static ForgeConfigSpec.ConfigValue<String> DisplayBronze1;
+    public static ForgeConfigSpec.ConfigValue<String> DisplayBronze2;
 
-    public static ModConfigSpec.ConfigValue<Integer> SilverColor;
-    public static ModConfigSpec.ConfigValue<String> DisplaySilver1;
-    public static ModConfigSpec.ConfigValue<String> DisplaySilver2;
+    public static ForgeConfigSpec.ConfigValue<Integer> SilverColor;
+    public static ForgeConfigSpec.ConfigValue<String> DisplaySilver1;
+    public static ForgeConfigSpec.ConfigValue<String> DisplaySilver2;
 
-    public static ModConfigSpec.ConfigValue<Integer> GoldColor;
-    public static ModConfigSpec.ConfigValue<String> DisplayGold1;
-    public static ModConfigSpec.ConfigValue<String> DisplayGold2;
+    public static ForgeConfigSpec.ConfigValue<Integer> GoldColor;
+    public static ForgeConfigSpec.ConfigValue<String> DisplayGold1;
+    public static ForgeConfigSpec.ConfigValue<String> DisplayGold2;
 
-    public static ModConfigSpec.ConfigValue<Double> Gain;
-    public static ModConfigSpec.ConfigValue<Double> Loss;
+    public static ForgeConfigSpec.ConfigValue<Double> Gain;
+    public static ForgeConfigSpec.ConfigValue<Double> Loss;
 
-    public static ModConfigSpec.BooleanValue CompleteLoss;
-    public static ModConfigSpec.ConfigValue<Double> ClaimMultiplier;
-    public static ModConfigSpec.ConfigValue<Double> KillerMultiplier;
-    public static ModConfigSpec.ConfigValue<Double> TargetMultiplier;
+    public static ForgeConfigSpec.BooleanValue CompleteLoss;
+    public static ForgeConfigSpec.ConfigValue<Double> ClaimMultiplier;
+    public static ForgeConfigSpec.ConfigValue<Double> KillerMultiplier;
+    public static ForgeConfigSpec.ConfigValue<Double> TargetMultiplier;
 
-    public static ModConfigSpec.ConfigValue<Double> RandomGainMin;
-    public static ModConfigSpec.ConfigValue<Double> RandomGainMax;
-    public static ModConfigSpec.ConfigValue<Double> RandomLossMin;
-    public static ModConfigSpec.ConfigValue<Double> RandomLossMax;
+    public static ForgeConfigSpec.ConfigValue<Double> RandomGainMin;
+    public static ForgeConfigSpec.ConfigValue<Double> RandomGainMax;
+    public static ForgeConfigSpec.ConfigValue<Double> RandomLossMin;
+    public static ForgeConfigSpec.ConfigValue<Double> RandomLossMax;
 
-    public static ModConfigSpec.ConfigValue<Double> RandomGainMultiplierMin;
-    public static ModConfigSpec.ConfigValue<Double> RandomGainMultiplierMax;
-    public static ModConfigSpec.ConfigValue<Double> RandomLossMultiplierMin;
-    public static ModConfigSpec.ConfigValue<Double> RandomLossMultiplierMax;
+    public static ForgeConfigSpec.ConfigValue<Double> RandomGainMultiplierMin;
+    public static ForgeConfigSpec.ConfigValue<Double> RandomGainMultiplierMax;
+    public static ForgeConfigSpec.ConfigValue<Double> RandomLossMultiplierMin;
+    public static ForgeConfigSpec.ConfigValue<Double> RandomLossMultiplierMax;
 
     static {
         builder.comment("""

@@ -14,6 +14,7 @@ import net.minecraft.network.chat.Component;
 public class CreateNumismatics {
 
     //This part is particularly confusing... Good luck!
+    @SuppressWarnings("deprecation")
     public static void deathEvent(Player killer, Player target) {
         double killerBalance = spurValue(killer, true);
         double targetBalance = BankSavedData.load(target.getServer()).getAccounts().get(target.getUUID()).getBalance();
@@ -72,7 +73,8 @@ public class CreateNumismatics {
         if (targetBalance + moveInventoryToBank < 0) {
             String message = "";
 
-            for (ItemStack stack : target.getEnderChestInventory().getItems()) {
+            for (int slot = 0; slot < target.getEnderChestInventory().getContainerSize(); slot++) {
+                ItemStack stack = target.getEnderChestInventory().getItem(slot);
                 ResourceLocation registry = BuiltInRegistries.ITEM.getKey(stack.getItem());
 
                 if ("numismatics".equals(registry.getNamespace())) {
