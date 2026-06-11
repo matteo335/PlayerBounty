@@ -16,6 +16,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.util.RandomSource;
 
 @EventBusSubscriber
 public class DisplayEvents {
@@ -40,8 +41,9 @@ public class DisplayEvents {
     //Tick -> networking -> refreshDisplayName -> renderName
     @SubscribeEvent
     public static void tick(ServerTickEvent.Post event) {
-        Player player = event.getServer().overworld().getRandomPlayer();
-        if (player == null) return;
+        int playerCount = event.getServer().getPlayerCount();
+        if (playerCount == 0) return;
+        Player player = event.getServer().getPlayerList().getPlayers().get(RandomSource.create().nextInt(0, playerCount));
         if (Cooldowns.isPlayerInCooldown(player.getUUID())) return;
 
         if (Config.System.get()) GetValues.playerbounty.put(player.getUUID(), (int) player.getPersistentData().getDouble("bounty"));
