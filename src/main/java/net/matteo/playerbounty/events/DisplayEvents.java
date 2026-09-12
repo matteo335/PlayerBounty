@@ -48,7 +48,7 @@ public class DisplayEvents {
 
         if (Config.System.get()) GetValues.playerbounty.put(player.getUUID(), (int) player.getPersistentData().getDouble("bounty"));
 
-        if (GetValues.sg_economy_system) GetValues.sg_economy.put(player.getUUID(), SGEconomyApi.get().getBalanceAsInt(player));
+        if (GetValues.sg_economy_system) GetValues.sg_economy.put(player.getUUID(), (int) SGEconomyApi.getBalance(player));
 
         if (GetValues.numismatic_overhaul_system) GetValues.numismaticoverhaul.put(player.getUUID(), CurrencyHolder.getValue(player));
 

@@ -11,25 +11,25 @@ import net.minecraft.world.entity.player.Player;
 public class SG_Economy {
 
     public static void handleKiller(Player killer, Player target) {
-        double killerCoins = SGEconomyApi.get().getBalance(killer);
+        double killerCoins = SGEconomyApi.getBalance(killer);
 
         killerCoins +=
                 (SGEconomyConfig.Gain.get() + SGEconomyUtils.randomGain())
                 + (killerCoins * (SGEconomyConfig.KillerMultiplier.get() + SGEconomyUtils.randomGainMultiplier()))
-                + (SGEconomyApi.get().getBalance(target) * SGEconomyConfig.ClaimMultiplier.get());
+                + (SGEconomyApi.getBalance(target) * SGEconomyConfig.ClaimMultiplier.get());
 
-        SGEconomyApi.get().setBalance(killer, killerCoins);
+        SGEconomyApi.setBalance(killer, killerCoins);
         GetValues.sg_economy.put(killer.getUUID(), (int) killerCoins);
     }
 
     public static void handleTarget(Player target) {
-        double targetCoins = SGEconomyApi.get().getBalance(target);
+        double targetCoins = SGEconomyApi.getBalance(target);
 
         targetCoins -=
                 (SGEconomyConfig.Loss.get() + SGEconomyUtils.randomLoss())
                 + (targetCoins * SGEconomyConfig.TargetMultiplier.get() + SGEconomyUtils.randomLossMultiplier());
 
-        SGEconomyApi.get().setBalance(target, targetCoins);
+        SGEconomyApi.setBalance(target, targetCoins);
         GetValues.sg_economy.put(target.getUUID(), (int) targetCoins);
     }
 }
